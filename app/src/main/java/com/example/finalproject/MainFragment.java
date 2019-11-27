@@ -4,12 +4,20 @@ package com.example.finalproject;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +28,7 @@ import android.widget.Toast;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,15 +42,18 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainFragment extends Fragment {
+
+public class MainFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
 
 
-    private RecyclerView recyclerView ;
+    private RecyclerView recyclerView , recyclerView2 , recyclerView3;
     private List<Product> list = new ArrayList<>();
     private Api api ;
-    private ProductAdapter adapter = new ProductAdapter(list);
+    private ProductAdapter adapter , adapter2 , adapter3 ;
     private ProgressBar progressBar ;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     public static MainFragment newInstance() {
 
@@ -56,6 +68,12 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,9 +82,30 @@ public class MainFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_main, container, false);
 
         initUi(view);
-     //   startInit();
+
+        drawer =  view.findViewById(R.id.drawer_layout);
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+
+
+
+
+
+
+        adapter = new ProductAdapter((AppCompatActivity) getActivity());
+        adapter2 = new ProductAdapter((AppCompatActivity) getActivity());
+
         api = RetrofitInstance.getRetrofit().create(Api.class);
-        api.getAllProducts().enqueue(new Callback<List<Product>>() {
+        api.getAllProducts("date",  "20").enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call , Response<List<Product>> response) {
                 if (response.isSuccessful()) {
@@ -77,7 +116,23 @@ public class MainFragment extends Fragment {
                 }
             }
 
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
 
+        api.getAllProducts("popularity" , "20").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call , Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+               //     Repository.getInstance().setAllProducts(response.body());
+                    adapter2.setProducts(response.body());
+                    adapter2.notifyDataSetChanged();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
@@ -91,15 +146,42 @@ public class MainFragment extends Fragment {
 
       // new InitProductsAsynceTask().execute();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+      //  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+      //  recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView2.setAdapter(adapter2);
+        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
+     //   recyclerView3.setAdapter(adapter3);
 
         return view ;
     }
 
+
+
     private void initUi(View view){
         recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView2 = view.findViewById(R.id.recyclerView2);
+        recyclerView3 = view.findViewById(R.id.recyclerView3);
         progressBar = view.findViewById(R.id.progressBar);
+        navigationView = view.findViewById(R.id.main_navigation_view);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if (id == R.id.home_navigation_menu) {
+            // Handle the camera action
+        } else if (id == R.id.bag_navigation_menu) {
+
+        } else if (id == R.id.bag_navigation_menu) {
+
+        } else if (id == R.id.categories_navigation_menu) {
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 /*
     private List<Product> generateLists(String type) throws IOException {
@@ -108,65 +190,6 @@ public class MainFragment extends Fragment {
     }
 
  */
-
-    private class ProductHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextViewTitle;
-        private TextView mTextViewDate;
-        private ImageView imageView ;
-        private Product product;
-
-        public ProductHolder(@NonNull View itemView) {
-            super(itemView);
-
-            mTextViewTitle = itemView.findViewById(R.id.textView);
-            mTextViewDate = itemView.findViewById(R.id.textView2);
-            imageView = itemView.findViewById(R.id.imageView);
-        }
-
-        public void bindCrime(Product product) {
-            mTextViewTitle.setText(product.getName());
-            mTextViewDate.setText(product.getPrice());
-            Picasso.get().load(product.getImages().get(0).getSrc()).resize(200 , 200 ).centerCrop().into(imageView);
-
-            this.product = product;
-        }
-    }
-
-    private class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
-
-        private List<Product> mProducts;
-
-        public ProductAdapter(List<Product> crimes) {
-            mProducts = crimes;
-        }
-
-        public void setProducts(List<Product> products) {
-            mProducts = products;
-        }
-
-        @NonNull
-        @Override
-        public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.row, parent, false);
-            ProductHolder productHolder = new ProductHolder(view);
-            return productHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-
-            holder.bindCrime(mProducts.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mProducts.size();
-        }
-    }
-
 
 
 }

@@ -57,6 +57,15 @@ public class Repository {
         this.allProducts = allProducts;
     }
 
+    public Product getProductById(int id) {
+        for (Product product : allProducts) {
+            if (id == product.getId())
+                return product;
+        }
+
+        return null;
+    }
+
 
 
 }

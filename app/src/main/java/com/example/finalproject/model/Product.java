@@ -3,10 +3,10 @@ package com.example.finalproject.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Product {
-
+public class Product implements Serializable {
 
     @Expose
     @SerializedName("_links")
@@ -27,14 +27,11 @@ public class Product {
     @SerializedName("default_attributes")
     private List<String> default_attributes;
     @Expose
-    @SerializedName("attributes")
-    private List<String> attributes;
-    @Expose
     @SerializedName("images")
     private List<Images> images;
     @Expose
     @SerializedName("tags")
-    private List<String> tags;
+    private List<Tags> tags;
     @Expose
     @SerializedName("categories")
     private List<Categories> categories;
@@ -240,13 +237,6 @@ public class Product {
         this.default_attributes = default_attributes;
     }
 
-    public List<String> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(List<String> attributes) {
-        this.attributes = attributes;
-    }
 
     public List<Images> getImages() {
         return images;
@@ -256,11 +246,11 @@ public class Product {
         this.images = images;
     }
 
-    public List<String> getTags() {
+    public List<Tags> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(List<Tags> tags) {
         this.tags = tags;
     }
 
@@ -860,7 +850,7 @@ public class Product {
         }
     }
 
-    public static class Categories {
+    public static class Tags {
         @Expose
         @SerializedName("slug")
         private String slug;
@@ -895,6 +885,8 @@ public class Product {
             this.id = id;
         }
     }
+
+
 
     public static class Dimensions {
         @Expose
