@@ -1,6 +1,7 @@
 package com.example.finalproject;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
@@ -48,12 +52,13 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
 
     private RecyclerView recyclerView , recyclerView2 , recyclerView3;
-    private List<Product> list = new ArrayList<>();
     private Api api ;
     private ProductAdapter adapter , adapter2 , adapter3 ;
     private ProgressBar progressBar ;
     private DrawerLayout drawer;
     private NavigationView navigationView;
+    private List<Chip> categoriesChip = new ArrayList<>();
+    private ChipGroup categoriesChipGroup ;
 
     public static MainFragment newInstance() {
 
@@ -91,14 +96,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
-
-
-
-
-
 
 
         adapter = new ProductAdapter((AppCompatActivity) getActivity());
@@ -141,6 +138,22 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             }
         });
 
+        api.getAllCategories().enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if(response.isSuccessful()) {
+                    Repository.getInstance().setAllCategories(response.body());
+                    setCategoriesChips();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
 
 
@@ -153,10 +166,19 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
      //   recyclerView3.setAdapter(adapter3);
 
+
         return view ;
     }
 
-
+    @SuppressLint("ResourceAsColor")
+    private void setCategoriesChips(){
+        List<Category> categoryList = Repository.getInstance().getAllCategories();
+        for(Category category : categoryList){
+            Chip chip = new Chip(getContext());
+            chip.setText(category.getName());
+            categoriesChipGroup.addView(chip);
+        }
+    }
 
     private void initUi(View view){
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -164,6 +186,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         recyclerView3 = view.findViewById(R.id.recyclerView3);
         progressBar = view.findViewById(R.id.progressBar);
         navigationView = view.findViewById(R.id.main_navigation_view);
+        categoriesChipGroup = view.findViewById(R.id.categories_chip_group);
     }
 
     @Override

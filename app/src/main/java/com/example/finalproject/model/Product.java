@@ -32,9 +32,7 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("tags")
     private List<Tags> tags;
-    @Expose
-    @SerializedName("categories")
-    private List<Categories> categories;
+
     @Expose
     @SerializedName("purchase_note")
     private String purchase_note;
@@ -252,14 +250,6 @@ public class Product implements Serializable {
 
     public void setTags(List<Tags> tags) {
         this.tags = tags;
-    }
-
-    public List<Categories> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<Categories> categories) {
-        this.categories = categories;
     }
 
     public String getPurchase_note() {

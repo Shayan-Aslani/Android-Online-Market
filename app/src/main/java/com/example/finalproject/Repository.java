@@ -1,5 +1,6 @@
 package com.example.finalproject;
 
+import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 
 import java.util.ArrayList;
@@ -12,10 +13,12 @@ public class Repository {
     private List<Product> ratedProducts;
     private List<Product> visitedProducts;
     private List<Product> allProducts;
+    private List<Category> allCategories;
 
     private Repository() {
         newProducts = new ArrayList<>();
         allProducts = new ArrayList<>();
+        allCategories = new ArrayList<>();
     }
 
     public static Repository getInstance() {
@@ -57,6 +60,15 @@ public class Repository {
         this.allProducts = allProducts;
     }
 
+    public List<Category> getAllCategories() {
+        return allCategories;
+    }
+
+    public void setAllCategories(List<Category> allCategories) {
+        this.allCategories = allCategories;
+    }
+
+
     public Product getProductById(int id) {
         for (Product product : allProducts) {
             if (id == product.getId())
@@ -65,7 +77,6 @@ public class Repository {
 
         return null;
     }
-
 
 
 }

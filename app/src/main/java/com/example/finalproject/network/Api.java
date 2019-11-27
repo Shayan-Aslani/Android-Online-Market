@@ -1,5 +1,6 @@
 package com.example.finalproject.network;
 
+import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 
 import java.util.List;
