@@ -57,7 +57,7 @@
             </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/latest_Products_RecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="252dp"
                 android:layout_marginTop="92dp"
@@ -75,32 +75,32 @@
                 android:layout_height="227dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/recyclerView"
-                app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+                app:layout_constraintStart_toStartOf="@+id/latest_Products_RecyclerView"
+                app:layout_constraintTop_toTopOf="@+id/latest_Products_RecyclerView" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView3"
+                android:id="@+id/most_Viewed_Products_RecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="56dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="@+id/recyclerView2"
+                app:layout_constraintEnd_toEndOf="@+id/popular_Products_RecyclerView"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/recyclerView2"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView2" />
+                app:layout_constraintStart_toStartOf="@+id/popular_Products_RecyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/popular_Products_RecyclerView" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView2"
+                android:id="@+id/popular_Products_RecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+                app:layout_constraintEnd_toEndOf="@+id/latest_Products_RecyclerView"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/recyclerView"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+                app:layout_constraintStart_toStartOf="@+id/latest_Products_RecyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/latest_Products_RecyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

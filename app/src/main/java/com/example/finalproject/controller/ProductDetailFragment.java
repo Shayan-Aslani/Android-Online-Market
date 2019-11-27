@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
 
 import android.os.Bundle;
@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.model.Repository;
 import com.squareup.picasso.Picasso;
 
 

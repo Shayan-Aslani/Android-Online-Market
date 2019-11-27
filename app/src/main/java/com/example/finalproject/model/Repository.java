@@ -1,7 +1,4 @@
-package com.example.finalproject;
-
-import com.example.finalproject.model.Category;
-import com.example.finalproject.model.Product;
+package com.example.finalproject.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +11,13 @@ public class Repository {
     private List<Product> visitedProducts;
     private List<Product> allProducts;
     private List<Category> allCategories;
+    private List<Category> parentCategories ;
 
     private Repository() {
         newProducts = new ArrayList<>();
         allProducts = new ArrayList<>();
         allCategories = new ArrayList<>();
+        parentCategories = new ArrayList<>();
     }
 
     public static Repository getInstance() {
@@ -64,8 +63,13 @@ public class Repository {
         return allCategories;
     }
 
+    public List<Category> getParentCategories() {
+        return parentCategories;
+    }
+
     public void setAllCategories(List<Category> allCategories) {
         this.allCategories = allCategories;
+        generateParentList();
     }
 
 
@@ -76,6 +80,31 @@ public class Repository {
         }
 
         return null;
+    }
+
+    public List<Category> getSubCategoires(long parentId) {
+        List<Category> result = new ArrayList<>();
+
+        for (Category category : allCategories) {
+            if (category.getParent() == parentId)
+                result.add(category);
+        }
+        return result;
+    }
+
+    public Category getCategoryById(int id) {
+        for (Category category : allCategories)
+            if (category.getId() == id)
+                return category;
+
+        return null;
+    }
+
+    private void generateParentList() {
+        for (Category category : allCategories) {
+            if (category.getParent() == 0)
+                parentCategories.add(category);
+        }
     }
 
 

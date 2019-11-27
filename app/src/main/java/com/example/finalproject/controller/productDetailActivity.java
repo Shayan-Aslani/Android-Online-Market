@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.finalproject.model.Product;
+import com.example.finalproject.R;
 
 public class productDetailActivity extends AppCompatActivity {
 

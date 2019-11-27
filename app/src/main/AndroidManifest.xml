@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".productDetailActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".controller.CategoryListActivity"></activity>
+        <activity android:name=".controller.productDetailActivity" />
+        <activity android:name=".controller.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

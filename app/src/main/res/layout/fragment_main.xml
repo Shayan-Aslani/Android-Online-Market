@@ -9,7 +9,7 @@
     tools:openDrawer="start"
     android:layoutDirection="rtl"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainFragment">
+    tools:context=".controller.MainFragment">
 
     <include
         layout="@layout/main"

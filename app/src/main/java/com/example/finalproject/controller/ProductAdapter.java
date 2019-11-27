@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
 import android.app.Activity;
 import android.view.View;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
 import com.squareup.picasso.Picasso;
 
@@ -54,14 +55,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     public class ProductHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
-        private TextView mTextViewDate;
+        private TextView mTextViewPrice;
         private ImageView imageView ;
         private Product product;
         public ProductHolder(@NonNull final View itemView) {
             super(itemView);
 
             mTextViewTitle = itemView.findViewById(R.id.productName_TextView);
-            mTextViewDate = itemView.findViewById(R.id.ProductPrice_TextView);
+            mTextViewPrice = itemView.findViewById(R.id.ProductPrice_TextView);
             imageView = itemView.findViewById(R.id.product_imageView);
 
         }
@@ -77,7 +78,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             });
 
             mTextViewTitle.setText(product.getName());
-            mTextViewDate.setText(product.getPrice());
+            mTextViewPrice.setText(product.getPrice());
             Picasso.get().load(product.getImages().get(0).getSrc()).fit().into(imageView);
 
             this.product = product;

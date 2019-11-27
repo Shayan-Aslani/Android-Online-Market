@@ -1,4 +1,4 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
 
 import android.annotation.SuppressLint;
@@ -12,28 +12,26 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.finalproject.R;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.navigation.NavigationView;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +48,15 @@ import retrofit2.Response;
 public class MainFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
 
-
-    private RecyclerView recyclerView , recyclerView2 , recyclerView3;
-    private Api api ;
-    private ProductAdapter adapter , adapter2 , adapter3 ;
-    private ProgressBar progressBar ;
+    private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView, mostViewedProductsRecyclerView;
+    private Api api;
+    private ProductAdapter latestProductsAdapter, popularProductsAdapter, mostViewedProductAdapter;
+    private ProgressBar progressBar;
     private DrawerLayout drawer;
-    private NavigationView navigationView;
+    private NavigationView mainNavigationView;
     private List<Chip> categoriesChip = new ArrayList<>();
-    private ChipGroup categoriesChipGroup ;
+    Toolbar toolbar;
+    private ChipGroup categoriesChipGroup;
 
     public static MainFragment newInstance() {
 
@@ -84,31 +82,23 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         initUi(view);
 
-        drawer =  view.findViewById(R.id.drawer_layout);
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        setupNavigationView();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        setupRecyclerViews();
 
-
-        adapter = new ProductAdapter((AppCompatActivity) getActivity());
-        adapter2 = new ProductAdapter((AppCompatActivity) getActivity());
 
         api = RetrofitInstance.getRetrofit().create(Api.class);
-        api.getAllProducts("date",  "20").enqueue(new Callback<List<Product>>() {
+        api.getAllProducts("date", "20").enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Product>> call , Response<List<Product>> response) {
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
                     Repository.getInstance().setAllProducts(response.body());
-                    adapter.setProducts(Repository.getInstance().getAllProducts());
-                    adapter.notifyDataSetChanged();
+                    latestProductsAdapter.setProducts(Repository.getInstance().getAllProducts());
+                    latestProductsAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
@@ -120,13 +110,15 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             }
         });
 
-        api.getAllProducts("popularity" , "20").enqueue(new Callback<List<Product>>() {
+        api.getAllProducts("popularity", "20").enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Product>> call , Response<List<Product>> response) {
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
-               //     Repository.getInstance().setAllProducts(response.body());
-                    adapter2.setProducts(response.body());
-                    adapter2.notifyDataSetChanged();
+                    //     Repository.getInstance().setAllProducts(response.body());
+                    popularProductsAdapter.setProducts(response.body());
+                    mostViewedProductAdapter.setProducts(response.body());
+                    mostViewedProductAdapter.notifyDataSetChanged();
+                    popularProductsAdapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             }
@@ -141,7 +133,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         api.getAllCategories().enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Repository.getInstance().setAllCategories(response.body());
                     setCategoriesChips();
                 }
@@ -154,39 +146,47 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             }
         });
 
+        // new InitProductsAsynceTask().execute();
 
-
-
-      // new InitProductsAsynceTask().execute();
-
-      //  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-      //  recyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView2.setAdapter(adapter2);
-        recyclerView3.setLayoutManager(new LinearLayoutManager(getActivity()));
-     //   recyclerView3.setAdapter(adapter3);
-
-
-        return view ;
+        return view;
     }
 
     @SuppressLint("ResourceAsColor")
-    private void setCategoriesChips(){
+    private void setCategoriesChips() {
         List<Category> categoryList = Repository.getInstance().getAllCategories();
-        for(Category category : categoryList){
+        for (final Category category : categoryList) {
             Chip chip = new Chip(getContext());
+            ChipDrawable chipDrawable = (ChipDrawable) chip.getChipDrawable();
+            chipDrawable.setChipBackgroundColorResource(R.color.green);
             chip.setText(category.getName());
             categoriesChipGroup.addView(chip);
+            chip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(CategoryListActivity.newIntent(getContext() , category.getId()));
+                }
+            });
         }
     }
 
-    private void initUi(View view){
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView2 = view.findViewById(R.id.recyclerView2);
-        recyclerView3 = view.findViewById(R.id.recyclerView3);
+    private void setupRecyclerViews() {
+        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
+        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
+        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity());
+        latestProductsRecyclerView.setAdapter(latestProductsAdapter);
+        popularProductsRecyclerView.setAdapter(popularProductsAdapter);
+        mostViewedProductsRecyclerView.setAdapter(mostViewedProductAdapter);
+    }
+
+    private void initUi(View view) {
+        latestProductsRecyclerView = view.findViewById(R.id.latest_Products_RecyclerView);
+        popularProductsRecyclerView = view.findViewById(R.id.popular_Products_RecyclerView);
+        mostViewedProductsRecyclerView = view.findViewById(R.id.most_Viewed_Products_RecyclerView);
         progressBar = view.findViewById(R.id.progressBar);
-        navigationView = view.findViewById(R.id.main_navigation_view);
+        mainNavigationView = view.findViewById(R.id.main_navigation_view);
         categoriesChipGroup = view.findViewById(R.id.categories_chip_group);
+        toolbar = view.findViewById(R.id.toolbar);
+        drawer = view.findViewById(R.id.drawer_layout);
     }
 
     @Override
@@ -194,8 +194,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         int id = menuItem.getItemId();
 
         if (id == R.id.home_navigation_menu) {
-            // Handle the camera action
-        } else if (id == R.id.bag_navigation_menu) {
 
         } else if (id == R.id.bag_navigation_menu) {
 
@@ -206,13 +204,17 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-/*
-    private List<Product> generateLists(String type) throws IOException {
-       return RetrofitInstance.getRetrofit().create(Api.class)
-                .getAllProducts("https://woocommerce.maktabsharif.ir/wp-json/wc/v3/products?consumer_key=ck_120a89c914da239359b2683859fb36ce3c94fc0a&consumer_secret=cs_0dabb4ea47c464969eaad199a30370b9e7cb7e7b&orderby=date").execute().body();
-    }
 
- */
+    private void setupNavigationView() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        mainNavigationView.setNavigationItemSelectedListener(this);
+
+
+    }
 
 
 }

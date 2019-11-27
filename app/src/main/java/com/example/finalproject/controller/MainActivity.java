@@ -1,12 +1,13 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 
 import android.os.Build;
 import android.os.Bundle;
+
+import com.example.finalproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
