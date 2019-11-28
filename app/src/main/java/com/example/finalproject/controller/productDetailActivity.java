@@ -1,6 +1,7 @@
 package com.example.finalproject.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,7 @@ import android.os.Bundle;
 
 import com.example.finalproject.R;
 
-public class productDetailActivity extends AppCompatActivity {
+public class productDetailActivity extends SingleFragmentActivity {
 
 
     public static final String PRODUCT_ID_EXTRA = "productId";
@@ -21,14 +22,13 @@ public class productDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public Fragment createFragment() {
+        return ProductDetailFragment.newInstance(mProductId);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
-
         mProductId = getIntent().getIntExtra(PRODUCT_ID_EXTRA , 0);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.product_detail_activity_frame_layout , ProductDetailFragment.newInstance(mProductId))
-                .commit();
+        super.onCreate(savedInstanceState);
     }
 }

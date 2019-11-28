@@ -2,6 +2,7 @@ package com.example.finalproject.controller;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +20,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.finalproject.CategoryDetailActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
@@ -33,6 +36,7 @@ import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +62,10 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     Toolbar toolbar;
     private ChipGroup categoriesChipGroup;
 
+
     public static MainFragment newInstance() {
 
         Bundle args = new Bundle();
-
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
         return fragment;
@@ -75,7 +79,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -87,64 +90,13 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         initUi(view);
 
         setupNavigationView();
-
         setupRecyclerViews();
 
 
         api = RetrofitInstance.getRetrofit().create(Api.class);
-        api.getAllProducts("date", "20").enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().setAllProducts(response.body());
-                    latestProductsAdapter.setProducts(Repository.getInstance().getAllProducts());
-                    latestProductsAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
 
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
+        generateLists();
 
-        api.getAllProducts("popularity", "20").enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    //     Repository.getInstance().setAllProducts(response.body());
-                    popularProductsAdapter.setProducts(response.body());
-                    mostViewedProductAdapter.setProducts(response.body());
-                    mostViewedProductAdapter.notifyDataSetChanged();
-                    popularProductsAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        api.getAllCategories().enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().setAllCategories(response.body());
-                    setCategoriesChips();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // new InitProductsAsynceTask().execute();
 
@@ -163,7 +115,10 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             chip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(CategoryListActivity.newIntent(getContext() , category.getId()));
+                    if (category.getParent() == 0)
+                        startActivity(CategoryListActivity.newIntent(getContext(), category.getId()));
+                    else
+                        startActivity(CategoryDetailActivity.newIntent(getContext(), category.getId()));
                 }
             });
         }
@@ -198,9 +153,8 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         } else if (id == R.id.bag_navigation_menu) {
 
         } else if (id == R.id.categories_navigation_menu) {
-
+            startActivity(CategoryListActivity.newIntent(getContext(), 0));
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -210,11 +164,86 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
         mainNavigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public boolean closeDrawer() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else
+            return false;
+    }
+
+    private void generateLists() {
+        api.getAllProducts("date", "20").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    Repository.getInstance().setAllProducts(response.body());
+                    latestProductsAdapter.setProducts(Repository.getInstance().getAllProducts());
+                    latestProductsAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+        api.getAllProducts("popularity", "20").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    popularProductsAdapter.setProducts(response.body());
+                    popularProductsAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        api.getAllProducts("rating", "20").enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    mostViewedProductAdapter.setProducts(response.body());
+                    mostViewedProductAdapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        api.getAllCategories().enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful()) {
+                    Repository.getInstance().setAllCategories(response.body());
+                    setCategoriesChips();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.d("network", "onFailure: " + t.getMessage());
+                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
-
 
 }

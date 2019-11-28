@@ -1,6 +1,7 @@
 package com.example.finalproject.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +9,7 @@ import android.os.Bundle;
 
 import com.example.finalproject.R;
 
-public class CategoryListActivity extends AppCompatActivity {
+public class CategoryListActivity extends SingleFragmentActivity {
 
     public static final String CATEGORY_ID_EXTRA = "categoryIdExtra";
     private int currentCategoryId ;
@@ -21,13 +22,14 @@ public class CategoryListActivity extends AppCompatActivity {
     }
 
     @Override
+    public Fragment createFragment() {
+        return CategoryListFragment.newInstance(currentCategoryId);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list);
         currentCategoryId = getIntent().getIntExtra(CATEGORY_ID_EXTRA ,0 );
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.category_List_Frame_Layout , CategoryListFragment.newInstance(currentCategoryId))
-                .commit();
+        super.onCreate(savedInstanceState);
 
     }
 

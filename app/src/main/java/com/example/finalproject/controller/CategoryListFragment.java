@@ -66,9 +66,8 @@ public class CategoryListFragment extends Fragment {
         mViewPager = view.findViewById(R.id.categories_viewpager);
         mTabLayout = view.findViewById(R.id.tablayout);
     }
+
     private void setupViewPager(){
-
-
         mTabLayout.setupWithViewPager(mViewPager);
         mPagerAdapter = new CategoryViewPagerAdapter(getFragmentManager());
         mPagerAdapter.setParentList(Repository.getInstance().getParentCategories());

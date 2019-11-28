@@ -24,6 +24,9 @@ public interface Api {
     @GET("products/categories/?per_page=100")
     Call<List<Category>> getAllCategories();
 
+    @GET("products/?")
+    Call<List<Product>> getProductsSubCategoires(@Query("category") String categoryId , @Query("orderby") String orderBy);
+
 
 
 }

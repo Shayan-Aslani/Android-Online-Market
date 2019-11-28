@@ -34,7 +34,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.product_item, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.product_list_item, parent, false);
         return new ProductHolder(view);
     }
 
@@ -57,7 +57,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         private TextView mTextViewTitle;
         private TextView mTextViewPrice;
         private ImageView imageView ;
-        private Product product;
+        private Product mProduct;
         public ProductHolder(@NonNull final View itemView) {
             super(itemView);
 
@@ -80,8 +80,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             mTextViewTitle.setText(product.getName());
             mTextViewPrice.setText(product.getPrice());
             Picasso.get().load(product.getImages().get(0).getSrc()).fit().into(imageView);
-
-            this.product = product;
+            this.mProduct = product;
 
         }
     }

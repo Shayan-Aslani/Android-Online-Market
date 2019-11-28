@@ -9,29 +9,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="252dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="2dp">
 
         <ImageView
             android:id="@+id/product_imageView"
             android:layout_width="match_parent"
-            android:layout_height="175dp"
+            android:layout_height="140dp"
             android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/productName_TextView"
             android:layout_width="match_parent"
-            android:layout_height="41dp"
+            android:layout_height="73dp"
             android:gravity="right"
+            android:maxLines="2"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="italic" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/ProductPrice_TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:gravity="right"
             android:textColor="@android:color/holo_green_light"
             android:textSize="15sp"

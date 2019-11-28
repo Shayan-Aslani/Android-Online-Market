@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.finalproject.CategoryDetailActivity;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Category;
 import com.squareup.picasso.Picasso;
@@ -63,19 +64,17 @@ public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.Categ
             imageView = itemView.findViewById(R.id.category_imageView);
         }
 
-
         public void bind(final Category category) {
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    mActivity.startActivity(CategoryDetailActivity.newIntent(mActivity , category.getId()));
                 }
             });
 
             mTextViewTitle.setText(category.getName());
             Picasso.get().load(category.getImage().getSrc()).fit().into(imageView);
-
             this.category = category;
 
         }
