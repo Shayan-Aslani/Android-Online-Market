@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.adapters.CategoryAdapter;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Repository;
 

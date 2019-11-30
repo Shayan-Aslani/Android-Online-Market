@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
 import android.view.View;
@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.finalproject.CategoryDetailActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.controller.CategoryDetailActivity;
 import com.example.finalproject.model.Category;
 import com.squareup.picasso.Picasso;
 

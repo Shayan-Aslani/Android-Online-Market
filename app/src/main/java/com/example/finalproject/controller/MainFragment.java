@@ -2,7 +2,6 @@ package com.example.finalproject.controller;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,12 +21,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.finalproject.CategoryDetailActivity;
 import com.example.finalproject.R;
+import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
@@ -38,7 +36,6 @@ import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,10 +89,12 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         initUi(view);
         setupNavigationView();
         setupRecyclerViews();
+        setCategoriesChips();
+
 
         api = RetrofitInstance.getRetrofit().create(Api.class);
 
-        generateLists();
+    //    generateLists();
         // new InitProductsAsynceTask().execute();
 
         return view;
@@ -125,9 +124,9 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     private void setupRecyclerViews() {
-        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
-        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
-        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity());
+        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getNewProducts());
+        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getRatedProducts());
+        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getVisitedProducts());
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
         mostViewedProductsRecyclerView.setAdapter(mostViewedProductAdapter);
@@ -137,7 +136,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         latestProductsRecyclerView = view.findViewById(R.id.latest_Products_RecyclerView);
         popularProductsRecyclerView = view.findViewById(R.id.popular_Products_RecyclerView);
         mostViewedProductsRecyclerView = view.findViewById(R.id.most_Viewed_Products_RecyclerView);
-        progressBar = view.findViewById(R.id.progressBar);
+
         mainNavigationView = view.findViewById(R.id.main_navigation_view);
         categoriesChipGroup = view.findViewById(R.id.categories_chip_group);
         toolbar = view.findViewById(R.id.toolbar);

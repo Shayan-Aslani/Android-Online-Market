@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.productDetailActivity;
 import com.example.finalproject.model.Product;
 import com.squareup.picasso.Picasso;
 
@@ -22,8 +23,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     private List<Product> mProducts = new ArrayList<>();
     private AppCompatActivity mActivity ;
 
-    public ProductAdapter(AppCompatActivity mActivity) {
+    public ProductAdapter(AppCompatActivity mActivity ) {
         this.mActivity = mActivity;
+    }
+
+    public ProductAdapter(AppCompatActivity mActivity , List<Product> productList) {
+        this.mActivity = mActivity;
+        this.mProducts = productList;
     }
 
     public void setProducts(List<Product> products) {
@@ -79,7 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
             mTextViewTitle.setText(product.getName());
             mTextViewPrice.setText(product.getPrice());
-            Picasso.get().load(product.getImages().get(0).getSrc()).fit().into(imageView);
+            Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
             this.mProduct = product;
 
         }

@@ -13,11 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;

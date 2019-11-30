@@ -1,15 +1,10 @@
-package com.example.finalproject;
+package com.example.finalproject.controller;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.finalproject.controller.CategoryDetailFragment;
-import com.example.finalproject.controller.CategoryListActivity;
-import com.example.finalproject.controller.SingleFragmentActivity;
 
 import static com.example.finalproject.controller.CategoryListActivity.CATEGORY_ID_EXTRA;
 

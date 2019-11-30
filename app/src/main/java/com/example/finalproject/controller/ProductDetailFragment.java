@@ -18,6 +18,7 @@ import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -95,20 +96,17 @@ public class ProductDetailFragment extends Fragment {
             View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_slider_layout_item, null);
             return new SliderAdapterVH(inflate);
         }
-
         @Override
         public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
-                    Picasso.get().load(imageList.get(position).getSrc())
+                    Picasso.get().load(imageList.get(position).getSrc()).placeholder(R.drawable.alt)
                             .into(viewHolder.imageViewBackground);
         }
-
         @Override
         public int getCount() {
             return imageList.size();
         }
 
         class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
-
             View itemView;
             ImageView imageViewBackground;
             public SliderAdapterVH(View itemView) {
