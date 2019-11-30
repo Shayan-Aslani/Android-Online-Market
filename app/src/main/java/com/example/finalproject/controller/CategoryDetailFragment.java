@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
@@ -38,10 +40,12 @@ public class CategoryDetailFragment extends Fragment {
 
     private int categoryid;
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView;
+    private TextView categoryTitleTextView ;
     private Api api;
     private ProductAdapter latestProductsAdapter, popularProductsAdapter;
     private ProgressBar progressBar;
     private List<Product> latestProductList , popularProductList ;
+    private Category mCategory ;
 
     public static CategoryDetailFragment newInstance(int categoryid) {
 
@@ -60,6 +64,7 @@ public class CategoryDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categoryid = getArguments().getInt(CATEGORY_ID_ARG);
+        mCategory = Repository.getInstance().getCategoryById(categoryid);
     }
 
     @Override
@@ -69,6 +74,7 @@ public class CategoryDetailFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_category_detail, container, false);
 
         initUi(view);
+        setDetail();
         setupRecyclerViews();
 
         api = RetrofitInstance.getRetrofit().create(Api.class);
@@ -111,7 +117,12 @@ public class CategoryDetailFragment extends Fragment {
     private void initUi(View view){
         latestProductsRecyclerView = view.findViewById(R.id.lateest_Products_RecyclerView_Detail);
         popularProductsRecyclerView = view.findViewById(R.id.popular_Products_RecyclerView_Detail);
+        categoryTitleTextView = view.findViewById(R.id.caegory_title_textView_detail);
         progressBar = view.findViewById(R.id.progressBar_Category_Detail);
+    }
+
+    private void setDetail(){
+        categoryTitleTextView.setText(mCategory.getName());
     }
 
     private void setupRecyclerViews() {

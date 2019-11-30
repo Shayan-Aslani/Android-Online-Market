@@ -3,10 +3,12 @@ package com.example.finalproject.controller;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -88,21 +90,18 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         initUi(view);
-
         setupNavigationView();
         setupRecyclerViews();
-
 
         api = RetrofitInstance.getRetrofit().create(Api.class);
 
         generateLists();
-
-
         // new InitProductsAsynceTask().execute();
 
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ResourceAsColor")
     private void setCategoriesChips() {
         List<Category> categoryList = Repository.getInstance().getAllCategories();
@@ -110,6 +109,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             Chip chip = new Chip(getContext());
             ChipDrawable chipDrawable = (ChipDrawable) chip.getChipDrawable();
             chipDrawable.setChipBackgroundColorResource(R.color.green);
+            chip.setElevation((float) 8.0);
             chip.setText(category.getName());
             categoriesChipGroup.addView(chip);
             chip.setOnClickListener(new View.OnClickListener() {
@@ -235,15 +235,12 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                     setCategoriesChips();
                 }
             }
-
             @Override
             public void onFailure(Call<List<Category>> call, Throwable t) {
                 Log.d("network", "onFailure: " + t.getMessage());
                 Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
 }

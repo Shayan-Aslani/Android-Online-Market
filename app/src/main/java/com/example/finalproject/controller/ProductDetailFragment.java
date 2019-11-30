@@ -1,6 +1,7 @@
 package com.example.finalproject.controller;
 
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,7 +16,11 @@ import android.widget.TextView;
 import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
+import com.smarteist.autoimageslider.SliderView;
+import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 
 /**
@@ -26,8 +31,8 @@ public class ProductDetailFragment extends Fragment {
     public static final String PRODUCT_ID_ARG = "productIdArg";
     private Product mProduct ;
     private TextView nameTextView , priceTextView , descriptionTextView ;
-    private ImageView imageView ;
     private int mProductId;
+    private SliderView sliderView ;
 
     public static ProductDetailFragment newInstance(int productId) {
         
@@ -56,6 +61,7 @@ public class ProductDetailFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_product_detail, container, false);
         initUi(view);
         setDetail();
+
         return view;
     }
 
@@ -64,14 +70,53 @@ public class ProductDetailFragment extends Fragment {
         nameTextView = view.findViewById(R.id.productName_TextView_Detail);
         priceTextView = view.findViewById(R.id.productPrice_TextView_Detail);
         descriptionTextView = view.findViewById(R.id.productDescription_TextView_Detail);
-        imageView = view.findViewById(R.id.imageView);
+        sliderView = view.findViewById(R.id.imageSlider);
     }
 
     public void setDetail(){
         nameTextView.setText(mProduct.getName());
         priceTextView.setText(mProduct.getPrice());
         descriptionTextView.setText(mProduct.getDescription());
-        Picasso.get().load(mProduct.getImages().get(0).getSrc()).into(imageView);
+        sliderView.setSliderAdapter(new SliderAdapter(getContext() , mProduct.getImages()));
+    }
+
+    public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
+
+        private Context context;
+        private List<Product.Images> imageList ;
+
+        public SliderAdapter(Context context , List list) {
+            this.context = context;
+            imageList = list ;
+        }
+
+        @Override
+        public SliderAdapterVH onCreateViewHolder(ViewGroup parent) {
+            View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_slider_layout_item, null);
+            return new SliderAdapterVH(inflate);
+        }
+
+        @Override
+        public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
+                    Picasso.get().load(imageList.get(position).getSrc())
+                            .into(viewHolder.imageViewBackground);
+        }
+
+        @Override
+        public int getCount() {
+            return imageList.size();
+        }
+
+        class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
+
+            View itemView;
+            ImageView imageViewBackground;
+            public SliderAdapterVH(View itemView) {
+                super(itemView);
+                imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider);
+                this.itemView = itemView;
+            }
+        }
     }
 
 }

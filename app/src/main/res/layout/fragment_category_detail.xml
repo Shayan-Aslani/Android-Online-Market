@@ -7,9 +7,39 @@
     android:layoutDirection="rtl"
     tools:context=".controller.CategoryDetailFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:titleTextColor="@android:color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <TextView
+            android:id="@+id/caegory_title_textView_detail"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:text="TextView"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar" />
 
         <ProgressBar
             android:id="@+id/progressBar_Category_Detail"
@@ -20,7 +50,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/caegory_title_textView_detail" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lateest_Products_RecyclerView_Detail"
@@ -38,13 +68,13 @@
             android:id="@+id/popular_Products_RecyclerView_Detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="184dp"
+            android:layout_marginTop="36dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/caegory_title_textView_detail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

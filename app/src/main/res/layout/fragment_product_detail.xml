@@ -1,51 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layoutDirection="rtl"
     tools:context=".controller.ProductDetailFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/materialButton"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="افزودن به سبد خرید"
+            android:textSize="20sp"
+            app:backgroundTint="@color/green"
+            app:icon="@drawable/ic_add_shopping_cart_2_white_24dp"
+            app:iconGravity="textStart"
+            app:layout_constraintEnd_toEndOf="@+id/productPrice_TextView_Detail"
+            app:layout_constraintStart_toStartOf="@+id/productPrice_TextView_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/productPrice_TextView_Detail" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="356dp"
-            android:layout_height="287dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
+        <com.smarteist.autoimageslider.SliderView
+            android:id="@+id/imageSlider"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintEnd_toEndOf="@+id/productName_TextView_Detail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:sliderAutoCycleDirection="back_and_forth"
+            app:sliderAutoCycleEnabled="false"
+            app:sliderCircularHandlerEnabled="true"
+            app:sliderIndicatorAnimationDuration="600"
+            app:sliderIndicatorGravity="center_horizontal|bottom"
+            app:sliderIndicatorMargin="15dp"
+            app:sliderIndicatorOrientation="horizontal"
+            app:sliderIndicatorPadding="3dp"
+            app:sliderIndicatorRadius="2dp"
+            app:sliderIndicatorSelectedColor="#5A5A5A"
+            app:sliderIndicatorUnselectedColor="#FFF"
+            app:sliderScrollTimeInSec="1"
+            app:sliderStartAutoCycle="false" />
 
-    <TextView
-        android:id="@+id/productName_TextView_Detail"
-        android:layout_width="194dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        <TextView
+            android:id="@+id/productName_TextView_Detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="TextView"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageSlider" />
 
-    <TextView
-        android:id="@+id/productPrice_TextView_Detail"
-        android:layout_width="198dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="12dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/productName_TextView_Detail"
-        app:layout_constraintStart_toStartOf="@+id/productName_TextView_Detail"
-        app:layout_constraintTop_toBottomOf="@+id/productName_TextView_Detail" />
+        <TextView
+            android:id="@+id/productPrice_TextView_Detail"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textColor="@color/green"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/productName_TextView_Detail"
+            app:layout_constraintStart_toStartOf="@+id/productName_TextView_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/productName_TextView_Detail" />
 
-    <TextView
-        android:id="@+id/productDescription_TextView_Detail"
-        android:layout_width="252dp"
-        android:layout_height="230dp"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="@+id/productPrice_TextView_Detail"
-        app:layout_constraintStart_toStartOf="@+id/productPrice_TextView_Detail"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice_TextView_Detail" />
+        <TextView
+            android:id="@+id/productDescription_TextView_Detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_marginTop="16dp"
+            android:text="TextView"
+            android:textDirection="rtl"
+            app:layout_constraintEnd_toEndOf="@+id/productPrice_TextView_Detail"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/productPrice_TextView_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/materialButton" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
