@@ -74,7 +74,8 @@ public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.Categ
             });
 
             mTextViewTitle.setText(category.getName());
-            Picasso.get().load(category.getImage().getSrc()).fit().into(imageView);
+            if(category.getImage()!=null)
+                Picasso.get().load(category.getImage().getSrc()).fit().into(imageView);
             this.category = category;
 
         }

@@ -1,6 +1,7 @@
 package com.example.finalproject.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Repository {
@@ -108,4 +109,7 @@ public class Repository {
     }
 
 
+    public List<Product> getShoppingBag() {
+        return null;
+    }
 }

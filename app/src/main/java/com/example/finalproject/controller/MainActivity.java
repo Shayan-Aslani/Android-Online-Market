@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.finalproject.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,11 +37,9 @@ public class MainActivity extends SingleFragmentActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-      /*  Toolbar myToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-       */
+
         super.onCreate(savedInstanceState);
-        View view = findViewById(R.id.fragment_container);
+
   /*      if(!getIntent().getExtras().getBoolean(RESULT_EXTRA))
             Snackbar.make(view , "f" , Snackbar.LENGTH_LONG);
 

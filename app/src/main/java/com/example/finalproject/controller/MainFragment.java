@@ -12,16 +12,22 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
@@ -52,9 +58,8 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
 
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView, mostViewedProductsRecyclerView;
-    private Api api;
+    private TextView cartItemCountTextView ;
     private ProductAdapter latestProductsAdapter, popularProductsAdapter, mostViewedProductAdapter;
-    private ProgressBar progressBar;
     private DrawerLayout drawer;
     private NavigationView mainNavigationView;
     private List<Chip> categoriesChip = new ArrayList<>();
@@ -77,27 +82,59 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-
         initUi(view);
+        toolbar.setTitle("");
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
         setupNavigationView();
         setupRecyclerViews();
         setCategoriesChips();
 
 
-        api = RetrofitInstance.getRetrofit().create(Api.class);
-
-    //    generateLists();
-        // new InitProductsAsynceTask().execute();
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.main_menu , menu);
+
+        MenuItem item = menu.findItem(R.id.action_cart);
+        item.getActionView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "fdafda", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        FrameLayout cartActionView = (FrameLayout) item.getActionView();
+        cartItemCountTextView = cartActionView.findViewById(R.id.cart_badge_counter_textView);
+        setupBadge();
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_cart: {
+
+                return true;
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -124,9 +161,9 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     private void setupRecyclerViews() {
-        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getNewProducts());
-        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getRatedProducts());
-        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity() , Repository.getInstance().getVisitedProducts());
+        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity(), Repository.getInstance().getNewProducts());
+        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity(), Repository.getInstance().getRatedProducts());
+        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity(), Repository.getInstance().getVisitedProducts());
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
         mostViewedProductsRecyclerView.setAdapter(mostViewedProductAdapter);
@@ -136,13 +173,31 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         latestProductsRecyclerView = view.findViewById(R.id.latest_Products_RecyclerView);
         popularProductsRecyclerView = view.findViewById(R.id.popular_Products_RecyclerView);
         mostViewedProductsRecyclerView = view.findViewById(R.id.most_Viewed_Products_RecyclerView);
-
         mainNavigationView = view.findViewById(R.id.main_navigation_view);
         categoriesChipGroup = view.findViewById(R.id.categories_chip_group);
         toolbar = view.findViewById(R.id.toolbar);
         drawer = view.findViewById(R.id.drawer_layout);
+
+
     }
 
+    private void setupBadge (){
+       /// int bagSize = Repository.getInstance().getShoppingBag().size();
+        int bagSize = 12;
+
+        if (cartItemCountTextView != null) {
+            if (bagSize == 0) {
+                if (cartItemCountTextView.getVisibility() != View.GONE) {
+                    cartItemCountTextView.setVisibility(View.GONE);
+                }
+            } else {
+                cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
+                if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
+                    cartItemCountTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
@@ -173,73 +228,5 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         } else
             return false;
     }
-
-    private void generateLists() {
-        api.getAllProducts("date", "20").enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().setAllProducts(response.body());
-                    latestProductsAdapter.setProducts(Repository.getInstance().getAllProducts());
-                    latestProductsAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-        api.getAllProducts("popularity", "20").enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    popularProductsAdapter.setProducts(response.body());
-                    popularProductsAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        api.getAllProducts("rating", "20").enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if (response.isSuccessful()) {
-                    mostViewedProductAdapter.setProducts(response.body());
-                    mostViewedProductAdapter.notifyDataSetChanged();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        api.getAllCategories().enqueue(new Callback<List<Category>>() {
-            @Override
-            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
-                if (response.isSuccessful()) {
-                    Repository.getInstance().setAllCategories(response.body());
-                    setCategoriesChips();
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Category>> call, Throwable t) {
-                Log.d("network", "onFailure: " + t.getMessage());
-                Toast.makeText(getActivity(), "network Failure", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
 }
+
