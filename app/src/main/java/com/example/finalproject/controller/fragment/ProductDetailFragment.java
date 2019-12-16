@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.fragment;
 
 
 import android.content.Context;
@@ -18,7 +18,6 @@ import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -101,6 +100,7 @@ public class ProductDetailFragment extends Fragment {
                     Picasso.get().load(imageList.get(position).getSrc()).placeholder(R.drawable.alt)
                             .into(viewHolder.imageViewBackground);
         }
+
         @Override
         public int getCount() {
             return imageList.size();

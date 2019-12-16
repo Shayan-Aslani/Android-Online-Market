@@ -1,8 +1,10 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.activity;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+
+import com.example.finalproject.controller.fragment.StartFragment;
 
 public class StartActivity extends SingleFragmentActivity {
 

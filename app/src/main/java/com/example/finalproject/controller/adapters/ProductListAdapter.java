@@ -18,16 +18,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
+public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductHolder> {
 
     private List<Product> mProducts = new ArrayList<>();
     private AppCompatActivity mActivity ;
 
-    public ProductAdapter(AppCompatActivity mActivity ) {
+    public ProductListAdapter(AppCompatActivity mActivity ) {
         this.mActivity = mActivity;
     }
 
-    public ProductAdapter(AppCompatActivity mActivity , List<Product> productList) {
+    public ProductListAdapter(AppCompatActivity mActivity , List<Product> productList) {
         this.mActivity = mActivity;
         this.mProducts = productList;
     }
@@ -40,7 +40,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.product_main_list_item, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.product_list_item, parent, false);
         return new ProductHolder(view);
     }
 
@@ -67,9 +67,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         public ProductHolder(@NonNull final View itemView) {
             super(itemView);
 
-            mTextViewTitle = itemView.findViewById(R.id.productName_TextView);
-            mTextViewPrice = itemView.findViewById(R.id.ProductPrice_TextView);
-            imageView = itemView.findViewById(R.id.product_imageView);
+            mTextViewTitle = itemView.findViewById(R.id.textView4);
+          //  mTextViewPrice = itemView.findViewById(R.id.ProductPrice_TextView);
+            imageView = itemView.findViewById(R.id.imageView6);
 
         }
 
@@ -84,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             });
 
             mTextViewTitle.setText(product.getName());
-            mTextViewPrice.setText(product.getPrice());
+          //  mTextViewPrice.setText(product.getPrice());
             Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
             this.mProduct = product;
 
@@ -92,3 +92,4 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
 }
+

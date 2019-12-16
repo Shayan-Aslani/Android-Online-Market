@@ -11,9 +11,7 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("_links")
     private _links _links;
-    @Expose
-    @SerializedName("meta_data")
-    private List<Meta_data> meta_data;
+
     @Expose
     @SerializedName("menu_order")
     private int menu_order;
@@ -23,16 +21,17 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("variations")
     private List<String> variations;
+
     @Expose
-    @SerializedName("default_attributes")
-    private List<String> default_attributes;
+    @SerializedName("attributes")
+    private List<Attributes> attributes;
     @Expose
     @SerializedName("images")
     private List<Images> images;
-    @Expose
-    @SerializedName("tags")
-    private List<Tags> tags;
 
+    @Expose
+    @SerializedName("categories")
+    private List<Categories> categories;
     @Expose
     @SerializedName("purchase_note")
     private String purchase_note;
@@ -111,9 +110,7 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("download_limit")
     private int download_limit;
-    @Expose
-    @SerializedName("downloads")
-    private List<String> downloads;
+
     @Expose
     @SerializedName("downloadable")
     private boolean downloadable;
@@ -195,13 +192,7 @@ public class Product implements Serializable {
         this._links = _links;
     }
 
-    public List<Meta_data> getMeta_data() {
-        return meta_data;
-    }
 
-    public void setMeta_data(List<Meta_data> meta_data) {
-        this.meta_data = meta_data;
-    }
 
     public int getMenu_order() {
         return menu_order;
@@ -227,14 +218,14 @@ public class Product implements Serializable {
         this.variations = variations;
     }
 
-    public List<String> getDefault_attributes() {
-        return default_attributes;
+
+    public List<Attributes> getAttributes() {
+        return attributes;
     }
 
-    public void setDefault_attributes(List<String> default_attributes) {
-        this.default_attributes = default_attributes;
+    public void setAttributes(List<Attributes> attributes) {
+        this.attributes = attributes;
     }
-
 
     public List<Images> getImages() {
         return images;
@@ -244,12 +235,13 @@ public class Product implements Serializable {
         this.images = images;
     }
 
-    public List<Tags> getTags() {
-        return tags;
+
+    public List<Categories> getCategories() {
+        return categories;
     }
 
-    public void setTags(List<Tags> tags) {
-        this.tags = tags;
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
     }
 
     public String getPurchase_note() {
@@ -460,13 +452,6 @@ public class Product implements Serializable {
         this.download_limit = download_limit;
     }
 
-    public List<String> getDownloads() {
-        return downloads;
-    }
-
-    public void setDownloads(List<String> downloads) {
-        this.downloads = downloads;
-    }
 
     public boolean getDownloadable() {
         return downloadable;
@@ -713,31 +698,64 @@ public class Product implements Serializable {
         }
     }
 
-    public static class Meta_data {
+    public static class Attributes {
         @Expose
-        @SerializedName("value")
-        private String value;
+        @SerializedName("options")
+        private List<String> options;
         @Expose
-        @SerializedName("key")
-        private String key;
+        @SerializedName("variation")
+        private boolean variation;
+        @Expose
+        @SerializedName("visible")
+        private boolean visible;
+        @Expose
+        @SerializedName("position")
+        private int position;
+        @Expose
+        @SerializedName("name")
+        private String name;
         @Expose
         @SerializedName("id")
         private int id;
 
-        public String getValue() {
-            return value;
+        public List<String> getOptions() {
+            return options;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public void setOptions(List<String> options) {
+            this.options = options;
         }
 
-        public String getKey() {
-            return key;
+        public boolean getVariation() {
+            return variation;
         }
 
-        public void setKey(String key) {
-            this.key = key;
+        public void setVariation(boolean variation) {
+            this.variation = variation;
+        }
+
+        public boolean getVisible() {
+            return visible;
+        }
+
+        public void setVisible(boolean visible) {
+            this.visible = visible;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         public int getId() {
@@ -840,7 +858,7 @@ public class Product implements Serializable {
         }
     }
 
-    public static class Tags {
+    public static class Categories {
         @Expose
         @SerializedName("slug")
         private String slug;
@@ -875,8 +893,6 @@ public class Product implements Serializable {
             this.id = id;
         }
     }
-
-
 
     public static class Dimensions {
         @Expose
@@ -914,3 +930,4 @@ public class Product implements Serializable {
         }
     }
 }
+

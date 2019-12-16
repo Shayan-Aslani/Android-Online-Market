@@ -1,13 +1,12 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.finalproject.R;
+import com.example.finalproject.controller.fragment.CategoryListFragment;
 
 public class CategoryListActivity extends SingleFragmentActivity {
 

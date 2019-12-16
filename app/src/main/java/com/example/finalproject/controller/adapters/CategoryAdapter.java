@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.CategoryDetailActivity;
+import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.model.Category;
 import com.squareup.picasso.Picasso;
 

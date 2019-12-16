@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.activity;
 
 import androidx.fragment.app.Fragment;
 
@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import static com.example.finalproject.controller.CategoryListActivity.CATEGORY_ID_EXTRA;
+import com.example.finalproject.controller.fragment.CategoryDetailFragment;
+
+import static com.example.finalproject.controller.activity.CategoryListActivity.CATEGORY_ID_EXTRA;
 
 public class CategoryDetailActivity extends SingleFragmentActivity {
 

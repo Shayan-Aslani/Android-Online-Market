@@ -1,5 +1,7 @@
 package com.example.finalproject.network;
 
+import androidx.annotation.Nullable;
+
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 
@@ -7,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -27,6 +30,7 @@ public interface Api {
     @GET("products/?")
     Call<List<Product>> getProductsSubCategoires(@Query("category") String categoryId , @Query("orderby") String orderBy);
 
-
+    @GET("products/?")
+    Call<List<Product>> searchProducts(@Query("search") String productName);
 
 }

@@ -1,21 +1,15 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.activity;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.finalproject.R;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.finalproject.controller.fragment.MainFragment;
 
 public class MainActivity extends SingleFragmentActivity {
 

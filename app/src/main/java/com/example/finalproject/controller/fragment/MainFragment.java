@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.fragment;
 
 
 import android.annotation.SuppressLint;
@@ -12,12 +12,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,18 +23,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.activity.CategoryDetailActivity;
+import com.example.finalproject.controller.activity.CategoryListActivity;
+import com.example.finalproject.controller.activity.SearchActivity;
 import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.Category;
-import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
-import com.example.finalproject.network.Api;
-import com.example.finalproject.network.RetrofitInstance;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
@@ -44,10 +40,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -128,8 +120,8 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.action_cart: {
-
+            case R.id.app_bar_search: {
+                startActivity(SearchActivity.newIntent(getContext()));
                 return true;
             }
 

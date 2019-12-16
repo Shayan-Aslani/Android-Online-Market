@@ -1,10 +1,15 @@
 package com.example.finalproject.network;
 
+import android.net.Uri;
+
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 
 import okhttp3.Authenticator;
 import okhttp3.Cache;
 import okhttp3.Credentials;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -12,6 +17,7 @@ import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Url;
 
 public class RetrofitInstance {
 
@@ -19,10 +25,11 @@ public class RetrofitInstance {
     private static final String BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
     public static final String USER_NAME = "ck_120a89c914da239359b2683859fb36ce3c94fc0a";
     public static final String PASSWORD = "cs_0dabb4ea47c464969eaad199a30370b9e7cb7e7b";
+    public static final String TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvd29vY29tbWVyY2UubWFrdGFic2hhcmlmLmlyIiwiaWF0IjoxNTc1Nzg2MjI2LCJuYmYiOjE1NzU3ODYyMjYsImV4cCI6MTU3NjM5MTAyNiwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMTEifX19.W35eIyG9slS-PBx_6V3TyzE0LREWpPJZKXHhJEvl6gk" ;
 
     public static Retrofit getRetrofit() {
         if (retrofitInstance == null) {
-           OkHttpClient client = new OkHttpClient.Builder()
+            OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new BasicAuthInterceptor(USER_NAME, PASSWORD))
                     .build();
 
@@ -52,13 +59,16 @@ public class RetrofitInstance {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
-            Request authenticatedRequest = request.newBuilder()
-                    .header("Authorization", credentials).build();
-            return chain.proceed(authenticatedRequest);
+
+            HttpUrl url = request.url().newBuilder().
+                    addQueryParameter("consumer_key",USER_NAME)
+                    .addQueryParameter("consumer_secret" , PASSWORD)
+                    .build();
+            request = request.newBuilder().url(url).build();
+            return chain.proceed(request);
         }
 
     }
-
 
 
 

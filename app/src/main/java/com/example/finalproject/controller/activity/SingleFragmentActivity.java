@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.activity;
 
 import android.os.Bundle;
 import android.util.Log;

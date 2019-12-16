@@ -1,4 +1,4 @@
-package com.example.finalproject.controller;
+package com.example.finalproject.controller.fragment;
 
 
 import android.content.Context;
@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.finalproject.R;
+import com.example.finalproject.controller.activity.MainActivity;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -112,8 +112,8 @@ public class StartFragment extends Fragment {
                 Repository.getInstance().setAllProducts(generateLists("date"));
                 Repository.getInstance().setRatedProducts(generateLists("rating"));
                 Repository.getInstance().setVisitedProducts(generateLists("popularity"));
-                Repository.getInstance().setAllCategories(RetrofitInstance.getRetrofit().create(Api.class)
-                        .getAllCategories().execute().body());
+               Repository.getInstance().setAllCategories(RetrofitInstance.getRetrofit().create(Api.class)
+                       .getAllCategories().execute().body());
             } catch (IOException e) {
                 e.printStackTrace();
                 publishProgress("خطا در دریافت اطلاعات از دیجی کالا");
@@ -135,6 +135,7 @@ public class StartFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             startActivity(MainActivity.newIntent(getActivity() , result));
+            getActivity().finish();
         }
     }
 
