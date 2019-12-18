@@ -14,12 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.ShoppingCartPreferences;
+import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
+import com.google.android.material.button.MaterialButton;
 import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,6 +35,7 @@ public class ProductDetailFragment extends Fragment {
     public static final String PRODUCT_ID_ARG = "productIdArg";
     private Product mProduct ;
     private TextView nameTextView , priceTextView , descriptionTextView ;
+    private MaterialButton addShoppingCartButton ;
     private int mProductId;
     private SliderView sliderView ;
 
@@ -62,6 +67,22 @@ public class ProductDetailFragment extends Fragment {
         initUi(view);
         setDetail();
 
+        addShoppingCartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<CartProduct> list =  Repository.getInstance().getShoppingBagProducts().getValue();
+                list.add(Repository.getInstance().convertToCartProduct(mProduct));
+                Repository.getInstance().getShoppingBagProducts().setValue(list);
+              /*  List<Integer> idList = ShoppingCartPreferences.getProductList(getContext()) ;
+                if(idList == null)
+                    idList = new ArrayList<>();
+                idList.add(mProduct.getId());
+                ShoppingCartPreferences.setProductList(getContext() , idList);
+
+               */
+            }
+        });
+
         return view;
     }
 
@@ -71,6 +92,7 @@ public class ProductDetailFragment extends Fragment {
         priceTextView = view.findViewById(R.id.productPrice_TextView_Detail);
         descriptionTextView = view.findViewById(R.id.productDescription_TextView_Detail);
         sliderView = view.findViewById(R.id.imageSlider);
+        addShoppingCartButton = view.findViewById(R.id.add_shopping_cart_Button);
     }
 
     public void setDetail(){

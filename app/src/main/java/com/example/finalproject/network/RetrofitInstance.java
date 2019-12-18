@@ -33,15 +33,12 @@ public class RetrofitInstance {
                     .addInterceptor(new BasicAuthInterceptor(USER_NAME, PASSWORD))
                     .build();
 
-
-
             retrofitInstance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
         }
-
 
         return retrofitInstance;
     }
@@ -50,19 +47,20 @@ public class RetrofitInstance {
 
     private static class BasicAuthInterceptor implements Interceptor {
 
-        private String credentials;
+        private String consumerKey , consumerSecret;
 
-        public BasicAuthInterceptor(String user, String password) {
-            this.credentials = Credentials.basic(user, password);
+        public BasicAuthInterceptor(String consumerKey, String consumerSecret) {
+            this.consumerKey = consumerKey;
+            this.consumerSecret = consumerSecret;
         }
 
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
 
-            HttpUrl url = request.url().newBuilder().
-                    addQueryParameter("consumer_key",USER_NAME)
-                    .addQueryParameter("consumer_secret" , PASSWORD)
+            HttpUrl url = request.url().newBuilder()
+                    .addQueryParameter("consumer_key",consumerKey)
+                    .addQueryParameter("consumer_secret" , consumerSecret)
                     .build();
             request = request.newBuilder().url(url).build();
             return chain.proceed(request);

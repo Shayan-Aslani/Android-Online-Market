@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.finalproject.R;
 import com.example.finalproject.controller.activity.MainActivity;
+import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
@@ -25,6 +26,7 @@ import com.example.finalproject.network.RetrofitInstance;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -97,6 +99,8 @@ public class StartFragment extends Fragment {
     private void initUi(View view){
         tryAgainButton = view.findViewById(R.id.tryagain_Button);
         progressBar = view.findViewById(R.id.progressBar2);
+        List<CartProduct> list = new ArrayList<>();
+        Repository.getInstance().getShoppingBagProducts().setValue(list);
     }
 
 

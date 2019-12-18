@@ -32,6 +32,7 @@ import com.example.finalproject.controller.activity.CategoryListActivity;
 import com.example.finalproject.controller.activity.SearchActivity;
 import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.Category;
+import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
@@ -106,7 +107,11 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         item.getActionView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "fdafda", Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container , ShoppingBagFragment.newInstance())
+                        .addToBackStack("")
+                        .commit();
             }
         });
 
@@ -175,20 +180,25 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
     private void setupBadge (){
        /// int bagSize = Repository.getInstance().getShoppingBag().size();
-        int bagSize = 12;
 
-        if (cartItemCountTextView != null) {
-            if (bagSize == 0) {
-                if (cartItemCountTextView.getVisibility() != View.GONE) {
-                    cartItemCountTextView.setVisibility(View.GONE);
-                }
-            } else {
-                cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
-                if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
-                    cartItemCountTextView.setVisibility(View.VISIBLE);
+
+        Repository.getInstance().getShoppingBagProducts().observe(this , shoppingBagList->{
+            int bagSize = shoppingBagList.size() ;
+            if (cartItemCountTextView != null) {
+                if (bagSize == 0) {
+                    if (cartItemCountTextView.getVisibility() != View.GONE) {
+                        cartItemCountTextView.setVisibility(View.GONE);
+                    }
+                } else {
+                    cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
+                    if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
+                        cartItemCountTextView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
-        }
+        });
+
+
     }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

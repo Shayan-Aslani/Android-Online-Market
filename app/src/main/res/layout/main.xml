@@ -48,7 +48,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.smarteist.autoimageslider.SliderView
+                android:id="@+id/main_sliderView"
+                android:layout_width="0dp"
+                android:layout_height="219dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <HorizontalScrollView
+                android:id="@+id/horizontalScrollView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scrollbars="none"
@@ -73,13 +81,13 @@
                 android:id="@+id/latest_Products_RecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="92dp"
+                android:layout_marginTop="48dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/main_sliderView" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/most_Viewed_Products_RecyclerView"
