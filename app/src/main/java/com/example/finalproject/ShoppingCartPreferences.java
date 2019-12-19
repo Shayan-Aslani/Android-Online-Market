@@ -32,13 +32,14 @@ public class ShoppingCartPreferences {
         if (prefs == null)
             return null;
 
-        List<CartProduct> productIdList;
+        List<CartProduct> cartProductList = new ArrayList<>();
         Type type = new TypeToken<List<CartProduct>>() {}.getType();
         Gson gson = new Gson();
         String jsonText =  prefs.getString(PREF_PRODUCT_ID, null) ;
-        productIdList = gson.fromJson(jsonText, type);
+        if(gson.fromJson(jsonText , type) instanceof  List)
+            cartProductList = gson.fromJson(jsonText, type);
 
-        return productIdList;
+        return cartProductList;
     }
 
     public static void setProductList(Context context, List<CartProduct> cartProductList) {

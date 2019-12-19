@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.finalproject.R;
+import com.example.finalproject.ShoppingCartPreferences;
 import com.example.finalproject.controller.activity.MainActivity;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;

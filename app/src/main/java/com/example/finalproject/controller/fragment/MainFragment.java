@@ -16,7 +16,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.finalproject.R;
 import com.example.finalproject.ShoppingCartPreferences;
@@ -35,7 +33,6 @@ import com.example.finalproject.controller.activity.SearchActivity;
 import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Category;
-import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
