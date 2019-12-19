@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,10 +28,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.ShoppingCartPreferences;
 import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.controller.activity.CategoryListActivity;
 import com.example.finalproject.controller.activity.SearchActivity;
 import com.example.finalproject.controller.adapters.ProductAdapter;
+import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
@@ -179,9 +182,10 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     private void setupBadge (){
-       /// int bagSize = Repository.getInstance().getShoppingBag().size();
 
+       List<CartProduct> list = ShoppingCartPreferences.getProductList(getContext()) ;
 
+        Repository.getInstance().getShoppingBagProducts().setValue(list);
         Repository.getInstance().getShoppingBagProducts().observe(this , shoppingBagList->{
             int bagSize = shoppingBagList.size() ;
             if (cartItemCountTextView != null) {
@@ -196,6 +200,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                     }
                 }
             }
+            ShoppingCartPreferences.setProductList(getContext() , shoppingBagList);
         });
 
 

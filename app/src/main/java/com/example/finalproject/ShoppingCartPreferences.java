@@ -32,10 +32,11 @@ public class ShoppingCartPreferences {
         if (prefs == null)
             return null;
 
-        Gson gson = new Gson();
-        String jsonText =  new Gson().toJson(prefs.getString(PREF_PRODUCT_ID, "["));
+        List<CartProduct> productIdList;
         Type type = new TypeToken<List<CartProduct>>() {}.getType();
-        ArrayList<CartProduct> productIdList = gson.fromJson(jsonText, type);
+        Gson gson = new Gson();
+        String jsonText =  prefs.getString(PREF_PRODUCT_ID, null) ;
+        productIdList = gson.fromJson(jsonText, type);
 
         return productIdList;
     }

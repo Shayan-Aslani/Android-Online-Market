@@ -116,7 +116,7 @@ public class StartFragment extends Fragment {
                 Repository.getInstance().setAllProducts(generateLists("date"));
                 Repository.getInstance().setRatedProducts(generateLists("rating"));
                 Repository.getInstance().setVisitedProducts(generateLists("popularity"));
-               Repository.getInstance().setAllCategories(RetrofitInstance.getRetrofit().create(Api.class)
+                Repository.getInstance().setAllCategories(RetrofitInstance.getRetrofit().create(Api.class)
                        .getAllCategories().execute().body());
             } catch (IOException e) {
                 e.printStackTrace();

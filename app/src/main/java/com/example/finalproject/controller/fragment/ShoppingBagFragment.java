@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.ShoppingCartPreferences;
@@ -27,8 +28,7 @@ import java.util.List;
  */
 public class ShoppingBagFragment extends Fragment {
 
-    private List<Product> productList ;
-    private List<Integer> productIdList ;
+    private ImageView closeImageView ;
     private List<CartProduct> cartProductList ;
     private RecyclerView shoppingCartRecyclerView ;
     private ShoppingCartAdapter shoppingCartAdapter ;
@@ -80,11 +80,18 @@ public class ShoppingBagFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_shopping_bag, container, false);
         initUi(view);
         setShoppingCartRecyclerView();
+        closeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
         return view ;
     }
 
     private void initUi(View view){
         shoppingCartRecyclerView = view.findViewById(R.id.shopping_cart_recyclerView);
+        closeImageView = view.findViewById(R.id.shopping_cart_close_imageview);
     }
 
     private void setShoppingCartRecyclerView(){
