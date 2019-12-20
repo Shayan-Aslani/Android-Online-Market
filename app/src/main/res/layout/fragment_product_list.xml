@@ -128,7 +128,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_toStartOf="@id/filter_img"
                     android:layout_toLeftOf="@id/filter_img"
-                    android:text="@string/product_filtering"
+                    android:text="@string/filter_on"
                     android:textSize="12sp" />
             </RelativeLayout>
 

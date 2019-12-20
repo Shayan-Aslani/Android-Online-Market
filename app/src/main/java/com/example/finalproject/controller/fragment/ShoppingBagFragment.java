@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,12 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.ShoppingCartPreferences;
 import com.example.finalproject.controller.adapters.ShoppingCartAdapter;
 import com.example.finalproject.model.CartProduct;
-import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class ShoppingBagFragment extends Fragment {
     private List<CartProduct> cartProductList ;
     private RecyclerView shoppingCartRecyclerView ;
     private ShoppingCartAdapter shoppingCartAdapter ;
-
+    private TextView cartItemCountTextView ;
 
     public static ShoppingBagFragment newInstance() {
 
@@ -50,27 +51,12 @@ public class ShoppingBagFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
+            cartProductList = shoppingBagList ;
+            shoppingCartAdapter.setProducts(cartProductList);
+            shoppingCartAdapter.notifyDataSetChanged();
+        });
 
-       // cartProductList =  ShoppingCartPreferences.getProductList(getContext());
-        cartProductList = Repository.getInstance().getShoppingBagProducts().getValue();
-        //productList = Repository.getInstance().getShoppingBagProducts();
-        /*for(Integer id : productIdList) {
-            RetrofitInstance.getRetrofit().create(Api.class)
-                    .getProduct(String.valueOf(id)).enqueue(new Callback<Product>() {
-                @Override
-                public void onResponse(Call<Product> call, Response<Product> response) {
-                    productList.add(response.body());
-                    Repository.getInstance().getShoppingBagProducts().postValue(productList);
-                }
-
-                @Override
-                public void onFailure(Call<Product> call, Throwable t) {
-
-                }
-            });
-        }
-
-         */
     }
 
     @Override
@@ -79,6 +65,7 @@ public class ShoppingBagFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_shopping_bag, container, false);
         initUi(view);
+        setupBadge();
         setShoppingCartRecyclerView();
         closeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,12 +79,32 @@ public class ShoppingBagFragment extends Fragment {
     private void initUi(View view){
         shoppingCartRecyclerView = view.findViewById(R.id.shopping_cart_recyclerView);
         closeImageView = view.findViewById(R.id.shopping_cart_close_imageview);
+        cartItemCountTextView = view.findViewById(R.id.cart_badge_counter_textView);
     }
 
     private void setShoppingCartRecyclerView(){
         shoppingCartAdapter = new ShoppingCartAdapter((AppCompatActivity) getActivity(), cartProductList);
         shoppingCartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shoppingCartRecyclerView.setAdapter(shoppingCartAdapter);
+    }
+
+    private void setupBadge(){
+        Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
+            int bagSize = shoppingBagList.size() ;
+            if (cartItemCountTextView != null) {
+                if (bagSize == 0) {
+                    if (cartItemCountTextView.getVisibility() != View.GONE) {
+                        cartItemCountTextView.setVisibility(View.GONE);
+                    }
+                } else {
+                    cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
+                    if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
+                        cartItemCountTextView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            ShoppingCartPreferences.setProductList(getContext() , shoppingBagList);
+        });
     }
 
 }

@@ -163,7 +163,6 @@
     <string name="collapse_text_view">بستن</string>
     <string name="color">رنگ :</string>
     <string name="color_warranty_choice">رنگ و گارانتی مورد نظر خود را انتخاب کنید</string>
-    <string name="com.crashlytics.android.build_id">b5e556c3-722a-4021-bdd2-ed4dae407945</string>
     <string name="comment">نظر</string>
     <string name="comment_line_id">rate_line_id</string>
     <string name="comment_text_empty">لطفا متن نقد و بررسی را وارد کنید</string>
@@ -174,21 +173,6 @@
     <string name="comments_ly_id">comments_ly_id</string>
     <string name="comments_rate_details_button_text">جزییات</string>
     <string name="commingSoon">به زودی</string>
-    <string name="common_google_play_services_enable_button">Enable</string>
-    <string name="common_google_play_services_enable_text">"%1$s won't work unless you enable Google Play services."</string>
-    <string name="common_google_play_services_enable_title">Enable Google Play services</string>
-    <string name="common_google_play_services_install_button">Install</string>
-    <string name="common_google_play_services_install_text">"%1$s won't run without Google Play services, which are missing from your device."</string>
-    <string name="common_google_play_services_install_title">Get Google Play services</string>
-    <string name="common_google_play_services_notification_channel_name">Google Play services availability</string>
-    <string name="common_google_play_services_notification_ticker">Google Play services error</string>
-    <string name="common_google_play_services_unknown_issue">%1$s is having trouble with Google Play services. Please try again.</string>
-    <string name="common_google_play_services_unsupported_text">"%1$s won't run without Google Play services, which are not supported by your device."</string>
-    <string name="common_google_play_services_update_button">Update</string>
-    <string name="common_google_play_services_update_text">"%1$s won't run unless you update Google Play services."</string>
-    <string name="common_google_play_services_update_title">Update Google Play services</string>
-    <string name="common_google_play_services_updating_text">"%1$s won't run without Google Play services, which are currently updating."</string>
-    <string name="common_google_play_services_wear_update_text">New version of Google Play services needed. It will update itself shortly.</string>
     <string name="common_open_on_phone">Open on phone</string>
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
@@ -208,14 +192,12 @@
     <string name="count">تعداد</string>
     <string name="crash_toast_text">خطا در پرداخت از طریق هم‌پی</string>
     <string name="currency_rials">ریال</string>
-    <string name="default_web_client_id">1084543464466-ae7mefs33jucdo0nhdef8tehe601f4gu.apps.googleusercontent.com</string>
     <string name="delete">حذف</string>
     <string name="delivery">تحویل</string>
     <string name="delivery_text_1">این سفارش از طریق</string>
     <string name="delivery_text_2">با هزینه</string>
     <string name="delivery_text_3">به شما تحویل داده می شود</string>
     <string name="description">Media Controls</string>
-    <string name="detail_info">http://digikala:28103@192.168.1.240:200/api/ProductCache/GetDetailInfoByProductId/</string>
     <string name="details_view">مشاهده جزئیات</string>
     <string name="dg_offers">پیشنهاد‌های دیجی‌کالا</string>
     <string name="dgbon">دیجی‌بن</string>
@@ -239,8 +221,6 @@
     <string name="drawer_close">drawer_close</string>
     <string name="drawer_open">drawer_open</string>
     <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">"DUMMY
-CONTENT"</string>
     <string name="duplication_notification_question">کالاهای زیر پیش تر توسط شما ثبت سفارش شده اند، آیا از سفارش مجدد این کالاها اطمینان دارید؟</string>
     <string name="duplication_notification_title">اخطار سفارش مجدد کالا</string>
     <string name="edame">ادامه مطلب</string>
@@ -686,7 +666,7 @@ CONTENT"</string>
     <string name="size">سایز</string>
     <string name="sort_by">مرتب سازی بر اساس</string>
     <string name="sorting">مرتب سازی</string>
-    <item type="string" name="spb_default_speed">1.0</item>
+    <item name="spb_default_speed" type="string">1.0</item>
     <string name="special_offer">پیشنهاد ویژه</string>
     <string name="status">وضعیت</string>
     <string name="status_bar_notification_info_overflow">999+</string>

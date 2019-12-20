@@ -180,10 +180,10 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
     private void setupBadge (){
 
-       List<CartProduct> list = ShoppingCartPreferences.getProductList(getContext()) ;
+        List<CartProduct> list = ShoppingCartPreferences.getProductList(getContext()) ;
 
-        Repository.getInstance().getShoppingBagProducts().setValue(list);
-        Repository.getInstance().getShoppingBagProducts().observe(this , shoppingBagList->{
+        Repository.getInstance().getShoppingCartProducts().setValue(list);
+        Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
             int bagSize = shoppingBagList.size() ;
             if (cartItemCountTextView != null) {
                 if (bagSize == 0) {
@@ -209,7 +209,10 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         if (id == R.id.home_navigation_menu) {
 
         } else if (id == R.id.bag_navigation_menu) {
-
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container , ShoppingBagFragment.newInstance())
+                    .addToBackStack("transaction")
+                    .commit();
         } else if (id == R.id.categories_navigation_menu) {
             startActivity(CategoryListActivity.newIntent(getContext(), 0));
         }

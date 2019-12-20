@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.ShoppingCartPreferences;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
@@ -23,7 +22,6 @@ import com.smarteist.autoimageslider.SliderView;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -70,9 +68,9 @@ public class ProductDetailFragment extends Fragment {
         addShoppingCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<CartProduct> list =  Repository.getInstance().getShoppingBagProducts().getValue();
+                List<CartProduct> list =  Repository.getInstance().getShoppingCartProducts().getValue();
                 list.add(Repository.getInstance().convertToCartProduct(mProduct));
-                Repository.getInstance().getShoppingBagProducts().setValue(list);
+                Repository.getInstance().getShoppingCartProducts().setValue(list);
               /*  List<Integer> idList = ShoppingCartPreferences.getProductList(getContext()) ;
                 if(idList == null)
                     idList = new ArrayList<>();

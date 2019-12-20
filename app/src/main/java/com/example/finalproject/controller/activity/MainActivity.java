@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.finalproject.R;
+import com.example.finalproject.ShoppingCartPreferences;
 import com.example.finalproject.controller.fragment.MainFragment;
+import com.example.finalproject.model.Repository;
 
 public class MainActivity extends SingleFragmentActivity {
 
@@ -53,5 +55,9 @@ public class MainActivity extends SingleFragmentActivity {
             super.onBackPressed();
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShoppingCartPreferences.setProductList(this , Repository.getInstance().getShoppingCartProducts().getValue());
+    }
 }

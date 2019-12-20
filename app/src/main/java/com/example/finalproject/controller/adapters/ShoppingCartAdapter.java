@@ -2,19 +2,23 @@ package com.example.finalproject.controller.adapters;
 
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.icu.text.Collator;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.CartProduct;
-import com.example.finalproject.model.Product;
+import com.example.finalproject.model.Repository;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -63,32 +67,54 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     public class ProductHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
-        private TextView mTextViewDescription;
+        private TextView mTextViewPrice;
+        private TextView deletetextView ;
         private ImageView imageView ;
-        private CartProduct mProduct;
+        private CartProduct mCartProduct;
         public ProductHolder(@NonNull final View itemView) {
             super(itemView);
 
-            mTextViewTitle = itemView.findViewById(R.id.prduct_name_shopping_cart);
-            mTextViewDescription = itemView.findViewById(R.id.product_description_shopping_cart);
-            imageView = itemView.findViewById(R.id.product_image_shopping_cart);
+            mTextViewTitle = itemView.findViewById(R.id.product_title_cart);
+         mTextViewPrice = itemView.findViewById(R.id.product_price_textview_cart);
+            imageView = itemView.findViewById(R.id.product_image_cart);
+            deletetextView = itemView.findViewById(R.id.delete_textview_cart);
 
         }
 
 
         public void bind(final CartProduct product) {
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mTextViewTitle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mActivity.startActivity(productDetailActivity.newIntent(mActivity , product.getId()));
                 }
             });
 
+            deletetextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
+                            .setTitle(R.string.are_you_sure_for_delete)
+                            .setPositiveButton(R.string.yes , new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Repository.getInstance().deleteCartproduct(mCartProduct);
+                                }
+                            })
+                            .setNegativeButton(R.string.no , null)
+                            .create();
+                    alertDialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+                    alertDialog.show();
+
+                }
+            });
+
             mTextViewTitle.setText(product.getName());
-            mTextViewDescription.setText(product.getShort_description());
+            mTextViewPrice.setText(product.getPrice());
             Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
-            this.mProduct = product;
+            this.mCartProduct = product;
 
         }
     }

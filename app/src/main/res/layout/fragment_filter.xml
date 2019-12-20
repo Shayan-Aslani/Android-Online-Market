@@ -65,7 +65,7 @@
                 android:textColor="@color/digikala_black_light"
                 android:textSize="14.0sp" />
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plist_filter_left_list"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -161,7 +161,7 @@
             android:layout_weight="1.0"
             android:orientation="vertical">
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/plist_filter_titles_list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

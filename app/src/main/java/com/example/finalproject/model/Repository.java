@@ -1,11 +1,8 @@
 package com.example.finalproject.model;
 
-import android.content.pm.ResolveInfo;
-
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Repository {
@@ -17,7 +14,7 @@ public class Repository {
     private List<Product> allProducts;
     private List<Category> allCategories;
     private List<Category> parentCategories ;
-    private MutableLiveData<List<CartProduct>> shoppingBagProducts = new MutableLiveData<>();
+    private MutableLiveData<List<CartProduct>> shoppingCartProducts = new MutableLiveData<>();
 
     private Repository() {
         newProducts = new ArrayList<>();
@@ -113,8 +110,14 @@ public class Repository {
         }
     }
 
-    public MutableLiveData<List<CartProduct>> getShoppingBagProducts() {
-        return shoppingBagProducts;
+    public MutableLiveData<List<CartProduct>> getShoppingCartProducts() {
+        return shoppingCartProducts;
+    }
+
+    public void deleteCartproduct(CartProduct cartProduct){
+        List<CartProduct> list = shoppingCartProducts.getValue();
+        list.remove(cartProduct);
+        shoppingCartProducts.setValue(list);
     }
 
     public CartProduct convertToCartProduct(Product product){
