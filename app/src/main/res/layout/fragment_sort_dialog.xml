@@ -8,10 +8,11 @@
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/sort_radiogroup"
         android:padding="16dp">
 
         <RadioButton
-            android:id="@+id/sort_selection_dialog_fragment__most_view"
+            android:id="@+id/sort_dialog_most_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/digikala_green_light"
@@ -22,7 +23,7 @@
             android:textSize="11dp" />
 
         <RadioButton
-            android:id="@+id/sort_selection_dialog_fragment__best_seller"
+            android:id="@+id/sort_dialog_best_seller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/digikala_green_light"
@@ -33,7 +34,7 @@
             android:textSize="11dp" />
 
         <RadioButton
-            android:id="@+id/sort_selection_dialog_fragment__price_ascending"
+            android:id="@+id/sort_dialog_price_ascending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:buttonTint="@color/digikala_green_light"
@@ -44,7 +45,7 @@
             android:textSize="11dp" />
 
         <RadioButton
-            android:id="@+id/sort_selection_dialog_fragment__price_descending"
+            android:id="@+id/sort_dialog_price_descending"
             style="@android:style/Widget.CompoundButton.RadioButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,10 +57,11 @@
             android:textSize="11dp" />
 
         <RadioButton
-            android:id="@+id/sort_selection_dialog_fragment__newest"
+            android:id="@+id/sort_dialog_newest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|center_vertical"
+            android:buttonTint="@color/digikala_green_light"
             android:layoutDirection="rtl"
             android:paddingRight="8dp"
             android:text="جدیدترین"

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.Attribute;
 
 import java.util.ArrayList;
@@ -74,10 +72,11 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.At
 
         public void bind(final Attribute attribute) {
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    attributeTermAdapter.setmAttribute(attribute);
+                    attributeTermAdapter.setAttribute(attribute);
                     attributeTermAdapter.setTerms(attribute.getTerms());
                     attributeTermAdapter.notifyDataSetChanged();
                 }

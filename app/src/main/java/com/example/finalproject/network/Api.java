@@ -34,7 +34,7 @@ public interface Api {
     Call<List<Product>> getProductsSubCategoires(@Query("category") String categoryId , @Query("orderby") String orderBy);
 
     @GET("products")
-    Call<List<Product>> searchProducts(@Query("search") String productName);
+    Call<List<Product>> searchProducts(@Query("search") String productName , @Query("orderby") String orderBy, @Query("order") String order);
 
     @GET("products")
     Call<List<Product>> getFilteredProducts(@Query("search") String search ,@Query("attribute") String attribute, @Query("attribute_term") String terms);

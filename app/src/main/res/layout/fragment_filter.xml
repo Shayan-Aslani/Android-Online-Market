@@ -36,7 +36,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/dofilter_button_filter_fragment"
+        android:layout_above="@id/dofilter_filter_fragment"
         android:layout_below="@id/plist_filter_close_ly"
         android:baselineAligned="false"
         android:orientation="horizontal"
@@ -170,8 +170,8 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/dofilter_button_filter_fragment"
+    <TextView
+        android:id="@+id/dofilter_filter_fragment"
         android:layout_width="fill_parent"
         android:layout_height="56.0dip"
         android:layout_alignParentBottom="true"

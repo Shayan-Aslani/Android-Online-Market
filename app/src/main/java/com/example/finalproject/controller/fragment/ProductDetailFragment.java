@@ -131,7 +131,7 @@ public class ProductDetailFragment extends Fragment {
             ImageView imageViewBackground;
             public SliderAdapterVH(View itemView) {
                 super(itemView);
-                imageViewBackground = itemView.findViewById(R.id.iv_auto_image_slider);
+                imageViewBackground = itemView.findViewById(R.id.auto_image_slider);
                 this.itemView = itemView;
             }
         }

@@ -2,6 +2,7 @@ package com.example.finalproject.controller.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
@@ -33,11 +35,15 @@ import com.example.finalproject.controller.activity.SearchActivity;
 import com.example.finalproject.controller.adapters.ProductAdapter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Category;
+import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.navigation.NavigationView;
+import com.smarteist.autoimageslider.SliderView;
+import com.smarteist.autoimageslider.SliderViewAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +63,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     private NavigationView mainNavigationView;
     private List<Chip> categoriesChip = new ArrayList<>();
     Toolbar toolbar;
+    private SliderView sliderView ;
     private ChipGroup categoriesChipGroup;
 
 
@@ -92,6 +99,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         setupNavigationView();
         setupRecyclerViews();
         setCategoriesChips();
+        sliderView.setSliderAdapter(new SliderAdapter(getContext() , Repository.getInstance().getNewProducts().get(0).getImages()));
 
 
 
@@ -174,6 +182,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         categoriesChipGroup = view.findViewById(R.id.categories_chip_group);
         toolbar = view.findViewById(R.id.toolbar);
         drawer = view.findViewById(R.id.drawer_layout);
+        sliderView = view.findViewById(R.id.main_sliderView);
 
 
     }
@@ -234,6 +243,43 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             return true;
         } else
             return false;
+    }
+
+    public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
+
+        private Context context;
+        private List<Product.Images> imageList ;
+
+        public SliderAdapter(Context context , List list) {
+            this.context = context;
+            imageList = list ;
+        }
+
+        @Override
+        public SliderAdapter.SliderAdapterVH onCreateViewHolder(ViewGroup parent) {
+            View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_slider_layout_item, null);
+            return new SliderAdapter.SliderAdapterVH(inflate);
+        }
+        @Override
+        public void onBindViewHolder(SliderAdapter.SliderAdapterVH viewHolder, int position) {
+            Picasso.get().load(imageList.get(position).getSrc()).placeholder(R.drawable.alt)
+                    .into(viewHolder.imageViewBackground);
+        }
+
+        @Override
+        public int getCount() {
+            return imageList.size();
+        }
+
+        class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
+            View itemView;
+            ImageView imageViewBackground;
+            public SliderAdapterVH(View itemView) {
+                super(itemView);
+                imageViewBackground = itemView.findViewById(R.id.auto_image_slider);
+                this.itemView = itemView;
+            }
+        }
     }
 }
 

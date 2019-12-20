@@ -21,15 +21,17 @@ import java.util.List;
 public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdapter.AttributeTermHolder> {
 
     private List<Attribute.Term> attributeList = new ArrayList<>();
+    private List<Attribute.Term> selectedTermList ;
     private AppCompatActivity mActivity;
     private Attribute mAttribute;
 
-    public void setmAttribute(Attribute mAttribute) {
+    public void setAttribute(Attribute mAttribute) {
         this.mAttribute = mAttribute;
     }
 
     public AttributeTermAdapter(AppCompatActivity mActivity) {
         this.mActivity = mActivity;
+        selectedTermList = Repository.getInstance().getSelectedTerms();
     }
 
     public AttributeTermAdapter(AppCompatActivity mActivity, List<Attribute.Term> attributeList, Attribute mAttribute) {
@@ -84,6 +86,11 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
             mTextViewTitle.setText(term.getName());
             this.mTerm = term;
             term.setAttributeSlug(mAttribute.getSlug());
+
+            if(selectedTermList.contains(term))
+                mCheckbox.setChecked(true);
+            else
+                mCheckbox.setChecked(false);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

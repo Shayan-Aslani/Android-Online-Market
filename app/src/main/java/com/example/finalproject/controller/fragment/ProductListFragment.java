@@ -7,26 +7,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Slide;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.ProductListAdapter;
+import com.example.finalproject.eventBus.ProductListSortMassage;
 import com.example.finalproject.model.Attribute;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,11 @@ public class ProductListFragment extends Fragment {
     private String searchText;
     private Boolean searchable;
     private List<Attribute.Term> selectedTerms ;
+    private TextView titleToolbar ;
+    private ImageView backImageViewToolbar;
+    private String mOrderType , mOrder ;
+    private TextView sortTextView ;
+    private int mSortType ;
 
     private RelativeLayout sortRelativeLayout, filterRelativeLayout;
 
@@ -73,7 +80,7 @@ public class ProductListFragment extends Fragment {
         searchable = getArguments().getBoolean(SEARCHABLE_ARG);
         searchText = getArguments().getString(SEARCH_STRING_ARG);
 
-        showSearchList(searchText);
+
     }
 
     @Override
@@ -93,12 +100,19 @@ public class ProductListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         initUi(view);
         setRecyclerView();
+        showSearchList(searchText , mOrder , mOrderType);
+        titleToolbar.setText(searchText);
 
-
+        backImageViewToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
         sortRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialogFragment = SortDialogFragment.newInstance();
+                DialogFragment dialogFragment = SortDialogFragment.newInstance(mSortType);
                 dialogFragment.show(getFragmentManager(), null);
             }
         });
@@ -120,6 +134,9 @@ public class ProductListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.product_list_recyclerView);
         sortRelativeLayout = view.findViewById(R.id.sort_relative);
         filterRelativeLayout = view.findViewById(R.id.filter_relative);
+        titleToolbar = view.findViewById(R.id.title_toolbar_productList);
+        backImageViewToolbar = view.findViewById(R.id.back_toolbar_productList);
+        sortTextView = view.findViewById(R.id.sort_mode_textView);
     }
 
     private void setRecyclerView() {
@@ -151,9 +168,9 @@ public class ProductListFragment extends Fragment {
         });
     }
 
-    private void showSearchList(String query) {
+    private void showSearchList(String query,  String orderBy , String orderType ) {
         RetrofitInstance.getRetrofit().create(Api.class).
-                searchProducts(query).enqueue(new Callback<List<Product>>() {
+                searchProducts(query , orderType , orderBy).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 productList = response.body();
@@ -166,6 +183,57 @@ public class ProductListFragment extends Fragment {
 
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSortChanged(ProductListSortMassage productListSortMassage) {
+
+        mSortType = productListSortMassage.getEnumIndex();
+
+
+            SortDialogFragment.Sorts sort = SortDialogFragment.getEnumSorts(mSortType);
+            switch (sort) {
+                case NEWEST:
+                    mOrderType = "date";
+                    sortTextView.setText("جدیدترین");
+                    break;
+                case RATED:
+                    mOrderType = "popularity";
+                    sortTextView.setText("پربازدیدترین");
+                    break;
+                case VISITED:
+                    mOrderType = "rating";
+                    sortTextView.setText("پرفروش ترین");
+                    break;
+                case LOW_TO_HIGH:
+                    mOrderType = "price";
+                    mOrder = "asc";
+                    sortTextView.setText("قیمت از کم به زیاد");
+                    break;
+                case HIGH_TO_LOW:
+                    mOrderType = "price";
+                    mOrder = "desc";
+                    sortTextView.setText("قیمت از زیاد به کم");
+                    break;
+            }
+            showSearchList(searchText , mOrder , mOrderType);
+
+
+        }
+
+
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

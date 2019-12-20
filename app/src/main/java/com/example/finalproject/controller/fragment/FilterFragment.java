@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,16 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.AttributeTermAdapter;
 import com.example.finalproject.controller.adapters.AttributesAdapter;
 import com.example.finalproject.model.Attribute;
-import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Repository;
-import com.example.finalproject.network.RetrofitInstance;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -32,7 +29,7 @@ import java.util.List;
  */
 public class FilterFragment extends Fragment {
 
-    private MaterialButton doFilterButton;
+    private TextView doFilterButton;
     private ImageView closeImageView;
     private List<Attribute> attributesList;
     private RecyclerView attributesRecyclerView, termsRecyclerView;
@@ -84,7 +81,7 @@ public class FilterFragment extends Fragment {
     }
 
     private void initUi(View view) {
-        doFilterButton = view.findViewById(R.id.dofilter_button_filter_fragment);
+        doFilterButton = view.findViewById(R.id.dofilter_filter_fragment);
         closeImageView = view.findViewById(R.id.close_imageView_filter_fragment);
         attributesRecyclerView = view.findViewById(R.id.attributes_recyclerView_filter);
         termsRecyclerView = view.findViewById(R.id.terms_recyclerView_filter);
