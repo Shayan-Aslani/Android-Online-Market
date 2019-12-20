@@ -26,7 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.ShoppingCartPreferences;
+import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.controller.activity.CategoryListActivity;
 import com.example.finalproject.controller.activity.SearchActivity;

@@ -14,6 +14,25 @@ public class Repository {
     private List<Product> allProducts;
     private List<Category> allCategories;
     private List<Category> parentCategories ;
+    private List<Attribute> allAttributes ;
+    private List<Attribute.Term> selectedTerms = new ArrayList<>();
+
+    public List<Attribute.Term> getSelectedTerms() {
+        return selectedTerms;
+    }
+
+    public void setSelectedTerms(List<Attribute.Term> selectedTerms) {
+        this.selectedTerms = selectedTerms;
+    }
+
+    public List<Attribute> getAllAttributes() {
+        return allAttributes;
+    }
+
+    public void setAllAttributes(List<Attribute> allAttributes) {
+        this.allAttributes = allAttributes;
+    }
+
     private MutableLiveData<List<CartProduct>> shoppingCartProducts = new MutableLiveData<>();
 
     private Repository() {
@@ -122,5 +141,15 @@ public class Repository {
 
     public CartProduct convertToCartProduct(Product product){
         return new CartProduct(product.getName() , product.getId() , product.getImages() , product.getPrice() , product.getShort_description());
+    }
+
+    public void addSelectedTerm(Attribute.Term term)
+    {
+        selectedTerms.add(term);
+    }
+
+    public void removeSelectedTerm(Attribute.Term term)
+    {
+        selectedTerms.remove(term);
     }
 }

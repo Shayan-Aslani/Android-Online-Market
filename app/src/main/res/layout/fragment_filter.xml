@@ -24,6 +24,7 @@
             android:textSize="17.0sp" />
 
         <ImageView
+            android:id="@+id/close_imageView_filter_fragment"
             android:layout_width="48.0dip"
             android:layout_height="48.0dip"
             android:layout_margin="4.0dip"
@@ -66,7 +67,7 @@
                 android:textSize="14.0sp" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/plist_filter_left_list"
+                android:id="@+id/terms_recyclerView_filter"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_above="@id/container_actions"
@@ -162,9 +163,9 @@
             android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/plist_filter_titles_list"
+                android:id="@+id/attributes_recyclerView_filter"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/digikala_black_light" />
         </LinearLayout>
     </LinearLayout>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.ShoppingCartPreferences;
+import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.adapters.ShoppingCartAdapter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Repository;

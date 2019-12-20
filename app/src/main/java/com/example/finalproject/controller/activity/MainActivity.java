@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.finalproject.R;
-import com.example.finalproject.ShoppingCartPreferences;
+import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.fragment.MainFragment;
 import com.example.finalproject.model.Repository;
 

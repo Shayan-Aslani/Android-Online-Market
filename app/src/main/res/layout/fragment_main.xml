@@ -12,7 +12,7 @@
     tools:context=".controller.fragment.MainFragment">
 
     <include
-        layout="@layout/main"
+        layout="@layout/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

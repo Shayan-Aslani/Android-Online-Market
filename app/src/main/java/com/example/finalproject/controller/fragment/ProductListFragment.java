@@ -18,13 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.ProductListAdapter;
+import com.example.finalproject.model.Attribute;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.model.Repository;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,6 +49,7 @@ public class ProductListFragment extends Fragment {
     private RecyclerView recyclerView;
     private String searchText;
     private Boolean searchable;
+    private List<Attribute.Term> selectedTerms ;
 
     private RelativeLayout sortRelativeLayout, filterRelativeLayout;
 
@@ -72,12 +77,23 @@ public class ProductListFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        selectedTerms = Repository.getInstance().getSelectedTerms();
+        if(selectedTerms.size() != 0 && selectedTerms != null)
+        {
+            setFilteredlist();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         initUi(view);
         setRecyclerView();
+
 
         sortRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +128,29 @@ public class ProductListFragment extends Fragment {
         recyclerView.setAdapter(productAdapter);
     }
 
+    private void setFilteredlist(){
+        String filter = "" ;
+        String attribute = selectedTerms.get(0).getAttributeSlug();
+        for(Attribute.Term term :selectedTerms)
+        {
+            filter += term.getId() ;
+        }
+        RetrofitInstance.getRetrofit().create(Api.class).
+                getFilteredProducts(searchText , attribute , filter).enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                productList = response.body();
+                productAdapter.setProducts(productList);
+                productAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void showSearchList(String query) {
         RetrofitInstance.getRetrofit().create(Api.class).
                 searchProducts(query).enqueue(new Callback<List<Product>>() {
@@ -129,4 +168,9 @@ public class ProductListFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Repository.getInstance().setSelectedTerms(new ArrayList<>());
+    }
 }

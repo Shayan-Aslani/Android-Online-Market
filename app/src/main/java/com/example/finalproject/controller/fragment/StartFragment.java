@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.finalproject.R;
 import com.example.finalproject.controller.activity.MainActivity;
+import com.example.finalproject.model.Attribute;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
@@ -83,6 +84,7 @@ public class StartFragment extends Fragment {
             tryAgainButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             new InitProductsAsynceTask().execute();
+
         }
         else
             onNetworkUnavailable();
@@ -103,6 +105,30 @@ public class StartFragment extends Fragment {
         Repository.getInstance().getShoppingCartProducts().setValue(list);
     }
 
+    private class InitAttributesAsyncTask extends AsyncTask<Void , Void , Void>
+    {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Repository.getInstance().setAllAttributes(RetrofitInstance.getRetrofit().create(Api.class)
+                        .getAttributes().execute().body());
+                List<Attribute> list = Repository.getInstance().getAllAttributes();
+                for(Attribute attribute : list){
+                    attribute.setTerms(RetrofitInstance.getRetrofit().create(Api.class).getTerms(String.valueOf(attribute.getId())).execute().body());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            getActivity().finish();
+        }
+    }
 
     private class InitProductsAsynceTask extends AsyncTask<Void, String, Void> {
 
@@ -139,7 +165,8 @@ public class StartFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             startActivity(MainActivity.newIntent(getActivity() , result));
-            getActivity().finish();
+            new InitAttributesAsyncTask().execute();
+
         }
     }
 

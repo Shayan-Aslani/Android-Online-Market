@@ -24,7 +24,7 @@ public class Product implements Serializable {
 
     @Expose
     @SerializedName("attributes")
-    private List<Attributes> attributes;
+    private List<Attribute> attributes;
     @Expose
     @SerializedName("images")
     private List<Images> images;
@@ -219,11 +219,11 @@ public class Product implements Serializable {
     }
 
 
-    public List<Attributes> getAttributes() {
+    public List<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attributes> attributes) {
+    public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
 
@@ -698,74 +698,7 @@ public class Product implements Serializable {
         }
     }
 
-    public static class Attributes {
-        @Expose
-        @SerializedName("options")
-        private List<String> options;
-        @Expose
-        @SerializedName("variation")
-        private boolean variation;
-        @Expose
-        @SerializedName("visible")
-        private boolean visible;
-        @Expose
-        @SerializedName("position")
-        private int position;
-        @Expose
-        @SerializedName("name")
-        private String name;
-        @Expose
-        @SerializedName("id")
-        private int id;
 
-        public List<String> getOptions() {
-            return options;
-        }
-
-        public void setOptions(List<String> options) {
-            this.options = options;
-        }
-
-        public boolean getVariation() {
-            return variation;
-        }
-
-        public void setVariation(boolean variation) {
-            this.variation = variation;
-        }
-
-        public boolean getVisible() {
-            return visible;
-        }
-
-        public void setVisible(boolean visible) {
-            this.visible = visible;
-        }
-
-        public int getPosition() {
-            return position;
-        }
-
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-    }
 
     public static class Images {
         @Expose
