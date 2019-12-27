@@ -70,9 +70,9 @@ public class CategoryListFragment extends Fragment {
     private void setupViewPager(){
         mTabLayout.setupWithViewPager(mViewPager);
         mPagerAdapter = new CategoryViewPagerAdapter(getFragmentManager());
-        mPagerAdapter.setParentList(Repository.getInstance().getParentCategories());
+        mPagerAdapter.setParentList(Repository.getInstance(getContext()).getParentCategories());
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setCurrentItem(Repository.getInstance().getParentCategories().indexOf(Repository.getInstance().getCategoryById(currentId)));
+        mViewPager.setCurrentItem(Repository.getInstance(getContext()).getParentCategories().indexOf(Repository.getInstance(getContext()).getCategoryById(currentId)));
 
     }
 

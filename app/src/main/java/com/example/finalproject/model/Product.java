@@ -69,54 +69,9 @@ public class Product implements Serializable {
     @SerializedName("shipping_required")
     private boolean shipping_required;
     @Expose
-    @SerializedName("dimensions")
-    private Dimensions dimensions;
-    @Expose
-    @SerializedName("weight")
-    private String weight;
-    @Expose
-    @SerializedName("sold_individually")
-    private boolean sold_individually;
-    @Expose
-    @SerializedName("backordered")
-    private boolean backordered;
-    @Expose
-    @SerializedName("backorders_allowed")
-    private boolean backorders_allowed;
-    @Expose
-    @SerializedName("backorders")
-    private String backorders;
-    @Expose
-    @SerializedName("stock_status")
-    private String stock_status;
-    @Expose
-    @SerializedName("manage_stock")
-    private boolean manage_stock;
-    @Expose
-    @SerializedName("tax_class")
-    private String tax_class;
-    @Expose
-    @SerializedName("tax_status")
-    private String tax_status;
-    @Expose
-    @SerializedName("button_text")
-    private String button_text;
-    @Expose
     @SerializedName("external_url")
     private String external_url;
-    @Expose
-    @SerializedName("download_expiry")
-    private int download_expiry;
-    @Expose
-    @SerializedName("download_limit")
-    private int download_limit;
 
-    @Expose
-    @SerializedName("downloadable")
-    private boolean downloadable;
-    @Expose
-    @SerializedName("virtual")
-    private boolean virtual;
     @Expose
     @SerializedName("total_sales")
     private int total_sales;
@@ -138,9 +93,6 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("price")
     private String price;
-    @Expose
-    @SerializedName("sku")
-    private String sku;
     @Expose
     @SerializedName("short_description")
     private String short_description;
@@ -340,135 +292,6 @@ public class Product implements Serializable {
         this.shipping_required = shipping_required;
     }
 
-    public Dimensions getDimensions() {
-        return dimensions;
-    }
-
-    public void setDimensions(Dimensions dimensions) {
-        this.dimensions = dimensions;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public boolean getSold_individually() {
-        return sold_individually;
-    }
-
-    public void setSold_individually(boolean sold_individually) {
-        this.sold_individually = sold_individually;
-    }
-
-    public boolean getBackordered() {
-        return backordered;
-    }
-
-    public void setBackordered(boolean backordered) {
-        this.backordered = backordered;
-    }
-
-    public boolean getBackorders_allowed() {
-        return backorders_allowed;
-    }
-
-    public void setBackorders_allowed(boolean backorders_allowed) {
-        this.backorders_allowed = backorders_allowed;
-    }
-
-    public String getBackorders() {
-        return backorders;
-    }
-
-    public void setBackorders(String backorders) {
-        this.backorders = backorders;
-    }
-
-    public String getStock_status() {
-        return stock_status;
-    }
-
-    public void setStock_status(String stock_status) {
-        this.stock_status = stock_status;
-    }
-
-    public boolean getManage_stock() {
-        return manage_stock;
-    }
-
-    public void setManage_stock(boolean manage_stock) {
-        this.manage_stock = manage_stock;
-    }
-
-    public String getTax_class() {
-        return tax_class;
-    }
-
-    public void setTax_class(String tax_class) {
-        this.tax_class = tax_class;
-    }
-
-    public String getTax_status() {
-        return tax_status;
-    }
-
-    public void setTax_status(String tax_status) {
-        this.tax_status = tax_status;
-    }
-
-    public String getButton_text() {
-        return button_text;
-    }
-
-    public void setButton_text(String button_text) {
-        this.button_text = button_text;
-    }
-
-    public String getExternal_url() {
-        return external_url;
-    }
-
-    public void setExternal_url(String external_url) {
-        this.external_url = external_url;
-    }
-
-    public int getDownload_expiry() {
-        return download_expiry;
-    }
-
-    public void setDownload_expiry(int download_expiry) {
-        this.download_expiry = download_expiry;
-    }
-
-    public int getDownload_limit() {
-        return download_limit;
-    }
-
-    public void setDownload_limit(int download_limit) {
-        this.download_limit = download_limit;
-    }
-
-
-    public boolean getDownloadable() {
-        return downloadable;
-    }
-
-    public void setDownloadable(boolean downloadable) {
-        this.downloadable = downloadable;
-    }
-
-    public boolean getVirtual() {
-        return virtual;
-    }
-
-    public void setVirtual(boolean virtual) {
-        this.virtual = virtual;
-    }
-
     public int getTotal_sales() {
         return total_sales;
     }
@@ -523,14 +346,6 @@ public class Product implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getShort_description() {

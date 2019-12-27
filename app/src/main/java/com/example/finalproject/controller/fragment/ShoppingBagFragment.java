@@ -20,6 +20,8 @@ import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.adapters.ShoppingCartAdapter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Repository;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -32,6 +34,8 @@ public class ShoppingBagFragment extends Fragment {
     private List<CartProduct> cartProductList ;
     private RecyclerView shoppingCartRecyclerView ;
     private ShoppingCartAdapter shoppingCartAdapter ;
+    private TextView nullMassageTextView ;
+    private MaterialButton loginButton ;
     private TextView cartItemCountTextView ;
 
     public static ShoppingBagFragment newInstance() {
@@ -50,10 +54,21 @@ public class ShoppingBagFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
-            cartProductList = shoppingBagList ;
-            shoppingCartAdapter.setProducts(cartProductList);
-            shoppingCartAdapter.notifyDataSetChanged();
+        Repository.getInstance(getContext()).getShoppingCartProducts().observe(this , shoppingBagList->{
+            if(shoppingBagList.size() == 0)
+            {
+                nullMassageTextView.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.VISIBLE);
+                shoppingCartRecyclerView.setVisibility(View.INVISIBLE);
+            }
+            else {
+                nullMassageTextView.setVisibility(View.GONE);
+                loginButton.setVisibility(View.GONE);
+                shoppingCartRecyclerView.setVisibility(View.VISIBLE);
+                cartProductList = shoppingBagList;
+                shoppingCartAdapter.setProducts(cartProductList);
+                shoppingCartAdapter.notifyDataSetChanged();
+            }
         });
 
     }
@@ -66,12 +81,7 @@ public class ShoppingBagFragment extends Fragment {
         initUi(view);
         setupBadge();
         setShoppingCartRecyclerView();
-        closeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
+        closeImageView.setOnClickListener(view1 -> getActivity().onBackPressed());
         return view ;
     }
 
@@ -79,16 +89,19 @@ public class ShoppingBagFragment extends Fragment {
         shoppingCartRecyclerView = view.findViewById(R.id.shopping_cart_recyclerView);
         closeImageView = view.findViewById(R.id.shopping_cart_close_imageview);
         cartItemCountTextView = view.findViewById(R.id.cart_badge_counter_textView);
+        nullMassageTextView = view.findViewById(R.id.null_massage_shopping_bag) ;
+        loginButton = view.findViewById(R.id.login_Button_shoppingFragment);
     }
 
     private void setShoppingCartRecyclerView(){
         shoppingCartAdapter = new ShoppingCartAdapter((AppCompatActivity) getActivity(), cartProductList);
         shoppingCartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shoppingCartRecyclerView.setAdapter(shoppingCartAdapter);
+
     }
 
     private void setupBadge(){
-        Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
+        Repository.getInstance(getContext()).getShoppingCartProducts().observe(this , shoppingBagList->{
             int bagSize = shoppingBagList.size() ;
             if (cartItemCountTextView != null) {
                 if (bagSize == 0) {
@@ -102,7 +115,6 @@ public class ShoppingBagFragment extends Fragment {
                     }
                 }
             }
-            ShoppingCartPreferences.setProductList(getContext() , shoppingBagList);
         });
     }
 

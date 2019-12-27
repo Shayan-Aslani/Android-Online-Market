@@ -48,7 +48,7 @@ public class CategoryTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentId = getArguments().getInt(CATEGORY_PARENT_ID_ARG);
-        categories = Repository.getInstance().getSubCategoires(parentId);
+        categories = Repository.getInstance(getContext()).getSubCategoires(parentId);
     }
 
     @Override

@@ -100,7 +100,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                             .setPositiveButton(R.string.yes , new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Repository.getInstance().deleteCartproduct(mCartProduct);
+                                    Repository.getInstance(mActivity).deleteCartproduct(mCartProduct);
                                 }
                             })
                             .setNegativeButton(R.string.no , null)

@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 import com.example.finalproject.R;
 import com.example.finalproject.Utils.ShoppingCartPreferences;
-import com.example.finalproject.controller.fragment.MainFragment;
+import com.example.finalproject.view.MainFragment;
 import com.example.finalproject.model.Repository;
 
 public class MainActivity extends SingleFragmentActivity {
@@ -35,12 +35,12 @@ public class MainActivity extends SingleFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+/*
+       if(!getIntent().getExtras().getBoolean(RESULT_EXTRA))
+            Snackbar.make(findViewById(R.id.fragment_container) , "f" , Snackbar.LENGTH_LONG);
 
-  /*      if(!getIntent().getExtras().getBoolean(RESULT_EXTRA))
-            Snackbar.make(view , "f" , Snackbar.LENGTH_LONG);
 
-   */
-
+ */
     }
 
     @Override
@@ -58,6 +58,5 @@ public class MainActivity extends SingleFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ShoppingCartPreferences.setProductList(this , Repository.getInstance().getShoppingCartProducts().getValue());
     }
 }

@@ -31,7 +31,7 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
     public AttributeTermAdapter(AppCompatActivity mActivity) {
         this.mActivity = mActivity;
-        selectedTermList = Repository.getInstance().getSelectedTerms();
+        selectedTermList = Repository.getInstance(mActivity).getSelectedTerms();
     }
 
     public AttributeTermAdapter(AppCompatActivity mActivity, List<Attribute.Term> attributeList, Attribute mAttribute) {
@@ -97,10 +97,10 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
                 public void onClick(View view) {
                     if (mCheckbox.isChecked()) {
                         mCheckbox.setChecked(false);
-                        Repository.getInstance().removeSelectedTerm(term);
+                        Repository.getInstance(mActivity).removeSelectedTerm(term);
                     } else {
                         mCheckbox.setChecked(true);
-                        Repository.getInstance().addSelectedTerm(term);
+                        Repository.getInstance(mActivity).addSelectedTerm(term);
                     }
                 }
             });

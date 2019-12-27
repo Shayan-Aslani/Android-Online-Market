@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -38,8 +39,9 @@ public class StartFragment extends Fragment {
 
 
     private LottieAnimationView mInternetAnimationView;
-    private MaterialButton tryAgainButton ;
-    private ProgressBar progressBar ;
+    private MaterialButton tryAgainButton;
+    private ProgressBar progressBar;
+
     public static StartFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -53,6 +55,11 @@ public class StartFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,19 +81,18 @@ public class StartFragment extends Fragment {
         return view;
     }
 
-    private void onNetworkUnavailable(){
+    private void onNetworkUnavailable() {
         tryAgainButton.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void startInit(){
-        if(isNetworkAvailable()){
+    private void startInit() {
+        if (isNetworkAvailable()) {
             tryAgainButton.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
             new InitProductsAsynceTask().execute();
 
-        }
-        else
+        } else
             onNetworkUnavailable();
 
     }
@@ -98,23 +104,22 @@ public class StartFragment extends Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void initUi(View view){
+    private void initUi(View view) {
         tryAgainButton = view.findViewById(R.id.tryagain_Button);
         progressBar = view.findViewById(R.id.progressBar2);
         List<CartProduct> list = new ArrayList<>();
-        Repository.getInstance().getShoppingCartProducts().setValue(list);
+        Repository.getInstance(getContext()).getShoppingCartProducts().setValue(list);
     }
 
-    private class InitAttributesAsyncTask extends AsyncTask<Void , Void , Void>
-    {
+    private class InitAttributesAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                Repository.getInstance().setAllAttributes(RetrofitInstance.getRetrofit().create(Api.class)
+                Repository.getInstance(getContext()).setAllAttributes(RetrofitInstance.getRetrofit().create(Api.class)
                         .getAttributes().execute().body());
-                List<Attribute> list = Repository.getInstance().getAllAttributes();
-                for(Attribute attribute : list){
+                List<Attribute> list = Repository.getInstance(getContext()).getAllAttributes();
+                for (Attribute attribute : list) {
                     attribute.setTerms(RetrofitInstance.getRetrofit().create(Api.class).getTerms(String.valueOf(attribute.getId())).execute().body());
                 }
             } catch (IOException e) {
@@ -132,20 +137,21 @@ public class StartFragment extends Fragment {
 
     private class InitProductsAsynceTask extends AsyncTask<Void, String, Void> {
 
-        private Boolean result  = true ;
+        private Boolean result = true;
 
         @Override
         protected Void doInBackground(Void... voids) {
 
             try {
-                Repository.getInstance().setNewProducts(generateLists("date"));
-                Repository.getInstance().setAllProducts(generateLists("date"));
-                Repository.getInstance().setRatedProducts(generateLists("rating"));
-                Repository.getInstance().setVisitedProducts(generateLists("popularity"));
-                Repository.getInstance().setAllCategories(RetrofitInstance.getRetrofit().create(Api.class)
-                       .getAllCategories().execute().body());
+                Repository.getInstance(getContext()).getNewProducts().postValue(generateLists("date"));
+                Repository.getInstance(getContext()).setAllProducts(generateLists("date"));
+                Repository.getInstance(getContext()).getRatedProducts().postValue(generateLists("rating"));
+                Repository.getInstance(getContext()).getVisitedProducts().postValue(generateLists("popularity"));
+                Repository.getInstance(getContext()).getAllCategories().postValue(RetrofitInstance.getRetrofit().create(Api.class)
+                        .getAllCategories().execute().body());
+                Repository.getInstance(getContext()).setVipProducts(Repository.getInstance(getContext()).getRatedProducts().getValue().subList(0, 10));
             } catch (IOException e) {
-                e.printStackTrace();
+
                 publishProgress("خطا در دریافت اطلاعات از دیجی کالا");
             }
 
@@ -164,7 +170,7 @@ public class StartFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            startActivity(MainActivity.newIntent(getActivity() , result));
+            startActivity(MainActivity.newIntent(getActivity(), result));
             new InitAttributesAsyncTask().execute();
 
         }
@@ -172,7 +178,7 @@ public class StartFragment extends Fragment {
 
     private List<Product> generateLists(String type) throws IOException {
         return RetrofitInstance.getRetrofit().create(Api.class)
-                .getAllProducts(type , "100").execute().body();
+                .getAllProducts(type, "10").execute().body();
     }
 
 }

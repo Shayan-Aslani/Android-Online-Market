@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,9 @@ public class CategoryDetailFragment extends Fragment {
     private TextView categoryTitleTextView ;
     private Api api;
     private ProductAdapter latestProductsAdapter, popularProductsAdapter;
+    private TextView cartItemCountTextView ;
     private ProgressBar progressBar;
+    private ImageView backImageView ;
     private List<Product> latestProductList , popularProductList ;
     private Category mCategory ;
 
@@ -64,7 +67,7 @@ public class CategoryDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categoryid = getArguments().getInt(CATEGORY_ID_ARG);
-        mCategory = Repository.getInstance().getCategoryById(categoryid);
+        mCategory = Repository.getInstance(getContext()).getCategoryById(categoryid);
     }
 
     @Override
@@ -111,18 +114,32 @@ public class CategoryDetailFragment extends Fragment {
             }
         });
 
+        Repository.getInstance(getContext()).getShoppingCartProducts().observe(this , shoppingBagList-> {
+            int bagSize = shoppingBagList.size();
+            setBadgeicon(bagSize);
+        });
+
+        backImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
+
         return view;
     }
 
     private void initUi(View view){
         latestProductsRecyclerView = view.findViewById(R.id.lateest_Products_RecyclerView_Detail);
         popularProductsRecyclerView = view.findViewById(R.id.popular_Products_RecyclerView_Detail);
-        categoryTitleTextView = view.findViewById(R.id.caegory_title_textView_detail);
+        categoryTitleTextView = view.findViewById(R.id.title_textview_category_detail);
         progressBar = view.findViewById(R.id.progressBar_Category_Detail);
+        backImageView = view.findViewById(R.id.back_cateogry_detail_imageview);
+        cartItemCountTextView = view.findViewById(R.id.cart_badge_counter_textView);
     }
 
     private void setDetail(){
-        categoryTitleTextView.setText(mCategory.getName());
+       categoryTitleTextView.setText(mCategory.getName());
     }
 
     private void setupRecyclerViews() {
@@ -130,6 +147,22 @@ public class CategoryDetailFragment extends Fragment {
         popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
+    }
+
+    private void setBadgeicon (int bagSize){
+
+        if (cartItemCountTextView != null) {
+            if (bagSize == 0) {
+                if (cartItemCountTextView.getVisibility() != View.GONE) {
+                    cartItemCountTextView.setVisibility(View.GONE);
+                }
+            } else {
+                cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
+                if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
+                    cartItemCountTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
 }

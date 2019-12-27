@@ -14,8 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.ProductListAdapter;
@@ -51,12 +54,13 @@ public class ProductListFragment extends Fragment {
     private RecyclerView recyclerView;
     private String searchText;
     private Boolean searchable;
-    private List<Attribute.Term> selectedTerms ;
-    private TextView titleToolbar ;
+    private List<Attribute.Term> selectedTerms;
+    private TextView titleToolbar;
     private ImageView backImageViewToolbar;
-    private String mOrderType , mOrder ;
-    private TextView sortTextView ;
-    private int mSortType ;
+    private String mOrderType, mOrder;
+    private TextView sortTextView;
+    private int mSortType;
+    private ProgressBar progressBar;
 
     private RelativeLayout sortRelativeLayout, filterRelativeLayout;
 
@@ -86,9 +90,8 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        selectedTerms = Repository.getInstance().getSelectedTerms();
-        if(selectedTerms.size() != 0 && selectedTerms != null)
-        {
+        selectedTerms = Repository.getInstance(getContext()).getSelectedTerms();
+        if (selectedTerms != null && selectedTerms.size() != 0) {
             setFilteredlist();
         }
     }
@@ -100,21 +103,13 @@ public class ProductListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_product_list, container, false);
         initUi(view);
         setRecyclerView();
-        showSearchList(searchText , mOrder , mOrderType);
+        showSearchList(searchText, mOrder, mOrderType);
         titleToolbar.setText(searchText);
 
-        backImageViewToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().onBackPressed();
-            }
-        });
-        sortRelativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogFragment dialogFragment = SortDialogFragment.newInstance(mSortType);
-                dialogFragment.show(getFragmentManager(), null);
-            }
+        backImageViewToolbar.setOnClickListener(view1 -> getActivity().onBackPressed());
+        sortRelativeLayout.setOnClickListener(view12 -> {
+            DialogFragment dialogFragment = SortDialogFragment.newInstance(mSortType);
+            dialogFragment.show(getFragmentManager(), null);
         });
 
         filterRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +132,7 @@ public class ProductListFragment extends Fragment {
         titleToolbar = view.findViewById(R.id.title_toolbar_productList);
         backImageViewToolbar = view.findViewById(R.id.back_toolbar_productList);
         sortTextView = view.findViewById(R.id.sort_mode_textView);
+        progressBar = view.findViewById(R.id.product_list_progressBar);
     }
 
     private void setRecyclerView() {
@@ -145,18 +141,21 @@ public class ProductListFragment extends Fragment {
         recyclerView.setAdapter(productAdapter);
     }
 
-    private void setFilteredlist(){
-        String filter = "" ;
+    private void setFilteredlist() {
+        String filter = "";
         String attribute = selectedTerms.get(0).getAttributeSlug();
-        for(Attribute.Term term :selectedTerms)
-        {
-            filter += term.getId() ;
+        for (Attribute.Term term : selectedTerms) {
+            filter += term.getId();
         }
         RetrofitInstance.getRetrofit().create(Api.class).
-                getFilteredProducts(searchText , attribute , filter).enqueue(new Callback<List<Product>>() {
+                getFilteredProducts(searchText, attribute, filter).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 productList = response.body();
+                if (productList.size() == 0) {
+                    Toast.makeText(getActivity(), "محصولی یافت نشد !", Toast.LENGTH_SHORT).show();
+                }
+                progressBar.setVisibility(View.INVISIBLE);
                 productAdapter.setProducts(productList);
                 productAdapter.notifyDataSetChanged();
             }
@@ -168,12 +167,16 @@ public class ProductListFragment extends Fragment {
         });
     }
 
-    private void showSearchList(String query,  String orderBy , String orderType ) {
+    private void showSearchList(String query, String orderBy, String orderType) {
         RetrofitInstance.getRetrofit().create(Api.class).
-                searchProducts(query , orderType , orderBy).enqueue(new Callback<List<Product>>() {
+                searchProducts(query, orderType, orderBy).enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 productList = response.body();
+                if (productList.size() == 0) {
+                    Toast.makeText(getActivity(), "محصولی یافت نشد !", Toast.LENGTH_SHORT).show();
+                }
+                progressBar.setVisibility(View.INVISIBLE);
                 productAdapter.setProducts(productList);
                 productAdapter.notifyDataSetChanged();
             }
@@ -189,39 +192,35 @@ public class ProductListFragment extends Fragment {
     public void onSortChanged(ProductListSortMassage productListSortMassage) {
 
         mSortType = productListSortMassage.getEnumIndex();
-
-
-            SortDialogFragment.Sorts sort = SortDialogFragment.getEnumSorts(mSortType);
-            switch (sort) {
-                case NEWEST:
-                    mOrderType = "date";
-                    sortTextView.setText("جدیدترین");
-                    break;
-                case RATED:
-                    mOrderType = "popularity";
-                    sortTextView.setText("پربازدیدترین");
-                    break;
-                case VISITED:
-                    mOrderType = "rating";
-                    sortTextView.setText("پرفروش ترین");
-                    break;
-                case LOW_TO_HIGH:
-                    mOrderType = "price";
-                    mOrder = "asc";
-                    sortTextView.setText("قیمت از کم به زیاد");
-                    break;
-                case HIGH_TO_LOW:
-                    mOrderType = "price";
-                    mOrder = "desc";
-                    sortTextView.setText("قیمت از زیاد به کم");
-                    break;
-            }
-            showSearchList(searchText , mOrder , mOrderType);
-
-
+        SortDialogFragment.Sorts sort = SortDialogFragment.getEnumSorts(mSortType);
+        switch (sort) {
+            case NEWEST:
+                mOrderType = "date";
+                sortTextView.setText("جدیدترین");
+                break;
+            case RATED:
+                mOrderType = "popularity";
+                sortTextView.setText("پربازدیدترین");
+                break;
+            case VISITED:
+                mOrderType = "rating";
+                sortTextView.setText("پرفروش ترین");
+                break;
+            case LOW_TO_HIGH:
+                mOrderType = "price";
+                mOrder = "asc";
+                sortTextView.setText("قیمت از کم به زیاد");
+                break;
+            case HIGH_TO_LOW:
+                mOrderType = "price";
+                mOrder = "desc";
+                sortTextView.setText("قیمت از زیاد به کم");
+                break;
         }
+        showSearchList(searchText, mOrder, mOrderType);
 
 
+    }
 
 
     @Override
@@ -239,6 +238,6 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Repository.getInstance().setSelectedTerms(new ArrayList<>());
+        Repository.getInstance(getContext()).setSelectedTerms(new ArrayList<>());
     }
 }

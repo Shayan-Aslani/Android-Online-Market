@@ -7,13 +7,16 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.model.Repository;
@@ -32,9 +35,10 @@ public class ProductDetailFragment extends Fragment {
 
     public static final String PRODUCT_ID_ARG = "productIdArg";
     private Product mProduct ;
-    private TextView nameTextView , priceTextView , descriptionTextView ;
+    private TextView nameTextView , priceTextView , descriptionTextView , cartItemCountTextView ;
     private MaterialButton addShoppingCartButton ;
     private int mProductId;
+    private ImageView backImageView ;
     private SliderView sliderView ;
 
     public static ProductDetailFragment newInstance(int productId) {
@@ -54,7 +58,7 @@ public class ProductDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mProductId = (Integer) getArguments().get(PRODUCT_ID_ARG);
-        mProduct = Repository.getInstance().getProductById(mProductId);
+        mProduct = Repository.getInstance(getContext()).getProductById(mProductId);
     }
 
     @Override
@@ -68,17 +72,21 @@ public class ProductDetailFragment extends Fragment {
         addShoppingCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<CartProduct> list =  Repository.getInstance().getShoppingCartProducts().getValue();
-                list.add(Repository.getInstance().convertToCartProduct(mProduct));
-                Repository.getInstance().getShoppingCartProducts().setValue(list);
-              /*  List<Integer> idList = ShoppingCartPreferences.getProductList(getContext()) ;
-                if(idList == null)
-                    idList = new ArrayList<>();
-                idList.add(mProduct.getId());
-                ShoppingCartPreferences.setProductList(getContext() , idList);
-
-               */
+                List<CartProduct> list =  Repository.getInstance(getContext()).getShoppingCartProducts().getValue();
+                list.add(Repository.getInstance(getContext()).convertToCartProduct(mProduct));
+                Repository.getInstance(getContext()).getShoppingCartProducts().setValue(list);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container , ShoppingBagFragment.newInstance())
+                        .addToBackStack("trans")
+                        .commit();
             }
+        });
+
+        backImageView.setOnClickListener(view1 -> getActivity().onBackPressed());
+
+        Repository.getInstance(getContext()).getShoppingCartProducts().observe(this , shoppingBagList-> {
+            int bagSize = shoppingBagList.size();
+            setBadgeicon(bagSize);
         });
 
         return view;
@@ -91,15 +99,32 @@ public class ProductDetailFragment extends Fragment {
         descriptionTextView = view.findViewById(R.id.productDescription_TextView_Detail);
         sliderView = view.findViewById(R.id.imageSlider);
         addShoppingCartButton = view.findViewById(R.id.add_shopping_cart_Button);
+        cartItemCountTextView = view.findViewById(R.id.cart_badge_counter_textView);
+        backImageView = view.findViewById(R.id.back_detail_imageview) ;
     }
 
     public void setDetail(){
         nameTextView.setText(mProduct.getName());
         priceTextView.setText(mProduct.getPrice());
-        descriptionTextView.setText(mProduct.getDescription());
+        descriptionTextView.setText(Html.fromHtml(mProduct.getDescription()));
         sliderView.setSliderAdapter(new SliderAdapter(getContext() , mProduct.getImages()));
     }
 
+    private void setBadgeicon (int bagSize){
+
+            if (cartItemCountTextView != null) {
+                if (bagSize == 0) {
+                    if (cartItemCountTextView.getVisibility() != View.GONE) {
+                        cartItemCountTextView.setVisibility(View.GONE);
+                    }
+                } else {
+                    cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
+                    if (cartItemCountTextView.getVisibility() != View.VISIBLE) {
+                        cartItemCountTextView.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+    }
     public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
 
         private Context context;

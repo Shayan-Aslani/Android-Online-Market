@@ -84,7 +84,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             });
 
             mTextViewTitle.setText(product.getName());
-           mTextViewPrice.setText(product.getPrice());
+            mTextViewPrice.setText(product.getPrice());
             Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
             this.mProduct = product;
 

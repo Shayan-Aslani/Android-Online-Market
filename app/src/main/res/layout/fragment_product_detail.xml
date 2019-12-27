@@ -4,12 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
     tools:context=".controller.fragment.ProductDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/product_detail_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:textDirection="rtl"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/shopping_cart_icon_detail_fragment"
+                    layout="@layout/action_shoppingcart_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/back_detail_imageview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_arrow_back_white_24dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_shopping_cart_Button"
@@ -31,15 +70,16 @@
             android:layout_width="0dp"
             android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_detail_toolbar"
             app:sliderIndicatorGravity="center_horizontal|bottom"
             app:sliderIndicatorMargin="15dp"
             app:sliderIndicatorOrientation="horizontal"
             app:sliderIndicatorPadding="3dp"
             app:sliderIndicatorRadius="2dp"
             app:sliderIndicatorSelectedColor="@color/redDigi"
-            app:sliderIndicatorUnselectedColor="#FFF"/>
+            app:sliderIndicatorUnselectedColor="#FFF" />
 
         <TextView
             android:id="@+id/productName_TextView_Detail"
@@ -68,18 +108,24 @@
             app:layout_constraintStart_toStartOf="@+id/productName_TextView_Detail"
             app:layout_constraintTop_toBottomOf="@+id/productName_TextView_Detail" />
 
-        <TextView
-            android:id="@+id/productDescription_TextView_Detail"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:layout_marginTop="16dp"
-            android:text="TextView"
-            android:textDirection="rtl"
             app:layout_constraintEnd_toEndOf="@+id/productPrice_TextView_Detail"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/productPrice_TextView_Detail"
-            app:layout_constraintTop_toBottomOf="@+id/add_shopping_cart_Button" />
+            app:layout_constraintTop_toBottomOf="@+id/add_shopping_cart_Button">
+
+            <TextView
+                android:id="@+id/productDescription_TextView_Detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                android:textDirection="rtl" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

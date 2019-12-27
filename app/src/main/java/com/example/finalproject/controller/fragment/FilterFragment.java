@@ -53,7 +53,7 @@ public class FilterFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        attributesList = Repository.getInstance().getAllAttributes();
+        attributesList = Repository.getInstance(getContext()).getAllAttributes();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class FilterFragment extends Fragment {
     private void doFilter() {
         getActivity().getSupportFragmentManager()
                 .popBackStack();
-        selectedTerm = Repository.getInstance().getSelectedTerms();
+        selectedTerm = Repository.getInstance(getContext()).getSelectedTerms();
 
 
     }

@@ -1,6 +1,11 @@
 package com.example.finalproject.model;
 
+import android.content.Context;
+
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.finalproject.Utils.ShoppingCartPreferences;
+import com.example.finalproject.controller.fragment.ShoppingBagFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,70 +13,45 @@ import java.util.List;
 public class Repository {
 
     private static Repository mInstance;
-    private List<Product> newProducts;
-    private List<Product> ratedProducts;
-    private List<Product> visitedProducts;
     private List<Product> allProducts;
-    private List<Category> allCategories;
     private List<Category> parentCategories ;
     private List<Attribute> allAttributes ;
+    private List<Product> vipProducts ;
+    private Context mContext;
+
     private List<Attribute.Term> selectedTerms = new ArrayList<>();
 
-    public List<Attribute.Term> getSelectedTerms() {
-        return selectedTerms;
-    }
-
-    public void setSelectedTerms(List<Attribute.Term> selectedTerms) {
-        this.selectedTerms = selectedTerms;
-    }
-
-    public List<Attribute> getAllAttributes() {
-        return allAttributes;
-    }
-
-    public void setAllAttributes(List<Attribute> allAttributes) {
-        this.allAttributes = allAttributes;
-    }
-
     private MutableLiveData<List<CartProduct>> shoppingCartProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mNewProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mRatedProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mVisitedProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Category>> mCategories = new MutableLiveData<>();
 
-    private Repository() {
-        newProducts = new ArrayList<>();
+    private Repository(Context context) {
+        mContext = context ;
         allProducts = new ArrayList<>();
-        allCategories = new ArrayList<>();
         parentCategories = new ArrayList<>();
     }
 
-    public static Repository getInstance() {
+    public static Repository getInstance(Context context) {
         if (mInstance == null)
-            mInstance = new Repository();
+            mInstance = new Repository(context);
 
         return mInstance;
     }
 
-    public List<Product> getNewProducts() {
-        return newProducts;
+
+
+
+    public void loadShoppingBagProducts(){
+        List<CartProduct> list = ShoppingCartPreferences.getProductList(mContext);
+        shoppingCartProducts.setValue(list);
     }
 
-    public void setNewProducts(List<Product> newProducts) {
-        this.newProducts = newProducts;
+    public void saveShoppingBagProducts(){
+        ShoppingCartPreferences.setProductList(mContext , shoppingCartProducts.getValue());
     }
 
-    public List<Product> getRatedProducts() {
-        return ratedProducts;
-    }
-
-    public void setRatedProducts(List<Product> ratedProducts) {
-        this.ratedProducts = ratedProducts;
-    }
-
-    public List<Product> getVisitedProducts() {
-        return visitedProducts;
-    }
-
-    public void setVisitedProducts(List<Product> visitedProducts) {
-        this.visitedProducts = visitedProducts;
-    }
 
     public List<Product> getAllProducts() {
         return allProducts;
@@ -81,18 +61,15 @@ public class Repository {
         this.allProducts = allProducts;
     }
 
-    public List<Category> getAllCategories() {
-        return allCategories;
+    public MutableLiveData<List<Category>> getAllCategories() {
+        return mCategories;
     }
 
     public List<Category> getParentCategories() {
         return parentCategories;
     }
 
-    public void setAllCategories(List<Category> allCategories) {
-        this.allCategories = allCategories;
-        generateParentList();
-    }
+
 
 
     public Product getProductById(int id) {
@@ -107,23 +84,25 @@ public class Repository {
     public List<Category> getSubCategoires(long parentId) {
         List<Category> result = new ArrayList<>();
 
-        for (Category category : allCategories) {
+        for (Category category : mCategories.getValue()) {
             if (category.getParent() == parentId)
                 result.add(category);
         }
+
+
         return result;
     }
 
     public Category getCategoryById(int id) {
-        for (Category category : allCategories)
+        for (Category category : mCategories.getValue())
             if (category.getId() == id)
                 return category;
 
         return null;
     }
 
-    private void generateParentList() {
-        for (Category category : allCategories) {
+    public void generateParentList() {
+        for (Category category : mCategories.getValue()) {
             if (category.getParent() == 0)
                 parentCategories.add(category);
         }
@@ -143,6 +122,31 @@ public class Repository {
         return new CartProduct(product.getName() , product.getId() , product.getImages() , product.getPrice() , product.getShort_description());
     }
 
+    public List<Product> getVipProducts() {
+        return vipProducts;
+    }
+
+    public void setVipProducts(List<Product> vipProducts) {
+        this.vipProducts = vipProducts;
+    }
+
+
+    public List<Attribute.Term> getSelectedTerms() {
+        return selectedTerms;
+    }
+
+    public void setSelectedTerms(List<Attribute.Term> selectedTerms) {
+        this.selectedTerms = selectedTerms;
+    }
+
+    public List<Attribute> getAllAttributes() {
+        return allAttributes;
+    }
+
+    public void setAllAttributes(List<Attribute> allAttributes) {
+        this.allAttributes = allAttributes;
+    }
+
     public void addSelectedTerm(Attribute.Term term)
     {
         selectedTerms.add(term);
@@ -151,5 +155,17 @@ public class Repository {
     public void removeSelectedTerm(Attribute.Term term)
     {
         selectedTerms.remove(term);
+    }
+
+    public MutableLiveData<List<Product>> getNewProducts() {
+        return mNewProducts;
+    }
+
+    public MutableLiveData<List<Product>> getRatedProducts() {
+        return mRatedProducts;
+    }
+
+    public MutableLiveData<List<Product>> getVisitedProducts() {
+        return mVisitedProducts;
     }
 }

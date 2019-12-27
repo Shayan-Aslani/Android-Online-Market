@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="true"
-    android:layoutDirection="rtl"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layoutDirection="rtl">
 
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -29,8 +30,6 @@
                 app:srcCompat="@drawable/ic_digikala_white_24dp" />
         </androidx.appcompat.widget.Toolbar>
 
-
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -44,15 +43,14 @@
         android:paddingBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.smarteist.autoimageslider.SliderView
                 android:id="@+id/main_sliderView"
-                android:layout_width="0dp"
-                android:layout_height="219dp"
+                android:layout_width="388dp"
+                android:layout_height="261dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +61,7 @@
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:scrollbars="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +74,6 @@
                     android:layout_height="wrap_content"
                     android:isScrollContainer="true"
                     app:singleLine="true">
-
 
                 </com.google.android.material.chip.ChipGroup>
 
@@ -125,6 +122,7 @@
                 android:layout_margin="4dp"
                 android:layout_marginBottom="4dp"
                 android:text="جدیدترین محصولات"
+                android:fontFamily="@font/iran_sans"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/latest_Products_RecyclerView"
@@ -137,10 +135,12 @@
                 android:layout_margin="4dp"
                 android:layout_marginBottom="8dp"
                 android:text="محصولات پرفروش"
+                android:fontFamily="@font/iran_sans"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/popular_Products_RecyclerView"
                 app:layout_constraintStart_toStartOf="@+id/popular_Products_RecyclerView" />
+
 
             <TextView
                 android:id="@+id/textView3"
@@ -149,6 +149,7 @@
                 android:layout_margin="4dp"
                 android:text="پربازدیدترین محصولات"
                 android:textSize="16sp"
+                android:fontFamily="@font/iran_sans"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/most_Viewed_Products_RecyclerView"
                 app:layout_constraintStart_toStartOf="@+id/most_Viewed_Products_RecyclerView" />
@@ -157,4 +158,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>
