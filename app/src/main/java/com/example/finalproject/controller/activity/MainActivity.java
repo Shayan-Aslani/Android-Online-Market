@@ -14,12 +14,10 @@ import com.example.finalproject.view.MainFragment;
 public class MainActivity extends SingleFragmentActivity {
 
     private MainFragment mainFragment ;
-    public static final String RESULT_EXTRA = "networkResultExtra";
 
-    public static Intent newIntent(Context context , boolean result ){
+    public static Intent newIntent(Context context ){
 
         Intent intent = new Intent(context, MainActivity.class);
-        intent.putExtra(RESULT_EXTRA , result);
         return intent;
     }
 
@@ -33,12 +31,6 @@ public class MainActivity extends SingleFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-/*
-       if(!getIntent().getExtras().getBoolean(RESULT_EXTRA))
-            Snackbar.make(findViewById(R.id.fragment_container) , "f" , Snackbar.LENGTH_LONG);
-
-
- */
     }
 
     @Override

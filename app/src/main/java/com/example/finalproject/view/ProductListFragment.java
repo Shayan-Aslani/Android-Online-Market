@@ -48,8 +48,8 @@ public class ProductListFragment extends Fragment {
     private int mSortType;
     private ProgressBar progressBar;
 
-    private FragmentProductListBinding mBinding ;
-    private ProductListFragmentViewModel mViewModel ;
+    private FragmentProductListBinding mBinding;
+    private ProductListFragmentViewModel mViewModel;
 
     public static ProductListFragment newInstance(String searchText, Boolean searchable) {
 
@@ -80,6 +80,7 @@ public class ProductListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_list, container, false);
+
         initUi();
         setRecyclerView();
 
@@ -87,9 +88,8 @@ public class ProductListFragment extends Fragment {
 
         setListeners();
 
-        mViewModel.getProductList().observe(this , productList -> {
+        mViewModel.getProductList().observe(this, productList -> {
             productAdapter.setProducts(productList);
-            productAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.INVISIBLE);
             mBinding.nullMassageProductListTextview.setVisibility(View.INVISIBLE);
             if (productList.size() == 0) {
@@ -101,20 +101,21 @@ public class ProductListFragment extends Fragment {
     }
 
     private void initUi() {
-        recyclerView = mBinding.productListRecyclerView ;
-        sortTextView = mBinding.sortModeTextView ;
-        progressBar = mBinding.productListProgressBar ;
+        recyclerView = mBinding.productListRecyclerView;
+        sortTextView = mBinding.sortModeTextView;
+        progressBar = mBinding.productListProgressBar;
     }
 
     private void setRecyclerView() {
-        productAdapter = new ProductListAdapter((AppCompatActivity) getActivity(), mViewModel.getProductList().getValue());
+        productAdapter = new ProductListAdapter((AppCompatActivity) getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(productAdapter);
         mViewModel.loadFilteredListFromApi(searchText, mOrderBy, mOrderType);
     }
 
-    private void setListeners(){
+    private void setListeners() {
         mBinding.backToolbarProductList.setOnClickListener(view1 -> getActivity().onBackPressed());
+
         mBinding.sortRelative.setOnClickListener(view12 -> {
             DialogFragment dialogFragment = SortDialogFragment.newInstance(mSortType);
             dialogFragment.show(getFragmentManager(), null);
@@ -126,8 +127,6 @@ public class ProductListFragment extends Fragment {
                 .addToBackStack("FilterTransaction")
                 .commit());
     }
-
-
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -179,6 +178,6 @@ public class ProductListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        FilterRepository.getInstance(getContext()).getSelectedTerms().setValue(new ArrayList<>());
+        mViewModel.setEmptySelectedTerm();
     }
 }

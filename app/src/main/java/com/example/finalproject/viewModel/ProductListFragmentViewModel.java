@@ -12,7 +12,9 @@ import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
 import com.example.finalproject.repositories.FilterRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Filter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,10 +24,12 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>() ;
     private MutableLiveData<List<Attribute.Term>> mSelectedTerms = new MutableLiveData<>();
+    private FilterRepository mFilterRepository ;
 
     public ProductListFragmentViewModel(@NonNull Application application) {
         super(application);
         mSelectedTerms = FilterRepository.getInstance(application).getSelectedTerms() ;
+        mFilterRepository = FilterRepository.getInstance(application);
     }
 
     public MutableLiveData<List<Product>> getProductList() {
@@ -34,6 +38,10 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Attribute.Term>> getSelectedTerms() {
         return mSelectedTerms;
+    }
+
+    public void setEmptySelectedTerm(){
+       mFilterRepository.getSelectedTerms().setValue(new ArrayList<>());
     }
 
     public void loadFilteredListFromApi(){

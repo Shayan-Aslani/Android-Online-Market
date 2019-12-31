@@ -28,7 +28,7 @@ import android.widget.TextView;
 import com.example.finalproject.R;
 import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.controller.activity.CategoryListActivity;
-import com.example.finalproject.controller.adapters.ProductAdapter;
+import com.example.finalproject.controller.adapters.ProductMainAdapter;
 import com.example.finalproject.databinding.FragmentMainBinding;
 import com.example.finalproject.databinding.MainFragmentToolbarBinding;
 import com.example.finalproject.model.Category;
@@ -54,7 +54,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView, mostViewedProductsRecyclerView;
     private TextView basketCountTextView;
-    private ProductAdapter latestProductsAdapter, popularProductsAdapter, mostViewedProductAdapter;
+    private ProductMainAdapter latestProductsAdapter, popularProductsAdapter, mostViewedProductAdapter;
     private DrawerLayout drawer;
     private NavigationView mainNavigationView;
     private SliderView sliderView;
@@ -166,12 +166,15 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     private void setupRecyclerViews() {
-        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity(), mViewModel.getNewProductList().getValue());
-        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity(), mViewModel.getRatedProductList().getValue());
-        mostViewedProductAdapter = new ProductAdapter((AppCompatActivity) getActivity(), mViewModel.getVisitedProductList().getValue());
+        latestProductsAdapter = new ProductMainAdapter((AppCompatActivity) getActivity());
+        popularProductsAdapter = new ProductMainAdapter((AppCompatActivity) getActivity());
+        mostViewedProductAdapter = new ProductMainAdapter((AppCompatActivity) getActivity());
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
         mostViewedProductsRecyclerView.setAdapter(mostViewedProductAdapter);
+        mViewModel.getNewProductList().observe(this , productList -> latestProductsAdapter.setProducts(productList));
+        mViewModel.getRatedProductList().observe(this , productList -> popularProductsAdapter.setProducts(productList));
+        mViewModel.getVisitedProductList().observe(this , productList -> mostViewedProductAdapter.setProducts(productList));
     }
 
     private void initUi() {
@@ -278,12 +281,15 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                 this.mProduct = product;
                 Picasso.get().load(mProduct.getImages().get(0).getSrc()).placeholder(R.drawable.alt)
                         .into(imageViewSlider);
-                itemView.setOnClickListener(view ->
+             /*   itemView.setOnClickListener(view ->
                         getActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.fragment_container, ProductDetailFragment.newInstance(product))
+                                .replace(R.id.fragment_container, ProductDetailFragment.newInstance())
                                 .addToBackStack("transaction")
                                 .commit());
+
+
+              */
 
             }
         }

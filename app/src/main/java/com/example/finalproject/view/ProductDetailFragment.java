@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.adapters.ImageSliderAdapter;
 import com.example.finalproject.databinding.FragmentProductDetailBinding;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.repositories.ProductRepository;
@@ -34,19 +35,18 @@ import java.util.List;
  */
 public class ProductDetailFragment extends Fragment {
 
-    public static final String PRODUCT_ID_ARG = "productIdArg";
+   // public static final String PRODUCT_ID_ARG = "productIdArg";
     private Product mProduct;
-    private TextView nameTextView, priceTextView, descriptionTextView, cartItemCountTextView;
+    private TextView cartItemCountTextView;
     private MaterialButton addShoppingCartButton;
     private SliderView sliderView;
 
     private ProductDetailFragmentViewModel mViewModel;
     private FragmentProductDetailBinding mBinding;
 
-    public static ProductDetailFragment newInstance(Product product) {
-
+    public static ProductDetailFragment newInstance() {
         Bundle args = new Bundle();
-        args.putSerializable(PRODUCT_ID_ARG, product);
+      //  args.putSerializable(PRODUCT_ID_ARG, product);
         ProductDetailFragment fragment = new ProductDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,8 +60,9 @@ public class ProductDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mProduct = (Product) getArguments().get(PRODUCT_ID_ARG);
-        mViewModel = ViewModelProviders.of(this).get(ProductDetailFragmentViewModel.class);
+   //     mProduct = (Product) getArguments().get(PRODUCT_ID_ARG);
+        mViewModel = ViewModelProviders.of(getActivity()).get(ProductDetailFragmentViewModel.class);
+        mProduct = mViewModel.getProduct().getValue() ;
     }
 
     @Override
@@ -69,9 +70,11 @@ public class ProductDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false);
-
         initUi();
-        setDetail();
+        mBinding.setProductDetailsViewModel(mViewModel);
+        mViewModel.getProduct().observe(this , product -> {
+            setDetail();
+        });
 
         addShoppingCartButton.setOnClickListener(view12 -> {
             mViewModel.addProductToShoppingCart(mProduct);
@@ -92,19 +95,13 @@ public class ProductDetailFragment extends Fragment {
     }
 
     public void initUi() {
-        nameTextView = mBinding.productNameTextViewDetail;
-        priceTextView = mBinding.productPriceTextViewDetail;
-        descriptionTextView = mBinding.productDescriptionTextViewDetail;
         sliderView = mBinding.imageSlider;
         addShoppingCartButton = mBinding.addShoppingCartButton;
         cartItemCountTextView = mBinding.shoppingCartIconDetailFragment.basketTextview;
     }
 
     public void setDetail() {
-        nameTextView.setText(mProduct.getName());
-        priceTextView.setText(mProduct.getPrice());
-        descriptionTextView.setText(Html.fromHtml(mProduct.getDescription()));
-        sliderView.setSliderAdapter(new SliderAdapter(getContext(), mProduct.getImages()));
+        sliderView.setSliderAdapter(new ImageSliderAdapter(getContext(), mProduct.getImages()));
     }
 
     private void setBadgeicon(int bagSize) {
@@ -123,43 +120,5 @@ public class ProductDetailFragment extends Fragment {
         }
     }
 
-    public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
-
-        private Context context;
-        private List<Product.Images> imageList;
-
-        public SliderAdapter(Context context, List list) {
-            this.context = context;
-            imageList = list;
-        }
-
-        @Override
-        public SliderAdapterVH onCreateViewHolder(ViewGroup parent) {
-            View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_slider_layout_item, null);
-            return new SliderAdapterVH(inflate);
-        }
-
-        @Override
-        public void onBindViewHolder(SliderAdapterVH viewHolder, int position) {
-            Picasso.get().load(imageList.get(position).getSrc()).placeholder(R.drawable.alt)
-                    .into(viewHolder.imageViewBackground);
-        }
-
-        @Override
-        public int getCount() {
-            return imageList.size();
-        }
-
-        class SliderAdapterVH extends SliderViewAdapter.ViewHolder {
-            View itemView;
-            ImageView imageViewBackground;
-
-            public SliderAdapterVH(View itemView) {
-                super(itemView);
-                imageViewBackground = itemView.findViewById(R.id.auto_image_slider);
-                this.itemView = itemView;
-            }
-        }
-    }
 
 }

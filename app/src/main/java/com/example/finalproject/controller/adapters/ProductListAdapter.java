@@ -8,11 +8,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.databinding.ProductListItemBinding;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.view.ProductDetailFragment;
+import com.example.finalproject.viewModel.ProductDetailFragmentViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,14 +38,16 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public void setProducts(List<Product> products) {
         mProducts = products;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.product_list_item, parent, false);
-        return new ProductHolder(view);
+        ProductListItemBinding binding = DataBindingUtil.inflate(activity.getLayoutInflater(),
+                R.layout.product_list_item, parent, false);
+        return new ProductHolder(binding);
     }
 
     @Override
@@ -60,32 +66,38 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
 
     public class ProductHolder extends RecyclerView.ViewHolder {
-        private TextView mTextViewTitle;
-        private TextView mTextViewPrice;
-        private ImageView imageView ;
-        private Product mProduct;
-        public ProductHolder(@NonNull final View itemView) {
-            super(itemView);
 
-            mTextViewTitle = itemView.findViewById(R.id.product_name_textView_productlist);
-            mTextViewPrice = itemView.findViewById(R.id.final_price_product_textView_productlist);
-            imageView = itemView.findViewById(R.id.imageView_product_list);
+        private ProductListItemBinding mbinding ;
+        private ProductDetailFragmentViewModel detailFragmentViewModel ;
+
+        private Product mProduct;
+        public ProductHolder(@NonNull ProductListItemBinding binding) {
+            super(binding.getRoot());
+            mbinding = binding ;
+            detailFragmentViewModel = ViewModelProviders.of(mActivity).get(ProductDetailFragmentViewModel.class);
 
         }
 
 
         public void bind(final Product product) {
 
-            itemView.setOnClickListener(view -> mActivity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container , ProductDetailFragment.newInstance(product))
-                    .addToBackStack("transaction")
-                    .commit());
-
-            mTextViewTitle.setText(product.getName());
-            mTextViewPrice.setText(product.getPrice());
-            Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
             this.mProduct = product;
+            detailFragmentViewModel.getProduct().setValue(mProduct);
+            mbinding.setProductDetailsViewModel(detailFragmentViewModel);
+            mbinding.executePendingBindings();
+
+            Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(mbinding.imageViewProductList);
+
+            mbinding.getRoot().setOnClickListener(view -> {
+               detailFragmentViewModel.getProduct().setValue(mProduct);
+                mActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, ProductDetailFragment.newInstance())
+                        .addToBackStack("transaction")
+                        .commit();
+
+            });
+
 
         }
     }

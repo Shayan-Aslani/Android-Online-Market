@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="productDetailsViewModel"
+            type="com.example.finalproject.viewModel.ProductDetailFragmentViewModel" />
+    </data>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -41,6 +50,7 @@
                 android:layout_marginLeft="16.0dip"
                 android:layout_marginTop="8.0dip"
                 android:layout_marginRight="8.0dip"
+                android:text="@{productDetailsViewModel.product.name}"
                 android:gravity="right"
                 android:singleLine="true"
                 android:textColor="@color/digikala_adrs_title1"
@@ -91,9 +101,12 @@
                 android:layout_marginBottom="0.0dip"
                 android:gravity="left|center"
                 android:paddingBottom="8.0dip"
+                android:text="@{productDetailsViewModel.product.price}"
                 android:singleLine="true"
                 android:textColor="@color/digikala_green_light"
                 android:textSize="15.0sp" />
         </RelativeLayout>
     </RelativeLayout>
-</com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

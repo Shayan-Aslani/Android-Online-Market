@@ -124,10 +124,15 @@ public class StartFragment extends Fragment {
                 mainFragmentViewModel.loadRatedProductListFromApi();
                 mainFragmentViewModel.loadVisitedProductListFromApi();
                 mainFragmentViewModel.loadAttributeTermsFromApi();
+                CategoriesRepository.getInstance(getContext()).generateParentList();
+                ProductRepository.getInstance(getContext()).setVipProducts(ProductRepository.getInstance(getContext()).getRatedProducts().getValue()
+                        .subList(0, 2));
 
 
             } catch (IOException e) {
                 publishProgress("خطا در دریافت اطلاعات از دیجی کالا");
+
+
             }
             return null;
         }
@@ -137,6 +142,7 @@ public class StartFragment extends Fragment {
             super.onProgressUpdate(values);
             String toastString = values[0];
             Toast.makeText(getActivity(), toastString, Toast.LENGTH_SHORT).show();
+
             result = false;
         }
 
@@ -144,12 +150,12 @@ public class StartFragment extends Fragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            CategoriesRepository.getInstance(getContext()).generateParentList();
-            ProductRepository.getInstance(getContext()).setVipProducts(ProductRepository.getInstance(getContext()).getRatedProducts().getValue()
-                    .subList(0, 2));
-
-            startActivity(MainActivity.newIntent(getActivity(), result));
-            getActivity().finish();
+            if(result) {
+                startActivity(MainActivity.newIntent(getActivity()));
+                getActivity().finish();
+            }
+            else
+                onNetworkUnavailable();
 
         }
     }

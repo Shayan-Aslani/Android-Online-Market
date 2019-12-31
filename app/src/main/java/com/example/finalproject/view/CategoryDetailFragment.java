@@ -19,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.adapters.ProductAdapter;
+import com.example.finalproject.controller.adapters.ProductMainAdapter;
 import com.example.finalproject.databinding.FragmentCategoryDetailBinding;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
@@ -46,7 +46,7 @@ public class CategoryDetailFragment extends Fragment {
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView;
     private TextView categoryTitleTextView ;
     private Api api;
-    private ProductAdapter latestProductsAdapter, popularProductsAdapter;
+    private ProductMainAdapter latestProductsAdapter, popularProductsAdapter;
     private TextView cartItemCountTextView ;
     private ProgressBar progressBar;
     private ImageView backImageView ;
@@ -143,8 +143,8 @@ public class CategoryDetailFragment extends Fragment {
     }
 
     private void setupRecyclerViews() {
-        latestProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
-        popularProductsAdapter = new ProductAdapter((AppCompatActivity) getActivity());
+        latestProductsAdapter = new ProductMainAdapter((AppCompatActivity) getActivity());
+        popularProductsAdapter = new ProductMainAdapter((AppCompatActivity) getActivity());
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
     }

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ProductDetailFragmentViewModel extends AndroidViewModel {
 
-    private MutableLiveData<Product> mProduct ;
+    private MutableLiveData<Product> mProduct = new MutableLiveData<>() ;
     private MutableLiveData<List<CartProduct>> mShoppingCartList ;
     private ProductRepository mProductRepository;
 
@@ -37,5 +37,11 @@ public class ProductDetailFragmentViewModel extends AndroidViewModel {
         return mShoppingCartList;
     }
 
+    public MutableLiveData<Product> getProduct() {
+        return mProduct;
+    }
 
+    public void loadProductFromApi(){
+        mProduct.postValue(mProductRepository.getProductById(mProduct.getValue().getId()).getValue());
+    }
 }
