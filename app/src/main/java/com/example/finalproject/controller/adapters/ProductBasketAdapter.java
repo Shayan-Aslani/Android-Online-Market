@@ -3,37 +3,38 @@ package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.icu.text.Collator;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.CartProduct;
-import com.example.finalproject.model.Repository;
+import com.example.finalproject.model.Product;
+import com.example.finalproject.repositories.ProductRepository;
+import com.example.finalproject.view.ProductDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ProductHolder> {
+public class ProductBasketAdapter extends RecyclerView.Adapter<ProductBasketAdapter.ProductHolder> {
 
     private List<CartProduct> mProducts = new ArrayList<>();
     private AppCompatActivity mActivity ;
 
-    public ShoppingCartAdapter(AppCompatActivity mActivity ) {
+    public ProductBasketAdapter(AppCompatActivity mActivity ) {
         this.mActivity = mActivity;
     }
 
-    public ShoppingCartAdapter (AppCompatActivity mActivity , List<CartProduct> productList) {
+    public ProductBasketAdapter(AppCompatActivity mActivity , List<CartProduct> productList) {
         this.mActivity = mActivity;
         this.mProducts = productList;
     }
@@ -59,11 +60,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     @Override
     public int getItemCount() {
-
         return mProducts == null ? 0 : mProducts.size();
     }
-
-
 
     public class ProductHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
@@ -84,14 +82,20 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         public void bind(final CartProduct product) {
 
-            mTextViewTitle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mActivity.startActivity(productDetailActivity.newIntent(mActivity , product.getId()));
-                }
+            mTextViewTitle.setOnClickListener(view -> {
+               ProductRepository.getInstance(mActivity).getProductById(product.getId()).observe(mActivity , product1 -> {
+                   mActivity.getSupportFragmentManager()
+                           .beginTransaction()
+                           .replace(R.id.fragment_container ,
+                                   ProductDetailFragment.newInstance(product1))
+                           .addToBackStack("transaction")
+                           .commit() ;
+
+               }); ;
             });
 
             deletetextView.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
                 @Override
                 public void onClick(View view) {
 
@@ -100,7 +104,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                             .setPositiveButton(R.string.yes , new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    Repository.getInstance(mActivity).deleteCartproduct(mCartProduct);
+                                    ProductRepository.getInstance(mActivity).deleteCartproduct(mCartProduct);
                                 }
                             })
                             .setNegativeButton(R.string.no , null)

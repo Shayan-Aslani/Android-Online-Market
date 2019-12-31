@@ -1,4 +1,4 @@
-package com.example.finalproject.controller.fragment;
+package com.example.finalproject.view;
 
 
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +20,8 @@ import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.AttributeTermAdapter;
 import com.example.finalproject.controller.adapters.AttributesAdapter;
 import com.example.finalproject.model.Attribute;
-import com.example.finalproject.model.Repository;
-import com.google.android.material.button.MaterialButton;
+import com.example.finalproject.repositories.FilterRepository;
+import com.example.finalproject.viewModel.ProductListFragmentViewModel;
 
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class FilterFragment extends Fragment {
     private RecyclerView attributesRecyclerView, termsRecyclerView;
     private AttributesAdapter attributeAdapter;
     private AttributeTermAdapter termAdapter;
-    private List<Attribute.Term> selectedTerm ;
+
+    private ProductListFragmentViewModel mProductListViewModel;
 
     public static FilterFragment newInstance() {
 
@@ -53,7 +55,8 @@ public class FilterFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        attributesList = Repository.getInstance(getContext()).getAllAttributes();
+        attributesList = FilterRepository.getInstance(getContext()).getAttributes().getValue();
+        mProductListViewModel = ViewModelProviders.of(this).get(ProductListFragmentViewModel.class);
     }
 
     @Override
@@ -64,18 +67,12 @@ public class FilterFragment extends Fragment {
         initUi(view);
         setRecyclerViews();
 
-        closeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().getSupportFragmentManager()
-                        .popBackStack();
-            }
-        });
-        doFilterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doFilter();
-            }
+        closeImageView.setOnClickListener(view1 -> getActivity().getSupportFragmentManager()
+                .popBackStack());
+        doFilterButton.setOnClickListener(view12 -> doFilter());
+
+        FilterRepository.getInstance(getContext()).getAttributes().observe(this , attributeList -> {
+            attributeAdapter.setAttributes(attributeList);
         });
         return view;
     }
@@ -99,11 +96,9 @@ public class FilterFragment extends Fragment {
     }
 
     private void doFilter() {
+        mProductListViewModel.loadFilteredListFromApi();
         getActivity().getSupportFragmentManager()
                 .popBackStack();
-        selectedTerm = Repository.getInstance(getContext()).getSelectedTerms();
-
-
     }
 
 }

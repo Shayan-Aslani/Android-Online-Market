@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    style="@style/Theme.MaterialComponents.Light.NoActionBar"
-    tools:context=".controller.fragment.CategoryListFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        style="@style/Theme.MaterialComponents.Light.NoActionBar"
+        tools:context=".view.CategoryListFragment">
 
 
     <com.google.android.material.tabs.TabLayout
+        app:tabMode="scrollable"
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +29,8 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-</LinearLayout>
+    </LinearLayout>
+
+</layout>
 
 

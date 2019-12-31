@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.finalproject.controller.fragment.CategoryDetailFragment;
+import com.example.finalproject.view.CategoryDetailFragment;
 
 import static com.example.finalproject.controller.activity.CategoryListActivity.CATEGORY_ID_EXTRA;
 

@@ -8,10 +8,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
-import com.example.finalproject.model.Repository;
+import com.example.finalproject.repositories.CategoriesRepository;
+import com.example.finalproject.repositories.FilterRepository;
+import com.example.finalproject.repositories.ProductRepository;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 public class MainFragmentViewModel extends AndroidViewModel {
 
@@ -19,45 +22,73 @@ public class MainFragmentViewModel extends AndroidViewModel {
     private MutableLiveData<List<Product>> mRatedProducts ;
     private MutableLiveData<List<Product>> mVisitedProducts ;
     private MutableLiveData<List<Category>> mCategories ;
-    private Repository mRepository ;
+    private ProductRepository mProductRepository;
+    private CategoriesRepository mCategoriesRepository ;
+    private FilterRepository mFilterRepository ;
 
     public MainFragmentViewModel(@NonNull Application application) {
         super(application);
-        mRepository = Repository.getInstance(application);
-        mRepository.loadShoppingBagProducts();
-        mRepository.generateParentList();
+        mProductRepository = ProductRepository.getInstance(application);
+        mCategoriesRepository = CategoriesRepository.getInstance(application);
+        mFilterRepository = FilterRepository.getInstance(application);
+        mFilterRepository.getSelectedTerms().setValue(new ArrayList<>());
+        mProductRepository.loadBasketProducts();
     }
 
     public MutableLiveData<List<Product>> getNewProductList() {
         if(mNewProductList == null)
-            mNewProductList = mRepository.getNewProducts();
+            mNewProductList = mProductRepository.getNewProducts();
 
         return mNewProductList;
     }
 
+    public void loadNewProductListFromApi() throws IOException {
+        mProductRepository.loadNewProductList();
+    }
+
+    public void loadRatedProductListFromApi() throws IOException {
+        mProductRepository.loadRatedProductList();
+    }
+
+    public void loadVisitedProductListFromApi() throws IOException {
+        mProductRepository.loadVisitedProductList();
+    }
+
+    public void loadCategoriesListFromApi() throws IOException {
+         mCategoriesRepository.loadCategoriesList();
+    }
+
     public MutableLiveData<List<Product>> getRatedProductList() {
         if(mRatedProducts == null)
-            mRatedProducts = mRepository.getRatedProducts();
+            mRatedProducts = mProductRepository.getRatedProducts();
 
         return mRatedProducts;
     }
 
     public MutableLiveData<List<Product>> getVisitedProductList() {
         if(mVisitedProducts == null)
-            mVisitedProducts = mRepository.getVisitedProducts();
+            mVisitedProducts = mProductRepository.getVisitedProducts();
 
         return mVisitedProducts;
     }
 
     public MutableLiveData<List<Category>> getCategoriesList() {
         if(mCategories == null)
-            mCategories = mRepository.getAllCategories();
+            mCategories = mCategoriesRepository.getAllCategories();
 
         return mCategories;
     }
 
+    public void loadAttributesFromApi() throws IOException {
+        mFilterRepository.loadAttributesFromApi();
+    }
+
+    public void loadAttributeTermsFromApi() throws IOException {
+        mFilterRepository.loadAttributeTerms();
+    }
+
     public void saveShoppingCartProducts(){
-        mRepository.saveShoppingBagProducts();
+        mProductRepository.saveBasketProducts();
     }
 
 

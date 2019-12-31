@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
-import com.example.finalproject.controller.fragment.StartFragment;
+import com.example.finalproject.view.StartFragment;
 
 public class StartActivity extends SingleFragmentActivity {
 

@@ -11,9 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.Attribute;
-import com.example.finalproject.model.Repository;
+import com.example.finalproject.repositories.FilterRepository;
+import com.example.finalproject.repositories.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
     public AttributeTermAdapter(AppCompatActivity mActivity) {
         this.mActivity = mActivity;
-        selectedTermList = Repository.getInstance(mActivity).getSelectedTerms();
+        selectedTermList = FilterRepository.getInstance(mActivity).getSelectedTerms().getValue();
     }
 
     public AttributeTermAdapter(AppCompatActivity mActivity, List<Attribute.Term> attributeList, Attribute mAttribute) {
@@ -80,28 +80,24 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
         }
 
-
         public void bind(final Attribute.Term term) {
 
             mTextViewTitle.setText(term.getName());
             this.mTerm = term;
             term.setAttributeSlug(mAttribute.getSlug());
 
-            if(selectedTermList.contains(term))
+            if(selectedTermList != null && selectedTermList.contains(term))
                 mCheckbox.setChecked(true);
             else
                 mCheckbox.setChecked(false);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mCheckbox.isChecked()) {
-                        mCheckbox.setChecked(false);
-                        Repository.getInstance(mActivity).removeSelectedTerm(term);
-                    } else {
-                        mCheckbox.setChecked(true);
-                        Repository.getInstance(mActivity).addSelectedTerm(term);
-                    }
+            itemView.setOnClickListener(view -> {
+                if (mCheckbox.isChecked()) {
+                    mCheckbox.setChecked(false);
+                    FilterRepository.getInstance(mActivity).removeSelectedTerm(term);
+                } else {
+                    mCheckbox.setChecked(true);
+                    FilterRepository.getInstance(mActivity).addSelectedTerm(term);
                 }
             });
 

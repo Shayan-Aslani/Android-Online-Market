@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".controller.activity.ProductListActivity"></activity>
-        <activity android:name=".controller.activity.SearchActivity" />
         <activity android:name=".controller.activity.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +22,6 @@
         </activity>
         <activity android:name=".controller.activity.CategoryDetailActivity" />
         <activity android:name=".controller.activity.CategoryListActivity" />
-        <activity android:name=".controller.activity.productDetailActivity" />
         <activity android:name=".controller.activity.MainActivity">
 
         </activity>

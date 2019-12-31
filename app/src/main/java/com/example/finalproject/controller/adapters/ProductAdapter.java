@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.view.ProductDetailFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -34,6 +34,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     public void setProducts(List<Product> products) {
         mProducts = products;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -79,7 +80,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mActivity.startActivity(productDetailActivity.newIntent(mActivity , product.getId()));
+                    mActivity.getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container , ProductDetailFragment.newInstance(product))
+                            .addToBackStack("transaction")
+                            .commit();
                 }
             });
 

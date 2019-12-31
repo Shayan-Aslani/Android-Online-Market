@@ -1,10 +1,11 @@
-package com.example.finalproject.controller.fragment;
+package com.example.finalproject.view;
 
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +16,9 @@ import android.view.ViewGroup;
 
 import com.example.finalproject.R;
 import com.example.finalproject.controller.adapters.CategoryAdapter;
+import com.example.finalproject.databinding.FragmentCategoryTabBinding;
 import com.example.finalproject.model.Category;
-import com.example.finalproject.model.Repository;
+import com.example.finalproject.repositories.CategoriesRepository;
 
 import java.util.List;
 
@@ -31,6 +33,9 @@ public class CategoryTabFragment extends Fragment {
     private CategoryAdapter categoryAdapter ;
     private List<Category>  categories ;
     private int parentId ;
+
+    private FragmentCategoryTabBinding mBinding ;
+
     public static CategoryTabFragment newInstance(int id) {
 
         Bundle args = new Bundle();
@@ -48,22 +53,22 @@ public class CategoryTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentId = getArguments().getInt(CATEGORY_PARENT_ID_ARG);
-        categories = Repository.getInstance(getContext()).getSubCategoires(parentId);
+        categories = CategoriesRepository.getInstance(getContext()).getSubCategoires(parentId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_category_tab, container, false);
-        initUi(view);
+        mBinding =  DataBindingUtil.inflate(inflater ,R.layout.fragment_category_tab, container, false);
+        initUi();
         setupRecyclerView();
 
-        return view ;
+        return mBinding.getRoot() ;
     }
 
-    private void initUi(View view){
-        recyclerView = view.findViewById(R.id.category_list_recyclerView);
+    private void initUi(){
+        recyclerView = mBinding.categoryListRecyclerView;
 
     }
 

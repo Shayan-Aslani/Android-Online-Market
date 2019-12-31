@@ -34,6 +34,7 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.At
 
     public void setAttributes(List<Attribute> attributes) {
         attributeList = attributes;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -73,13 +74,10 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.At
         public void bind(final Attribute attribute) {
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    attributeTermAdapter.setAttribute(attribute);
-                    attributeTermAdapter.setTerms(attribute.getTerms());
-                    attributeTermAdapter.notifyDataSetChanged();
-                }
+            itemView.setOnClickListener(view -> {
+                attributeTermAdapter.setAttribute(attribute);
+                attributeTermAdapter.setTerms(attribute.getTerms());
+                attributeTermAdapter.notifyDataSetChanged();
             });
 
             mTextViewTitle.setText(attribute.getName());

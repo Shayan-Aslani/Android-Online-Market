@@ -9,9 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.finalproject.R;
-import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.view.MainFragment;
-import com.example.finalproject.model.Repository;
 
 public class MainActivity extends SingleFragmentActivity {
 

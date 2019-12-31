@@ -1,4 +1,4 @@
-package com.example.finalproject.controller.fragment;
+package com.example.finalproject.view;
 
 
 import android.content.Context;
@@ -8,7 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.example.finalproject.R;
 import com.example.finalproject.controller.activity.MainActivity;
-import com.example.finalproject.model.Attribute;
+import com.example.finalproject.databinding.FragmentStartBinding;
 import com.example.finalproject.model.CartProduct;
-import com.example.finalproject.model.Product;
-import com.example.finalproject.model.Repository;
-import com.example.finalproject.network.Api;
-import com.example.finalproject.network.RetrofitInstance;
+import com.example.finalproject.repositories.CategoriesRepository;
+import com.example.finalproject.repositories.ProductRepository;
+import com.example.finalproject.viewModel.MainFragmentViewModel;
 import com.google.android.material.button.MaterialButton;
 
 import java.io.IOException;
@@ -38,9 +38,12 @@ import java.util.List;
 public class StartFragment extends Fragment {
 
 
-    private LottieAnimationView mInternetAnimationView;
     private MaterialButton tryAgainButton;
     private ProgressBar progressBar;
+
+    private FragmentStartBinding mBinding ;
+
+    private MainFragmentViewModel mainFragmentViewModel ;
 
     public static StartFragment newInstance() {
 
@@ -58,27 +61,21 @@ public class StartFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mainFragmentViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mBinding = DataBindingUtil.inflate(inflater , R.layout.fragment_start, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_start, container, false);
-
-        initUi(view);
+        initUi();
 
         startInit();
 
-        tryAgainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startInit();
-            }
-        });
-        return view;
+        tryAgainButton.setOnClickListener(view1 -> startInit());
+        return mBinding.getRoot();
     }
 
     private void onNetworkUnavailable() {
@@ -104,36 +101,14 @@ public class StartFragment extends Fragment {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void initUi(View view) {
-        tryAgainButton = view.findViewById(R.id.tryagain_Button);
-        progressBar = view.findViewById(R.id.progressBar2);
+    private void initUi() {
+        tryAgainButton = mBinding.tryagainButton;
+        progressBar = mBinding.progressBar2;
         List<CartProduct> list = new ArrayList<>();
-        Repository.getInstance(getContext()).getShoppingCartProducts().setValue(list);
+        ProductRepository.getInstance(getContext()).getBasketProducts().setValue(list);
     }
 
-    private class InitAttributesAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                Repository.getInstance(getContext()).setAllAttributes(RetrofitInstance.getRetrofit().create(Api.class)
-                        .getAttributes().execute().body());
-                List<Attribute> list = Repository.getInstance(getContext()).getAllAttributes();
-                for (Attribute attribute : list) {
-                    attribute.setTerms(RetrofitInstance.getRetrofit().create(Api.class).getTerms(String.valueOf(attribute.getId())).execute().body());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            getActivity().finish();
-        }
-    }
 
     private class InitProductsAsynceTask extends AsyncTask<Void, String, Void> {
 
@@ -143,19 +118,17 @@ public class StartFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
 
             try {
-                Repository.getInstance(getContext()).getNewProducts().postValue(generateLists("date"));
-                Repository.getInstance(getContext()).setAllProducts(generateLists("date"));
-                Repository.getInstance(getContext()).getRatedProducts().postValue(generateLists("rating"));
-                Repository.getInstance(getContext()).getVisitedProducts().postValue(generateLists("popularity"));
-                Repository.getInstance(getContext()).getAllCategories().postValue(RetrofitInstance.getRetrofit().create(Api.class)
-                        .getAllCategories().execute().body());
-                Repository.getInstance(getContext()).setVipProducts(Repository.getInstance(getContext()).getRatedProducts().getValue().subList(0, 10));
-            } catch (IOException e) {
+                mainFragmentViewModel.loadAttributesFromApi();
+                mainFragmentViewModel.loadCategoriesListFromApi();
+                mainFragmentViewModel.loadNewProductListFromApi();
+                mainFragmentViewModel.loadRatedProductListFromApi();
+                mainFragmentViewModel.loadVisitedProductListFromApi();
+                mainFragmentViewModel.loadAttributeTermsFromApi();
 
+
+            } catch (IOException e) {
                 publishProgress("خطا در دریافت اطلاعات از دیجی کالا");
             }
-
-
             return null;
         }
 
@@ -170,15 +143,16 @@ public class StartFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            CategoriesRepository.getInstance(getContext()).generateParentList();
+            ProductRepository.getInstance(getContext()).setVipProducts(ProductRepository.getInstance(getContext()).getRatedProducts().getValue()
+                    .subList(0, 2));
+
             startActivity(MainActivity.newIntent(getActivity(), result));
-            new InitAttributesAsyncTask().execute();
+            getActivity().finish();
 
         }
     }
 
-    private List<Product> generateLists(String type) throws IOException {
-        return RetrofitInstance.getRetrofit().create(Api.class)
-                .getAllProducts(type, "10").execute().body();
-    }
 
 }

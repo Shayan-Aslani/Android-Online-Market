@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.finalproject.controller.fragment.CategoryListFragment;
+import com.example.finalproject.view.CategoryListFragment;
 
 public class CategoryListActivity extends SingleFragmentActivity {
 
