@@ -87,6 +87,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

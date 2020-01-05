@@ -9,10 +9,6 @@ import java.util.List;
 public class Product implements Serializable {
 
     @Expose
-    @SerializedName("_links")
-    private _links _links;
-
-    @Expose
     @SerializedName("menu_order")
     private int menu_order;
     @Expose
@@ -38,36 +34,7 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("parent_id")
     private int parent_id;
-    @Expose
-    @SerializedName("cross_sell_ids")
-    private List<String> cross_sell_ids;
-    @Expose
-    @SerializedName("upsell_ids")
-    private List<String> upsell_ids;
-    @Expose
-    @SerializedName("related_ids")
-    private List<Integer> related_ids;
-    @Expose
-    @SerializedName("rating_count")
-    private int rating_count;
-    @Expose
-    @SerializedName("average_rating")
-    private String average_rating;
-    @Expose
-    @SerializedName("reviews_allowed")
-    private boolean reviews_allowed;
-    @Expose
-    @SerializedName("shipping_class_id")
-    private int shipping_class_id;
-    @Expose
-    @SerializedName("shipping_class")
-    private String shipping_class;
-    @Expose
-    @SerializedName("shipping_taxable")
-    private boolean shipping_taxable;
-    @Expose
-    @SerializedName("shipping_required")
-    private boolean shipping_required;
+
     @Expose
     @SerializedName("dimensions")
     private Dimensions dimensions;
@@ -148,31 +115,11 @@ public class Product implements Serializable {
     @SerializedName("description")
     private String description;
     @Expose
-    @SerializedName("catalog_visibility")
-    private String catalog_visibility;
-    @Expose
     @SerializedName("featured")
     private boolean featured;
     @Expose
     @SerializedName("status")
     private String status;
-    @Expose
-    @SerializedName("type")
-    private String type;
-    @Expose
-    @SerializedName("date_modified_gmt")
-    private String date_modified_gmt;
-    @Expose
-    @SerializedName("date_modified")
-    private String date_modified;
-    @Expose
-    @SerializedName("date_created_gmt")
-    private String date_created_gmt;
-    @Expose
-    @SerializedName("date_created")
-    private String date_created;
-    @Expose
-    @SerializedName("permalink")
     private String permalink;
     @Expose
     @SerializedName("slug")
@@ -183,15 +130,6 @@ public class Product implements Serializable {
     @Expose
     @SerializedName("id")
     private int id;
-
-    public _links get_links() {
-        return _links;
-    }
-
-    public void set_links(_links _links) {
-        this._links = _links;
-    }
-
 
 
     public int getMenu_order() {
@@ -260,85 +198,6 @@ public class Product implements Serializable {
         this.parent_id = parent_id;
     }
 
-    public List<String> getCross_sell_ids() {
-        return cross_sell_ids;
-    }
-
-    public void setCross_sell_ids(List<String> cross_sell_ids) {
-        this.cross_sell_ids = cross_sell_ids;
-    }
-
-    public List<String> getUpsell_ids() {
-        return upsell_ids;
-    }
-
-    public void setUpsell_ids(List<String> upsell_ids) {
-        this.upsell_ids = upsell_ids;
-    }
-
-    public List<Integer> getRelated_ids() {
-        return related_ids;
-    }
-
-    public void setRelated_ids(List<Integer> related_ids) {
-        this.related_ids = related_ids;
-    }
-
-    public int getRating_count() {
-        return rating_count;
-    }
-
-    public void setRating_count(int rating_count) {
-        this.rating_count = rating_count;
-    }
-
-    public String getAverage_rating() {
-        return average_rating;
-    }
-
-    public void setAverage_rating(String average_rating) {
-        this.average_rating = average_rating;
-    }
-
-    public boolean getReviews_allowed() {
-        return reviews_allowed;
-    }
-
-    public void setReviews_allowed(boolean reviews_allowed) {
-        this.reviews_allowed = reviews_allowed;
-    }
-
-    public int getShipping_class_id() {
-        return shipping_class_id;
-    }
-
-    public void setShipping_class_id(int shipping_class_id) {
-        this.shipping_class_id = shipping_class_id;
-    }
-
-    public String getShipping_class() {
-        return shipping_class;
-    }
-
-    public void setShipping_class(String shipping_class) {
-        this.shipping_class = shipping_class;
-    }
-
-    public boolean getShipping_taxable() {
-        return shipping_taxable;
-    }
-
-    public void setShipping_taxable(boolean shipping_taxable) {
-        this.shipping_taxable = shipping_taxable;
-    }
-
-    public boolean getShipping_required() {
-        return shipping_required;
-    }
-
-    public void setShipping_required(boolean shipping_required) {
-        this.shipping_required = shipping_required;
-    }
 
     public Dimensions getDimensions() {
         return dimensions;
@@ -549,13 +408,6 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public String getCatalog_visibility() {
-        return catalog_visibility;
-    }
-
-    public void setCatalog_visibility(String catalog_visibility) {
-        this.catalog_visibility = catalog_visibility;
-    }
 
     public boolean getFeatured() {
         return featured;
@@ -573,45 +425,6 @@ public class Product implements Serializable {
         this.status = status;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getDate_modified_gmt() {
-        return date_modified_gmt;
-    }
-
-    public void setDate_modified_gmt(String date_modified_gmt) {
-        this.date_modified_gmt = date_modified_gmt;
-    }
-
-    public String getDate_modified() {
-        return date_modified;
-    }
-
-    public void setDate_modified(String date_modified) {
-        this.date_modified = date_modified;
-    }
-
-    public String getDate_created_gmt() {
-        return date_created_gmt;
-    }
-
-    public void setDate_created_gmt(String date_created_gmt) {
-        this.date_created_gmt = date_created_gmt;
-    }
-
-    public String getDate_created() {
-        return date_created;
-    }
-
-    public void setDate_created(String date_created) {
-        this.date_created = date_created;
-    }
 
     public String getPermalink() {
         return permalink;
@@ -644,60 +457,6 @@ public class Product implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
-    public static class _links {
-        @Expose
-        @SerializedName("collection")
-        private List<Collection> collection;
-        @Expose
-        @SerializedName("self")
-        private List<Self> self;
-
-        public List<Collection> getCollection() {
-            return collection;
-        }
-
-        public void setCollection(List<Collection> collection) {
-            this.collection = collection;
-        }
-
-        public List<Self> getSelf() {
-            return self;
-        }
-
-        public void setSelf(List<Self> self) {
-            this.self = self;
-        }
-    }
-
-    public static class Collection {
-        @Expose
-        @SerializedName("href")
-        private String href;
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
-    }
-
-    public static class Self {
-        @Expose
-        @SerializedName("href")
-        private String href;
-
-        public String getHref() {
-            return href;
-        }
-
-        public void setHref(String href) {
-            this.href = href;
-        }
-    }
-
 
 
     public static class Images {
@@ -827,40 +586,6 @@ public class Product implements Serializable {
         }
     }
 
-    public static class Dimensions {
-        @Expose
-        @SerializedName("height")
-        private String height;
-        @Expose
-        @SerializedName("width")
-        private String width;
-        @Expose
-        @SerializedName("length")
-        private String length;
 
-        public String getHeight() {
-            return height;
-        }
-
-        public void setHeight(String height) {
-            this.height = height;
-        }
-
-        public String getWidth() {
-            return width;
-        }
-
-        public void setWidth(String width) {
-            this.width = width;
-        }
-
-        public String getLength() {
-            return length;
-        }
-
-        public void setLength(String length) {
-            this.length = length;
-        }
-    }
 }
 
