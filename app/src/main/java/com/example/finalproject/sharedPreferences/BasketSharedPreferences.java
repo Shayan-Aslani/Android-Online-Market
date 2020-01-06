@@ -1,4 +1,5 @@
-package com.example.finalproject.utils;
+package com.example.finalproject.sharedPreferences;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +12,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingCartPreferences {
+
+public class BasketSharedPreferences {
 
     private static final String PREF_NAME = "Digikala";
 
@@ -21,9 +23,9 @@ public class ShoppingCartPreferences {
         return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
+
     public static List<CartProduct> getProductList(Context context) {
         SharedPreferences prefs = getShoppingCartSharedPreferences(context);
-
         if (prefs == null)
             return null;
 
@@ -33,19 +35,19 @@ public class ShoppingCartPreferences {
         String jsonText =  prefs.getString(PREF_PRODUCT_ID, null) ;
         if(gson.fromJson(jsonText , type) instanceof  List)
             cartProductList = gson.fromJson(jsonText, type);
-
         return cartProductList;
     }
 
     public static void setProductList(Context context, List<CartProduct> cartProductList) {
         SharedPreferences prefs = getShoppingCartSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        Gson gson = new Gson();
-        String jsonText = gson.toJson(cartProductList);
+        Gson gsonText = new Gson();
+        String jsonText = gsonText.toJson(cartProductList);
         editor.putString(PREF_PRODUCT_ID, jsonText);
         editor.apply();
     }
 
 
 }
+
 

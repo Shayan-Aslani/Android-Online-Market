@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.adapters.ShoppingCartAdapter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Repository;
@@ -102,7 +101,7 @@ public class ShoppingBagFragment extends Fragment {
                     }
                 }
             }
-            ShoppingCartPreferences.setProductList(getContext() , shoppingBagList);
+            BasketSharedPreferences.setProductList(getContext() , shoppingBagList);
         });
     }
 

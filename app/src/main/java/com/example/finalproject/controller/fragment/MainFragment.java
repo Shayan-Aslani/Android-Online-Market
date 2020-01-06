@@ -28,7 +28,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.Utils.ShoppingCartPreferences;
 import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.controller.activity.CategoryListActivity;
 import com.example.finalproject.controller.activity.SearchActivity;
@@ -87,6 +86,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -189,7 +189,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
 
     private void setupBadge (){
 
-        List<CartProduct> list = ShoppingCartPreferences.getProductList(getContext()) ;
+        List<CartProduct> list = BasketSharedPreferences.getProductList(getContext()) ;
 
         Repository.getInstance().getShoppingCartProducts().setValue(list);
         Repository.getInstance().getShoppingCartProducts().observe(this , shoppingBagList->{
@@ -206,7 +206,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                     }
                 }
             }
-            ShoppingCartPreferences.setProductList(getContext() , shoppingBagList);
+            BasketSharedPreferences.setProductList(getContext() , shoppingBagList);
         });
 
 
