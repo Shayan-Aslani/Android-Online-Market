@@ -32,14 +32,27 @@ public class MainFragmentViewModel extends AndroidViewModel {
         mCategoriesRepository = CategoriesRepository.getInstance(application);
         mFilterRepository = FilterRepository.getInstance(application);
         mFilterRepository.getSelectedTerms().setValue(new ArrayList<>());
+        mNewProductList = mProductRepository.getNewProducts();
+        mRatedProducts = mProductRepository.getRatedProducts();
+        mVisitedProducts = mProductRepository.getVisitedProducts();
+        mCategories = mCategoriesRepository.getAllCategories();
         mProductRepository.loadBasketProducts();
     }
 
     public MutableLiveData<List<Product>> getNewProductList() {
-        if(mNewProductList == null)
-            mNewProductList = mProductRepository.getNewProducts();
-
         return mNewProductList;
+    }
+
+    public MutableLiveData<List<Product>> getRatedProductList() {
+        return mRatedProducts;
+    }
+
+    public MutableLiveData<List<Product>> getVisitedProductList() {
+        return mVisitedProducts;
+    }
+
+    public MutableLiveData<List<Category>> getCategoriesList() {
+        return mCategories;
     }
 
     public void loadNewProductListFromApi() throws IOException {
@@ -58,27 +71,6 @@ public class MainFragmentViewModel extends AndroidViewModel {
          mCategoriesRepository.loadCategoriesList();
     }
 
-    public MutableLiveData<List<Product>> getRatedProductList() {
-        if(mRatedProducts == null)
-            mRatedProducts = mProductRepository.getRatedProducts();
-
-        return mRatedProducts;
-    }
-
-    public MutableLiveData<List<Product>> getVisitedProductList() {
-        if(mVisitedProducts == null)
-            mVisitedProducts = mProductRepository.getVisitedProducts();
-
-        return mVisitedProducts;
-    }
-
-    public MutableLiveData<List<Category>> getCategoriesList() {
-        if(mCategories == null)
-            mCategories = mCategoriesRepository.getAllCategories();
-
-        return mCategories;
-    }
-
     public void loadAttributesFromApi() throws IOException {
         mFilterRepository.loadAttributesFromApi();
     }
@@ -90,6 +82,7 @@ public class MainFragmentViewModel extends AndroidViewModel {
     public void saveShoppingCartProducts(){
         mProductRepository.saveBasketProducts();
     }
+
 
 
 

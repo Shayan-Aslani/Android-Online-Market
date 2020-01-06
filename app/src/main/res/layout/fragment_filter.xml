@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.FilterFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.fragment.FilterFragment">
 
     <LinearLayout
         android:id="@+id/plist_filter_close_ly"
@@ -180,4 +181,6 @@
         android:text="@string/do_filter"
         android:textColor="@color/back_withe"
         android:textSize="17.0sp" />
-</RelativeLayout>
+
+    </RelativeLayout>
+</layout>

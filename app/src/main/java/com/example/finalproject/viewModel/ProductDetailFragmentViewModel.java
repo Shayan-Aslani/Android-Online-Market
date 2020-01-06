@@ -28,8 +28,8 @@ public class ProductDetailFragmentViewModel extends AndroidViewModel {
     public void addProductToShoppingCart(Product product){
         CartProduct cartProduct = ProductBasketConverter.convertToCartProduct(product);
         List<CartProduct> list = mShoppingCartList.getValue() ;
-        list.add(cartProduct) ;
-        mShoppingCartList.postValue(list);
+        list.add(cartProduct);
+        mShoppingCartList.setValue(list);
         mProductRepository.saveBasketProducts();
     }
 

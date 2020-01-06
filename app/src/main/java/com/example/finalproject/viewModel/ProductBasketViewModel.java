@@ -1,6 +1,7 @@
 package com.example.finalproject.viewModel;
 
 import android.app.Application;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -23,5 +24,16 @@ public class ProductBasketViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<CartProduct>> getCartProductBasketList() {
         return cartProductBasketList;
+    }
+
+    public String totalBasketPrice(){
+
+        double totalPrice = 0 ;
+
+        for(CartProduct cartProduct : cartProductBasketList.getValue())
+        {
+            totalPrice += Double.valueOf(cartProduct.getPrice());
+        }
+        return Double.toString(totalPrice);
     }
 }

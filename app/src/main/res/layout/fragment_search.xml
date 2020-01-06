@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="8dp"
-        tools:context=".view.SearchFragment">
+        tools:context=".view.fragment.SearchFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -27,39 +27,9 @@
             android:textDirection="rtl"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/back_imageView_Search"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/voice_imageView_Search"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/qr_code_imageView_Search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_qrcode_scan_grey600_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/voice_imageView_Search"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/voice_imageView_Search"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
-
-        <ImageView
-            android:id="@+id/voice_imageView_Search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
-            android:background="?selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_keyboard_voice"
-            app:layout_constraintBottom_toBottomOf="@+id/search_editText"
-            app:layout_constraintStart_toEndOf="@+id/qr_code_imageView_Search"
-            app:layout_constraintTop_toTopOf="@+id/search_editText"
-            app:layout_constraintVertical_bias="0.571" />
 
         <ImageView
             android:id="@+id/back_imageView_Search"

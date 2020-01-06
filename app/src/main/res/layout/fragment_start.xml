@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/digikala_red_light"
-        tools:context=".view.StartFragment">
+        tools:context=".view.fragment.StartFragment">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/tryagain_Button"

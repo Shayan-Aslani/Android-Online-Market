@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CategoriesRepository {
 
     private static CategoriesRepository mInstance;
@@ -20,6 +24,8 @@ public class CategoriesRepository {
 
     private MutableLiveData<List<Category>> mCategories = new MutableLiveData<>();
     private MutableLiveData<List<Category>> mParentCategories = new MutableLiveData<>() ;
+    private MutableLiveData<List<Product>> mNewProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mRatedProducts = new MutableLiveData<>();
 
     private CategoriesRepository(Context mContext) {
         this.mContext = mContext;
@@ -67,7 +73,47 @@ public class CategoriesRepository {
         for (Category category : mCategories.getValue())
             if (category.getId() == id)
                 return category;
-
         return null;
+    }
+
+
+    public MutableLiveData<List<Product>> getNewProducts() {
+        return mNewProducts;
+    }
+
+    public MutableLiveData<List<Product>> getRatedProducts() {
+        return mRatedProducts;
+    }
+
+    public void loadNewProductList(int categoryId) {
+        RetrofitInstance.getRetrofit().create(Api.class)
+                .getProductsByCategory(String.valueOf(categoryId), "date").enqueue(new Callback<List<Product>>() {
+                    @Override
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                        if(response.isSuccessful())
+                            mNewProducts.postValue(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                    }
+                });
+    }
+
+    public void loadRatedProductList(int categoryId) {
+        RetrofitInstance.getRetrofit().create(Api.class)
+                .getProductsByCategory(String.valueOf(categoryId), "rating").enqueue(new Callback<List<Product>>() {
+                    @Override
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                        if(response.isSuccessful())
+                            mRatedProducts.postValue(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                    }
+                });
     }
 }

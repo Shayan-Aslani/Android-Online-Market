@@ -74,6 +74,7 @@ public class ProductRepository {
         List<CartProduct> list = mBasketProducts.getValue();
         list.remove(cartProduct);
         mBasketProducts.setValue(list);
+        saveBasketProducts();
     }
 
 

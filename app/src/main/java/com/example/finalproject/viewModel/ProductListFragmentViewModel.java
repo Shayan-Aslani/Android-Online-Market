@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class ProductListFragmentViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>() ;
-    private MutableLiveData<List<Attribute.Term>> mSelectedTerms = new MutableLiveData<>();
+    private MutableLiveData<List<Attribute.Term>> mSelectedTerms ;
     private FilterRepository mFilterRepository ;
 
     public ProductListFragmentViewModel(@NonNull Application application) {
@@ -45,10 +45,10 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
     }
 
     public void loadFilteredListFromApi(){
-        loadFilteredListFromApi(null , null , null);
+        loadFilteredListFromApi(null , null , null , 1);
     }
 
-    public void loadFilteredListFromApi(String searchText , String orderBy, String orderType){
+    public void loadFilteredListFromApi(String searchText , String orderBy, String orderType , int page){
         String filter = "";
         String attribute = "";
         if(mSelectedTerms.getValue().size() != 0) {
@@ -59,7 +59,8 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
         }
 
         RetrofitInstance.getRetrofit().create(Api.class).
-                getSearchedProducts(searchText, attribute, filter , orderBy , orderType).enqueue(new Callback<List<Product>>() {
+                getSearchedProducts(searchText, attribute, filter , orderBy , orderType ,String.valueOf(page) , 20)
+                .enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if(response.isSuccessful())
@@ -71,6 +72,5 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
             }
         });
     }
-
 
 }

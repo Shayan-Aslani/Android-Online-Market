@@ -11,7 +11,7 @@
         android:id="@+id/drawer_layout"
         android:layoutDirection="rtl"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".view.MainFragment">
+        tools:context=".view.fragment.MainFragment">
 
     <include
         layout="@layout/main_layout"
