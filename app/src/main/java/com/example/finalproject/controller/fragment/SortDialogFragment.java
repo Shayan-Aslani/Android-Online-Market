@@ -1,22 +1,22 @@
-package com.example.finalproject.view.fragment;
+package com.example.finalproject.controller.fragment;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
 import com.example.finalproject.R;
-import com.example.finalproject.databinding.FragmentSortDialogBinding;
 import com.example.finalproject.eventBus.ProductListSortMassage;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,8 +30,6 @@ public class SortDialogFragment extends DialogFragment {
     private static final String CURRENT_SORT_ARG = "CURRENT_SORT_ARG";
     private int mCurrentSort;
     private RadioGroup mSortRadioGroup;
-
-    private FragmentSortDialogBinding mBinding ;
 
     public static SortDialogFragment newInstance(Integer currentSort) {
 
@@ -54,6 +52,7 @@ public class SortDialogFragment extends DialogFragment {
         LOW_TO_HIGH(4);
 
         int index;
+
         public int getIndex() {
             return index;
         }
@@ -69,17 +68,11 @@ public class SortDialogFragment extends DialogFragment {
         mCurrentSort = getArguments().getInt(CURRENT_SORT_ARG);
     }
 
-    @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-        mBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()) , R.layout.fragment_sort_dialog , null , false);
-        // Dialog Box
-
-        Dialog dialog = new AlertDialog.Builder(getActivity())
-                .setView(mBinding.getRoot())
-                .create();
-        mSortRadioGroup = mBinding.sortRadiogroup;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_sort_dialog, container, false);
 
         Sorts currentSort = getEnumSorts(mCurrentSort);
         switch (currentSort) {
@@ -101,33 +94,53 @@ public class SortDialogFragment extends DialogFragment {
         }
 
 
-        mSortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            int selected = 0;
-            switch (checkedId) {
-                case R.id.sort_dialog_newest:
-                    selected = Sorts.NEWEST.getIndex();
-                    break;
-                case R.id.sort_dialog_best_seller:
-                    selected = Sorts.RATED.getIndex();
-                    break;
-                case R.id.sort_dialog_most_view:
-                    selected = Sorts.VISITED.getIndex();
-                    break;
-                case R.id.sort_dialog_price_ascending:
-                    selected = Sorts.HIGH_TO_LOW.getIndex();
-                    break;
-                case R.id.sort_dialog_price_descending:
-                    selected = Sorts.LOW_TO_HIGH.getIndex();
-                    break;
-            }
+        mSortRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                int selected = 0;
+                switch (checkedId) {
+                    case R.id.sort_dialog_newest:
+                        selected = Sorts.NEWEST.getIndex();
+                        break;
+                    case R.id.sort_dialog_best_seller:
+                        selected = Sorts.RATED.getIndex();
+                        break;
+                    case R.id.sort_dialog_most_view:
+                        selected = Sorts.VISITED.getIndex();
+                        break;
+                    case R.id.sort_dialog_price_ascending:
+                        selected = Sorts.HIGH_TO_LOW.getIndex();
+                        break;
+                    case R.id.sort_dialog_price_descending:
+                        selected = Sorts.LOW_TO_HIGH.getIndex();
+                        break;
+                }
 
-            if (selected == mCurrentSort) {
-                dismiss();
-            } else {
-                EventBus.getDefault().post(new ProductListSortMassage(selected));
-                dismiss();
+                if (selected == mCurrentSort) {
+                    dismiss();
+                } else {
+                    EventBus.getDefault().post(new ProductListSortMassage(selected));
+                    dismiss();
+                }
             }
         });
+
+
+        return view;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_sort_dialog, null, false);
+
+        // Dialog Box
+
+        Dialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .create();
+        mSortRadioGroup = view.findViewById(R.id.sort_radiogroup);
 
         return dialog;
     }

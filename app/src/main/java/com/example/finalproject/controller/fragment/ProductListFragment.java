@@ -199,7 +199,7 @@ public class ProductListFragment extends Fragment {
                     break;
                 case RATED:
                     mOrderType = "popularity";
-                    sortTextView.setText("پربازدیدترین");
+                    sortTextView.setText("جدیدترین");
                     break;
                 case VISITED:
                     mOrderType = "rating";

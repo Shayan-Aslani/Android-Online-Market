@@ -1,4 +1,4 @@
-package com.example.finalproject.adapter;
+package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
 import android.view.View;
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.view.activity.CategoryDetailActivity;
+import com.example.finalproject.controller.activity.CategoryDetailActivity;
 import com.example.finalproject.model.Category;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +35,7 @@ public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.Categ
     @Override
     public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.item_ctergory_list, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.ctergory_list_item, parent, false);
         return new CategoryHolder(view);
     }
 
@@ -66,7 +66,12 @@ public class CategoryAdapter extends  RecyclerView.Adapter<CategoryAdapter.Categ
 
         public void bind(final Category category) {
 
-            itemView.setOnClickListener(view -> mActivity.startActivity(CategoryDetailActivity.newIntent(mActivity , category.getId())));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mActivity.startActivity(CategoryDetailActivity.newIntent(mActivity , category.getId()));
+                }
+            });
 
             mTextViewTitle.setText(category.getName());
             if(category.getImage()!=null)

@@ -1,4 +1,4 @@
-package com.example.finalproject.view.activity;
+package com.example.finalproject.controller.activity;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -9,15 +9,19 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.example.finalproject.R;
-import com.example.finalproject.view.fragment.MainFragment;
+import com.example.finalproject.Utils.ShoppingCartPreferences;
+import com.example.finalproject.controller.fragment.MainFragment;
+import com.example.finalproject.model.Repository;
 
 public class MainActivity extends SingleFragmentActivity {
 
     private MainFragment mainFragment ;
+    public static final String RESULT_EXTRA = "networkResultExtra";
 
-    public static Intent newIntent(Context context ){
+    public static Intent newIntent(Context context , boolean result ){
 
         Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(RESULT_EXTRA , result);
         return intent;
     }
 
@@ -31,6 +35,12 @@ public class MainActivity extends SingleFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+  /*      if(!getIntent().getExtras().getBoolean(RESULT_EXTRA))
+            Snackbar.make(view , "f" , Snackbar.LENGTH_LONG);
+
+   */
+
     }
 
     @Override
@@ -48,5 +58,6 @@ public class MainActivity extends SingleFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ShoppingCartPreferences.setProductList(this , Repository.getInstance().getShoppingCartProducts().getValue());
     }
 }

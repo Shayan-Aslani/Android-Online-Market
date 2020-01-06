@@ -1,4 +1,4 @@
-package com.example.finalproject.adapter;
+package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
 import android.view.View;
@@ -11,8 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.controller.activity.productDetailActivity;
 import com.example.finalproject.model.Attribute;
-import com.example.finalproject.repositories.FilterRepository;
+import com.example.finalproject.model.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
     public AttributeTermAdapter(AppCompatActivity mActivity) {
         this.mActivity = mActivity;
-        selectedTermList = FilterRepository.getInstance(mActivity).getSelectedTerms().getValue();
+        selectedTermList = Repository.getInstance().getSelectedTerms();
     }
 
     public AttributeTermAdapter(AppCompatActivity mActivity, List<Attribute.Term> attributeList, Attribute mAttribute) {
@@ -47,7 +48,7 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
     @Override
     public AttributeTermHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.item_filter_term, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.filter_term_item, parent, false);
         return new AttributeTermHolder(view);
     }
 
@@ -60,6 +61,7 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
     @Override
     public int getItemCount() {
+
         return attributeList == null ? 0 : attributeList.size();
     }
 
@@ -72,9 +74,12 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
 
         public AttributeTermHolder(@NonNull final View itemView) {
             super(itemView);
+
             mTextViewTitle = itemView.findViewById(R.id.term_title_text_view);
             mCheckbox = itemView.findViewById(R.id.term_checkbox);
+
         }
+
 
         public void bind(final Attribute.Term term) {
 
@@ -82,20 +87,26 @@ public class AttributeTermAdapter extends RecyclerView.Adapter<AttributeTermAdap
             this.mTerm = term;
             term.setAttributeSlug(mAttribute.getSlug());
 
-            if(selectedTermList != null && selectedTermList.contains(term))
+            if(selectedTermList.contains(term))
                 mCheckbox.setChecked(true);
             else
                 mCheckbox.setChecked(false);
 
-            itemView.setOnClickListener(view -> {
-                if (mCheckbox.isChecked()) {
-                    mCheckbox.setChecked(false);
-                    FilterRepository.getInstance(mActivity).removeSelectedTerm(term);
-                } else {
-                    mCheckbox.setChecked(true);
-                    FilterRepository.getInstance(mActivity).addSelectedTerm(term);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mCheckbox.isChecked()) {
+                        mCheckbox.setChecked(false);
+                        Repository.getInstance().removeSelectedTerm(term);
+                    } else {
+                        mCheckbox.setChecked(true);
+                        Repository.getInstance().addSelectedTerm(term);
+                    }
                 }
             });
+
+
+
         }
     }
 

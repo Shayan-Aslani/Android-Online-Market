@@ -1,15 +1,20 @@
-package com.example.finalproject.utils;
+package com.example.finalproject.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.finalproject.model.CartProduct;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ShoppingCartPreferences {
 

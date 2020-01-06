@@ -1,6 +1,7 @@
-package com.example.finalproject.adapter;
+package com.example.finalproject.controller.adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class AttributesAdapter extends RecyclerView.Adapter<AttributesAdapter.At
     @Override
     public AttributeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Activity activity = (Activity) parent.getContext();
-        View view = activity.getLayoutInflater().inflate(R.layout.item_filter_attributes, parent, false);
+        View view = activity.getLayoutInflater().inflate(R.layout.filter_attributes_item, parent, false);
         return new AttributeHolder(view);
     }
 

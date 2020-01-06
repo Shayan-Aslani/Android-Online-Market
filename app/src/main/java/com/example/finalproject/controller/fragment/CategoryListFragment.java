@@ -1,10 +1,9 @@
-package com.example.finalproject.view.fragment;
+package com.example.finalproject.controller.fragment;
 
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -15,9 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.finalproject.R;
-import com.example.finalproject.databinding.FragmentCategoryListBinding;
 import com.example.finalproject.model.Category;
-import com.example.finalproject.repositories.CategoriesRepository;
+import com.example.finalproject.model.Repository;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -32,15 +30,12 @@ public class CategoryListFragment extends Fragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private CategoryViewPagerAdapter mPagerAdapter;
-    private int currentId;
-
-    private FragmentCategoryListBinding mBinding;
-
+    private int currentId ;
 
     public static CategoryListFragment newInstance(int currentId) {
 
         Bundle args = new Bundle();
-        args.putInt(CURRENT_CATEGORY_ID_ARG, currentId);
+        args.putInt(CURRENT_CATEGORY_ID_ARG , currentId);
         CategoryListFragment fragment = new CategoryListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,33 +55,29 @@ public class CategoryListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_list, container, false);
+        View view =  inflater.inflate(R.layout.fragment_category_list, container, false);
 
-        initUi();
+        initUi(view);
         setupViewPager();
-
-        mBinding.buttonBack.setOnClickListener(view -> getActivity().onBackPressed());
-
-        return mBinding.getRoot();
+        return view;
     }
 
-    private void initUi() {
-        mViewPager = mBinding.categoriesViewpager;
-        mTabLayout = mBinding.tablayout;
+    private void initUi(View view){
+        mViewPager = view.findViewById(R.id.categories_viewpager);
+        mTabLayout = view.findViewById(R.id.tablayout);
     }
 
-    private void setupViewPager() {
+    private void setupViewPager(){
         mTabLayout.setupWithViewPager(mViewPager);
         mPagerAdapter = new CategoryViewPagerAdapter(getFragmentManager());
-        mPagerAdapter.setParentList(CategoriesRepository.getInstance(getContext()).getParentCategories().getValue());
+        mPagerAdapter.setParentList(Repository.getInstance().getParentCategories());
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setCurrentItem(CategoriesRepository.getInstance(getContext()).getParentCategories().getValue()
-                .indexOf(CategoriesRepository.getInstance(getContext()).getCategoryById(currentId)));
+        mViewPager.setCurrentItem(Repository.getInstance().getParentCategories().indexOf(Repository.getInstance().getCategoryById(currentId)));
+
     }
 
 
     private class CategoryViewPagerAdapter extends FragmentStatePagerAdapter {
-
         private List<Category> mParentList;
 
         public void setParentList(List<Category> parentList) {

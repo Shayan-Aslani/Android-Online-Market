@@ -21,7 +21,8 @@ public interface Api {
 
 
     @GET("products")
-    Call<List<Product>> getAllProducts(@Query("orderby") String type, @Query("per_page") String perpage);
+    Call<List<Product>> getAllProducts(@Query("orderby") String type , @Query("per_page") String perpage);
+
 
     @GET("products/{id}")
     Call<Product> getProduct(@Path("id") String productId);
@@ -30,13 +31,13 @@ public interface Api {
     Call<List<Category>> getAllCategories();
 
     @GET("products")
-    Call<List<Product>> getProductsByCategory(@Query("category") String categoryId, @Query("orderby") String orderBy);
+    Call<List<Product>> getProductsSubCategoires(@Query("category") String categoryId , @Query("orderby") String orderBy);
 
     @GET("products")
-    Call<List<Product>> getSearchedProducts(@Query("search") String search, @Query("attribute") String attribute,
-                                            @Query("attribute_term") String terms, @Query("orderby") String orderBy,
-                                            @Query("order") String order, @Query("page") String page,
-                                            @Query("per_page") int perPage);
+    Call<List<Product>> searchProducts(@Query("search") String productName , @Query("orderby") String orderBy, @Query("order") String order);
+
+    @GET("products")
+    Call<List<Product>> getFilteredProducts(@Query("search") String search ,@Query("attribute") String attribute, @Query("attribute_term") String terms);
 
     @GET("products/attributes")
     Call<List<Attribute>> getAttributes();

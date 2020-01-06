@@ -1,10 +1,10 @@
-package com.example.finalproject.view.activity;
+package com.example.finalproject.controller.activity;
 
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
-import com.example.finalproject.view.fragment.StartFragment;
+import com.example.finalproject.controller.fragment.StartFragment;
 
 public class StartActivity extends SingleFragmentActivity {
 

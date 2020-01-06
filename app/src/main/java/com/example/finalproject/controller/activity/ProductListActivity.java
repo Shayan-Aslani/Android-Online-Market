@@ -1,12 +1,13 @@
-package com.example.finalproject.view.activity;
+package com.example.finalproject.controller.activity;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.finalproject.view.fragment.ProductListFragment;
+import com.example.finalproject.controller.fragment.ProductListFragment;
 
 
 public class ProductListActivity extends SingleFragmentActivity {
