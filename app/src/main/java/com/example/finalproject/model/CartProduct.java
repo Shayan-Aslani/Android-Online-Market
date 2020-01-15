@@ -8,38 +8,26 @@ import java.util.List;
 
 public class CartProduct {
 
-    public CartProduct(String name, int id, List<Product.Images> images, String price, String short_description) {
+    public CartProduct(String name, int id, List<Product.Images> images, String price, String description) {
         this.name = name;
         this.id = id;
         this.images = images;
         this.price = price;
-        this.short_description = short_description;
+        this.description = description;
     }
 
-    @Expose
-    @SerializedName("name")
     private String name;
-    @Expose
-    @SerializedName("id")
     private int id;
-    @Expose
-    @SerializedName("images")
     private List<Product.Images> images;
-
-    @Expose
-    @SerializedName("price")
     private String price;
+    private String description;
 
-    @Expose
-    @SerializedName("short_description")
-    private String short_description;
-
-    public String getShort_description() {
-        return short_description;
+    public String getDescription() {
+        return description;
     }
 
-    public void setShort_description(String short_description) {
-        this.short_description = short_description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {

@@ -830,4 +830,8 @@
     <string name="your_order_status">وضعیت سفارش شما :</string>
     <string name="your_total_sale_price">جمع کل خرید شما</string>
 
+    <string name="channel_name">Newest Products</string>
+    <string name="channel_description">Receiving newest products from this Channel</string>
+    <string name="channel_id">digikala_channel_id</string>
+
 </resources>
