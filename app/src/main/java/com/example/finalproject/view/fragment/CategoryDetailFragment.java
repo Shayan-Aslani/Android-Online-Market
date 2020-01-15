@@ -10,56 +10,37 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.ProductMainAdapter;
 import com.example.finalproject.databinding.FragmentCategoryDetailBinding;
-import com.example.finalproject.model.Category;
-import com.example.finalproject.model.Product;
-import com.example.finalproject.repositories.CategoriesRepository;
-import com.example.finalproject.repositories.ProductRepository;
-import com.example.finalproject.network.Api;
-import com.example.finalproject.network.RetrofitInstance;
-import com.example.finalproject.viewModel.CategoryDetailFragmentViewModel;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.finalproject.utils.UiUtils;
+import com.example.finalproject.viewModel.CategoriesViewModel;
+import com.example.finalproject.viewModel.ProductBasketViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CategoryDetailFragment extends Fragment {
 
-
     public static final String CATEGORY_ID_ARG = "categoryIdArg";
 
     private int categoryid;
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView;
-    private Api api;
     private ProductMainAdapter latestProductsAdapter, popularProductsAdapter;
-    private TextView cartItemCountTextView ;
     private ProgressBar progressBar;
-    private Category mCategory ;
 
-    private FragmentCategoryDetailBinding mBinding ;
-    private CategoryDetailFragmentViewModel mViewModel ;
-
+    private FragmentCategoryDetailBinding mBinding;
+    private CategoriesViewModel mViewModel;
+    private ProductBasketViewModel productBasketViewModel;
 
     public static CategoryDetailFragment newInstance(int categoryid) {
-
         Bundle args = new Bundle();
-        args.putInt(CATEGORY_ID_ARG , categoryid);
+        args.putInt(CATEGORY_ID_ARG, categoryid);
         CategoryDetailFragment fragment = new CategoryDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -73,55 +54,31 @@ public class CategoryDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         categoryid = getArguments().getInt(CATEGORY_ID_ARG);
-        mCategory = CategoriesRepository.getInstance(getContext()).getCategoryById(categoryid);
-        mViewModel = ViewModelProviders.of(this).get(CategoryDetailFragmentViewModel.class);
-        mViewModel.loadNewProductListFromApi(mCategory.getId());
-        mViewModel.loadRatedProductListFromApi(mCategory.getId());
-
+        mViewModel = ViewModelProviders.of(getActivity()).get(CategoriesViewModel.class);
+        productBasketViewModel = ViewModelProviders.of(this).get(ProductBasketViewModel.class);
+        mViewModel.loadCategoryById(categoryid);
+        mViewModel.loadNewProductListFromApi(categoryid);
+        mViewModel.loadRatedProductListFromApi(categoryid);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mBinding = DataBindingUtil.inflate(inflater , R.layout.fragment_category_detail , container , false);
-
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_detail, container, false);
+        mBinding.setCategoryDetailViewModel(mViewModel);
         initUi();
-        setDetail();
         setupRecyclerViews();
+        setObservers();
+        setListeners();
 
-        mViewModel.getRatedProducts().observe(this , productList -> {
-            popularProductsAdapter.setProducts(productList);
-            progressBar.setVisibility(View.INVISIBLE);
-        });
-        mViewModel.getNewProducts().observe(this , productList -> {
-            latestProductsAdapter.setProducts(productList);
-            progressBar.setVisibility(View.INVISIBLE);
-
-        });
-
-        ProductRepository.getInstance(getContext()).getBasketProducts().observe(this , shoppingBagList-> {
-            setBadgeicon(shoppingBagList.size());
-        });
-
-        mBinding.backCateogryDetailImageview.setOnClickListener(view -> getActivity().onBackPressed());
-        mBinding.shoppingCartIconCategoryFragment.basketImageview.setOnClickListener(view -> getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container , ProductBasketFragment.newInstance())
-                .addToBackStack("transaction")
-                .commit());
         return mBinding.getRoot();
     }
 
-    private void initUi(){
+    private void initUi() {
         latestProductsRecyclerView = mBinding.lateestProductsRecyclerViewDetail;
         popularProductsRecyclerView = mBinding.popularProductsRecyclerViewDetail;
         progressBar = mBinding.progressBarCategoryDetail;
-        cartItemCountTextView = mBinding.shoppingCartIconCategoryFragment.basketTextview;
-    }
-
-    private void setDetail(){
-       mBinding.titleTextviewCategoryDetail.setText(mCategory.getName());
     }
 
     private void setupRecyclerViews() {
@@ -131,15 +88,29 @@ public class CategoryDetailFragment extends Fragment {
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
     }
 
-    private void setBadgeicon (int bagSize){
-        if (cartItemCountTextView != null) {
-            if (bagSize == 0) {
-                    cartItemCountTextView.setVisibility(View.GONE);
-            } else {
-                cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
-                cartItemCountTextView.setVisibility(View.VISIBLE);
-            }
-        }
+    private void setObservers() {
+        mViewModel.getRatedProducts().observe(this, productList -> {
+            popularProductsAdapter.setProducts(productList);
+            progressBar.setVisibility(View.INVISIBLE);
+        });
+
+        mViewModel.getNewProducts().observe(this, productList -> {
+            latestProductsAdapter.setProducts(productList);
+            progressBar.setVisibility(View.INVISIBLE);
+        });
+
+        productBasketViewModel.getCartProductBasketList().observe(this, shoppingBagList -> {
+            UiUtils.setBadgeicon(shoppingBagList.size(), mBinding.shoppingCartIconCategoryFragment.basketTextview);
+        });
     }
 
+    private void setListeners() {
+        mBinding.backCateogryDetailImageview.setOnClickListener(view -> getActivity().onBackPressed());
+
+        mBinding.shoppingCartIconCategoryFragment.basketImageview.setOnClickListener(view -> getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, ProductBasketFragment.newInstance())
+                .addToBackStack(null)
+                .commit());
+    }
 }

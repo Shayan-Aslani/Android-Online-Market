@@ -14,26 +14,23 @@ import java.util.List;
 
 public class ProductBasketViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<CartProduct>> cartProductBasketList ;
-
+    private MutableLiveData<List<CartProduct>> cartProductBasketList;
 
     public ProductBasketViewModel(@NonNull Application application) {
         super(application);
-        cartProductBasketList = ProductRepository.getInstance(application).getBasketProducts() ;
+        cartProductBasketList = ProductRepository.getInstance(application).getBasketProducts();
     }
 
     public MutableLiveData<List<CartProduct>> getCartProductBasketList() {
         return cartProductBasketList;
     }
 
-    public String totalBasketPrice(){
+    public String totalBasketPrice() {
+        Long totalPrice = 0L;
 
-        double totalPrice = 0 ;
-
-        for(CartProduct cartProduct : cartProductBasketList.getValue())
-        {
-            totalPrice += Double.valueOf(cartProduct.getPrice());
+        for (CartProduct cartProduct : cartProductBasketList.getValue()) {
+            totalPrice += Long.valueOf(cartProduct.getPrice());
         }
-        return Double.toString(totalPrice);
+        return String.valueOf(totalPrice);
     }
 }

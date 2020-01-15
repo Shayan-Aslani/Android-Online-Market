@@ -75,7 +75,6 @@ public class ProductListFragment extends Fragment {
         searchable = getArguments().getBoolean(SEARCHABLE_ARG);
         searchText = getArguments().getString(SEARCH_STRING_ARG);
         mViewModel = ViewModelProviders.of(this).get(ProductListFragmentViewModel.class);
-
     }
 
 
@@ -88,10 +87,9 @@ public class ProductListFragment extends Fragment {
 
         initUi();
         setRecyclerView();
+        setListeners();
 
         mBinding.titleToolbarProductList.setText(searchText);
-
-        setListeners();
 
         mViewModel.getProductList().observe(this, productList -> {
             loadingProgressBar(false);
@@ -114,7 +112,6 @@ public class ProductListFragment extends Fragment {
         recyclerView.setAdapter(productAdapter);
         loadingProgressBar(true);
         mViewModel.loadFilteredListFromApi(searchText, mOrderBy, mOrderType, productListPage);
-
 //        recyclerView.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
 //            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 //            if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == mViewModel
@@ -127,9 +124,11 @@ public class ProductListFragment extends Fragment {
 
     private void setAdapterList(boolean newList, List<Product> productList) {
         productAdapter.setProducts(productList);
-        // mBinding.nullMassageProductListTextview.setVisibility(View.INVISIBLE);
         if (productAdapter.getProductList().size() == 0) {
             mBinding.nullMassageProductListTextview.setVisibility(View.VISIBLE);
+        }
+        else {
+            mBinding.nullMassageProductListTextview.setVisibility(View.GONE);
         }
     }
 
@@ -148,10 +147,8 @@ public class ProductListFragment extends Fragment {
                 .commit());
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSortChanged(ProductListSortMassage productListSortMassage) {
-
         mSortType = productListSortMassage.getEnumIndex();
         SortDialogFragment.Sorts sort = SortDialogFragment.getEnumSorts(mSortType);
         switch (sort) {

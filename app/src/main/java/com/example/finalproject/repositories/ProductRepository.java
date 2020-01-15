@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.finalproject.Utils.ShoppingCartPreferences;
+import com.example.finalproject.utils.ProductBasketPreferences;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.network.Api;
@@ -20,13 +20,14 @@ import retrofit2.Response;
 public class ProductRepository {
 
     private static ProductRepository mInstance;
-    private List<Product> vipProducts;
+
     private Context mContext;
 
     private MutableLiveData<List<CartProduct>> mBasketProducts = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mNewProducts = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mRatedProducts = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mVisitedProducts = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mVipProducts = new MutableLiveData<>();
 
     private ProductRepository(Context context) {
         mContext = context;
@@ -41,12 +42,12 @@ public class ProductRepository {
 
 
     public void loadBasketProducts() {
-        List<CartProduct> list = ShoppingCartPreferences.getProductList(mContext);
+        List<CartProduct> list = ProductBasketPreferences.getProductList(mContext);
         mBasketProducts.postValue(list);
     }
 
     public void saveBasketProducts() {
-        ShoppingCartPreferences.setProductList(mContext, mBasketProducts.getValue());
+        ProductBasketPreferences.setProductList(mContext, mBasketProducts.getValue());
     }
 
     public MutableLiveData<Product> getProductById(int id) {
@@ -54,9 +55,10 @@ public class ProductRepository {
         RetrofitInstance.getRetrofit().create(Api.class).getProduct(String.valueOf(id)).enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                if(response.isSuccessful())
+                if (response.isSuccessful())
                     productMutableLiveData.setValue(response.body());
             }
+
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
 
@@ -78,14 +80,6 @@ public class ProductRepository {
     }
 
 
-    public List<Product> getVipProducts() {
-        return vipProducts;
-    }
-
-    public void setVipProducts(List<Product> vipProducts) {
-        this.vipProducts = vipProducts;
-    }
-
     public MutableLiveData<List<Product>> getNewProducts() {
         return mNewProducts;
     }
@@ -98,6 +92,9 @@ public class ProductRepository {
         return mVisitedProducts;
     }
 
+    public MutableLiveData<List<Product>> getVipProducts() {
+        return mVipProducts;
+    }
 
     public void loadNewProductList() throws IOException {
         mNewProducts.postValue(RetrofitInstance.getRetrofit().create(Api.class)

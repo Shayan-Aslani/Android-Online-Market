@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,10 +18,7 @@ import android.view.ViewGroup;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.CategoryAdapter;
 import com.example.finalproject.databinding.FragmentCategoryTabBinding;
-import com.example.finalproject.model.Category;
-import com.example.finalproject.repositories.CategoriesRepository;
-
-import java.util.List;
+import com.example.finalproject.viewModel.CategoriesViewModel;
 
 
 /**
@@ -29,12 +27,11 @@ import java.util.List;
 public class CategoryTabFragment extends Fragment {
 
     private static final String CATEGORY_PARENT_ID_ARG = "categoryIdArg";
-    private RecyclerView recyclerView ;
-    private CategoryAdapter categoryAdapter ;
-    private List<Category>  categories ;
+
     private int parentId ;
 
     private FragmentCategoryTabBinding mBinding ;
+    private CategoriesViewModel mViewModel ;
 
     public static CategoryTabFragment newInstance(int id) {
 
@@ -53,7 +50,7 @@ public class CategoryTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentId = getArguments().getInt(CATEGORY_PARENT_ID_ARG);
-        categories = CategoriesRepository.getInstance(getContext()).getSubCategoires(parentId);
+        mViewModel = ViewModelProviders.of(this).get(CategoriesViewModel.class) ;
     }
 
     @Override
@@ -61,22 +58,16 @@ public class CategoryTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding =  DataBindingUtil.inflate(inflater ,R.layout.fragment_category_tab, container, false);
-        initUi();
         setupRecyclerView();
 
         return mBinding.getRoot() ;
     }
 
-    private void initUi(){
-        recyclerView = mBinding.categoryListRecyclerView;
-
-    }
-
     private void setupRecyclerView(){
+        RecyclerView recyclerView = mBinding.categoryListRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        categoryAdapter = new CategoryAdapter((AppCompatActivity) getActivity());
-        categoryAdapter.setCategories(categories);
-        recyclerView.setAdapter(categoryAdapter);
+        CategoryAdapter categoryAdapter = new CategoryAdapter((AppCompatActivity) getActivity());
+        categoryAdapter.setCategories(mViewModel.getSubCategories(parentId));
+        recyclerView.setAdapter(categoryAdapter) ;
     }
-
 }

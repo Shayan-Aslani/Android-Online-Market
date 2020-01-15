@@ -19,29 +19,24 @@ import android.widget.TextView;
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.ProductBasketAdapter;
 import com.example.finalproject.databinding.FragmentProductBasketBinding;
-import com.example.finalproject.model.CartProduct;
+import com.example.finalproject.utils.UiUtils;
 import com.example.finalproject.viewModel.ProductBasketViewModel;
 import com.google.android.material.button.MaterialButton;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProductBasketFragment extends Fragment {
 
-    private List<CartProduct> cartProductList ;
-    private RecyclerView shoppingCartRecyclerView ;
+    private RecyclerView basketRecyclerView;
     private ProductBasketAdapter productBasketAdapter;
     private TextView nullMassageTextView ;
     private MaterialButton loginButton ;
-    private TextView basketCountTextView;
 
     private ProductBasketViewModel mViewModel;
     private FragmentProductBasketBinding mBinding;
 
     public static ProductBasketFragment newInstance() {
-
         Bundle args = new Bundle();
         ProductBasketFragment fragment = new ProductBasketFragment();
         fragment.setArguments(args);
@@ -56,7 +51,6 @@ public class ProductBasketFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(ProductBasketViewModel.class);
-
     }
 
     @Override
@@ -70,52 +64,48 @@ public class ProductBasketFragment extends Fragment {
         setShoppingCartRecyclerView();
 
         mViewModel.getCartProductBasketList().observe(this , shoppingBagList->{
+            mBinding.sumPriceShoppingCartTextView.setText(mViewModel.totalBasketPrice());
             if(shoppingBagList.size() == 0)
             {
                 nullMassageTextView.setVisibility(View.VISIBLE);
                 loginButton.setVisibility(View.VISIBLE);
-                shoppingCartRecyclerView.setVisibility(View.INVISIBLE);
-                mBinding.sumPriceShoppingCartTextView.setText(0);
+                basketRecyclerView.setVisibility(View.INVISIBLE);
             }
             else {
                 nullMassageTextView.setVisibility(View.GONE);
                 loginButton.setVisibility(View.GONE);
-                shoppingCartRecyclerView.setVisibility(View.VISIBLE);
-                cartProductList = shoppingBagList;
-                productBasketAdapter.setProducts(cartProductList);
+                basketRecyclerView.setVisibility(View.VISIBLE);
+                productBasketAdapter.setProducts(shoppingBagList);
                 productBasketAdapter.notifyDataSetChanged();
             }
         });
 
         mBinding.shoppingCartCloseImageview.setOnClickListener(view1 -> getActivity().onBackPressed());
 
+        mBinding.shoppingCartFinalTextView.setOnClickListener(view -> getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container , RegisterFragment.newInstance())
+                .addToBackStack(null)
+                .commit());
+
         return mBinding.getRoot() ;
     }
 
     private void initUi(){
-        shoppingCartRecyclerView = mBinding.shoppingCartRecyclerView ;
-        basketCountTextView = mBinding.shoppingCartIconShoppinFragment.basketTextview;
+        basketRecyclerView = mBinding.shoppingCartRecyclerView ;
         nullMassageTextView = mBinding.nullMassageShoppingBag ;
         loginButton = mBinding.loginButtonShoppingFragment;
     }
 
     private void setShoppingCartRecyclerView(){
-        productBasketAdapter = new ProductBasketAdapter((AppCompatActivity) getActivity(), cartProductList);
-        shoppingCartRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        shoppingCartRecyclerView.setAdapter(productBasketAdapter);
-
+        productBasketAdapter = new ProductBasketAdapter((AppCompatActivity) getActivity());
+        basketRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        basketRecyclerView.setAdapter(productBasketAdapter);
     }
 
     private void setupBadge(){
         mViewModel.getCartProductBasketList().observe(this , shoppingBagList->{
-            int bagSize = shoppingBagList.size() ;
-            if (bagSize == 0) {
-                basketCountTextView.setVisibility(View.GONE);
-            } else {
-                basketCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
-                basketCountTextView.setVisibility(View.VISIBLE);
-            }
+            UiUtils.setBadgeicon(shoppingBagList.size() , mBinding.shoppingCartIconShoppinFragment.basketTextview);
         });
     }
-
 }

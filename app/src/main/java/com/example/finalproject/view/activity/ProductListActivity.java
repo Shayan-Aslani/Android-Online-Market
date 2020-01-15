@@ -25,7 +25,6 @@ public class ProductListActivity extends SingleFragmentActivity {
         return intent;
     }
 
-
     @Override
     public Fragment createFragment() {
         return ProductListFragment.newInstance(searchText , searchable);

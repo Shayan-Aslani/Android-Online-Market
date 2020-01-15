@@ -100,7 +100,6 @@ public class SortDialogFragment extends DialogFragment {
                 break;
         }
 
-
         mSortRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             int selected = 0;
             switch (checkedId) {

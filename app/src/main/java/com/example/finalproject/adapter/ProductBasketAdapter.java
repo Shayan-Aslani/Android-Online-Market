@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.finalproject.R;
-import com.example.finalproject.Utils.ProductBasketConverter;
+import com.example.finalproject.utils.ProductBasketConverter;
 import com.example.finalproject.databinding.ItemProductBasketBinding;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;

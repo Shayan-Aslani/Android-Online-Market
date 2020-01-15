@@ -23,9 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.utils.UiUtils;
 import com.example.finalproject.view.activity.CategoryDetailActivity;
 import com.example.finalproject.view.activity.CategoryListActivity;
 import com.example.finalproject.adapter.ProductMainAdapter;
@@ -33,7 +33,6 @@ import com.example.finalproject.databinding.FragmentMainBinding;
 import com.example.finalproject.databinding.ToolbarMainFragmentBinding;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
-import com.example.finalproject.repositories.ProductRepository;
 import com.example.finalproject.viewModel.MainFragmentViewModel;
 import com.example.finalproject.viewModel.ProductBasketViewModel;
 import com.google.android.material.chip.Chip;
@@ -53,7 +52,6 @@ import java.util.List;
 public class MainFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView latestProductsRecyclerView, popularProductsRecyclerView, mostViewedProductsRecyclerView;
-    private TextView basketCountTextView;
     private ProductMainAdapter latestProductsAdapter, popularProductsAdapter, mostViewedProductAdapter;
     private DrawerLayout drawer;
     private SliderView sliderView;
@@ -80,7 +78,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         productBasketViewModel = ViewModelProviders.of(this).get(ProductBasketViewModel.class);
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,31 +89,13 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         setupNavigationView();
         setupRecyclerViews();
         setToolbarMenuListeners();
-        setupBadge();
-
-        mViewModel.getCategoriesList().observe(this, list -> {
-            setCategoriesChips(list);
-        });
-
-        mViewModel.getNewProductList().observe(this, productList -> {
-            latestProductsAdapter.setProducts(productList);
-        });
-
-        mViewModel.getRatedProductList().observe(this, list -> {
-            popularProductsAdapter.setProducts(list);
-        });
-
-        mViewModel.getVisitedProductList().observe(this, productList -> {
-            mostViewedProductAdapter.setProducts(productList);
-        });
-
+        setObservers();
 
         sliderView.setSliderAdapter(new SliderAdapter(getContext()
-                , ProductRepository.getInstance(getContext()).getVipProducts()));
+                , mViewModel.getVipProducts().getValue()));
 
         return mBinding.getRoot();
     }
-
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("ResourceAsColor")
@@ -174,20 +153,30 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         latestProductsRecyclerView = mBinding.includeMainLayout.latestProductsRecyclerView;
         popularProductsRecyclerView = mBinding.includeMainLayout.popularProductsRecyclerView;
         mostViewedProductsRecyclerView = mBinding.includeMainLayout.mostViewedProductsRecyclerView;
-        basketCountTextView = mBinding.includeMainLayout.mainFragmentToolbar.mainToolbarBasketTextview;
         drawer = mBinding.drawerLayout;
         sliderView = mBinding.includeMainLayout.mainSliderView;
     }
 
-    private void setupBadge() {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setObservers(){
+        mViewModel.getCategoriesList().observe(this, list -> {
+            setCategoriesChips(list);
+        });
+
+        mViewModel.getNewProductList().observe(this, productList -> {
+            latestProductsAdapter.setProducts(productList);
+        });
+
+        mViewModel.getRatedProductList().observe(this, list -> {
+            popularProductsAdapter.setProducts(list);
+        });
+
+        mViewModel.getVisitedProductList().observe(this, productList -> {
+            mostViewedProductAdapter.setProducts(productList);
+        });
+
         productBasketViewModel.getCartProductBasketList().observe(this, shoppingBagList -> {
-            int bagSize = shoppingBagList.size();
-                if (bagSize == 0) {
-                        basketCountTextView.setVisibility(View.GONE);
-                } else {
-                    basketCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
-                    basketCountTextView.setVisibility(View.VISIBLE);
-                }
+            UiUtils.setBadgeicon(shoppingBagList.size() ,  mBinding.includeMainLayout.mainFragmentToolbar.mainToolbarBasketTextview);
         });
     }
 
@@ -260,7 +249,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             }
 
             public void bind(final Product product) {
-
                 this.mProduct = product;
                 Picasso.get().load(mProduct.getImages().get(0).getSrc()).placeholder(R.drawable.alt)
                         .into(imageViewSlider);
@@ -275,6 +263,5 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
             }
         }
     }
-
 }
 

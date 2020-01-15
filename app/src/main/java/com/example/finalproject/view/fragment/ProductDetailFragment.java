@@ -11,12 +11,14 @@ import androidx.lifecycle.ViewModelProviders;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.finalproject.R;
 import com.example.finalproject.adapter.ImageSliderAdapter;
 import com.example.finalproject.databinding.FragmentProductDetailBinding;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.utils.UiUtils;
 import com.example.finalproject.viewModel.ProductDetailFragmentViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.smarteist.autoimageslider.SliderView;
@@ -29,16 +31,12 @@ public class ProductDetailFragment extends Fragment {
 
     // public static final String PRODUCT_ID_ARG = "productIdArg";
     //private Product mProduct;
-    private TextView cartItemCountTextView;
-    private MaterialButton addShoppingCartButton;
-    private SliderView sliderView;
 
     private ProductDetailFragmentViewModel mViewModel;
     private FragmentProductDetailBinding mBinding;
 
     public static ProductDetailFragment newInstance() {
         Bundle args = new Bundle();
-        //  args.putSerializable(PRODUCT_ID_ARG, product);
         ProductDetailFragment fragment = new ProductDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -48,11 +46,9 @@ public class ProductDetailFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //     mProduct = (Product) getArguments().get(PRODUCT_ID_ARG);
         mViewModel = ViewModelProviders.of(getActivity()).get(ProductDetailFragmentViewModel.class);
     }
 
@@ -61,48 +57,37 @@ public class ProductDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container, false);
-        initUi();
-        mBinding.setProductDetailsViewModel(mViewModel);
-        mViewModel.getProduct().observe(this, product -> {
-            setDetail();
-        });
-
-        addShoppingCartButton.setOnClickListener(view12 -> {
-            mViewModel.addProductToShoppingCart(mViewModel.getProduct().getValue());
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ProductBasketFragment.newInstance())
-                    .addToBackStack("trans")
-                    .commit();
-        });
-
-        mBinding.backDetailImageview.setOnClickListener(view1 -> getActivity().onBackPressed());
-
-        mViewModel.getShoppingCartList().observe(this, shoppingBagList -> {
-            int bagSize = shoppingBagList.size();
-            setBadgeicon(bagSize);
-        });
+        setObservers();
+        setListeners();
 
         return mBinding.getRoot();
     }
 
-    public void initUi() {
-        sliderView = mBinding.imageSlider;
-        addShoppingCartButton = mBinding.addShoppingCartButton;
-        cartItemCountTextView = mBinding.shoppingCartIconDetailFragment.basketTextview;
+    private void setDetail() {
+        mBinding.setProductDetailsViewModel(mViewModel);
+        mBinding.imageSlider.setSliderAdapter(new ImageSliderAdapter(getContext(), mViewModel.getProduct().getValue().getImages()));
     }
 
-    public void setDetail() {
-        sliderView.setSliderAdapter(new ImageSliderAdapter(getContext(), mViewModel.getProduct().getValue().getImages()));
+    private void setListeners(){
+        mBinding.fragmentProductDetailAddToBasket.setOnClickListener(view12 -> {
+            mViewModel.addProductToShoppingCart(mViewModel.getProduct().getValue());
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, ProductBasketFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        mBinding.backDetailImageview.setOnClickListener(view1 -> getActivity().onBackPressed());
     }
 
-    private void setBadgeicon(int bagSize) {
-        if (cartItemCountTextView != null) {
-            if (bagSize == 0) {
-                cartItemCountTextView.setVisibility(View.GONE);
-            }
-        } else {
-            cartItemCountTextView.setText(String.valueOf(Math.min(bagSize, 99)));
-            cartItemCountTextView.setVisibility(View.VISIBLE);
-        }
+    private void setObservers() {
+        mViewModel.getProduct().observe(this, product -> {
+            setDetail();
+        });
+
+        mViewModel.getShoppingCartList().observe(this, shoppingBagList -> {
+            UiUtils.setBadgeicon(shoppingBagList.size(), mBinding.shoppingCartIconDetailFragment.basketTextview);
+        });
+
     }
 }

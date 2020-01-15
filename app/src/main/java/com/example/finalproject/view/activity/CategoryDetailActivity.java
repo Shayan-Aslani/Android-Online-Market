@@ -32,3 +32,4 @@ public class CategoryDetailActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
     }
 }
+

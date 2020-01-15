@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.finalproject.Utils.ProductBasketConverter;
+import com.example.finalproject.utils.ProductBasketConverter;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.repositories.ProductRepository;

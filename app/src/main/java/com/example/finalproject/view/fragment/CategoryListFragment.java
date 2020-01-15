@@ -29,13 +29,10 @@ import java.util.List;
 public class CategoryListFragment extends Fragment {
 
     public static final String CURRENT_CATEGORY_ID_ARG = "currentCategoryid";
-    private ViewPager mViewPager;
-    private TabLayout mTabLayout;
     private CategoryViewPagerAdapter mPagerAdapter;
     private int currentId;
 
     private FragmentCategoryListBinding mBinding;
-
 
     public static CategoryListFragment newInstance(int currentId) {
 
@@ -61,29 +58,21 @@ public class CategoryListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_category_list, container, false);
-
-        initUi();
         setupViewPager();
-
         mBinding.buttonBack.setOnClickListener(view -> getActivity().onBackPressed());
 
         return mBinding.getRoot();
     }
 
-    private void initUi() {
-        mViewPager = mBinding.categoriesViewpager;
-        mTabLayout = mBinding.tablayout;
-    }
-
     private void setupViewPager() {
-        mTabLayout.setupWithViewPager(mViewPager);
+        ViewPager mViewPager = mBinding.categoriesViewpager;
+        mBinding.tablayout.setupWithViewPager(mViewPager);
         mPagerAdapter = new CategoryViewPagerAdapter(getFragmentManager());
         mPagerAdapter.setParentList(CategoriesRepository.getInstance(getContext()).getParentCategories().getValue());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setCurrentItem(CategoriesRepository.getInstance(getContext()).getParentCategories().getValue()
                 .indexOf(CategoriesRepository.getInstance(getContext()).getCategoryById(currentId)));
     }
-
 
     private class CategoryViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -113,6 +102,4 @@ public class CategoryListFragment extends Fragment {
             return mParentList.size();
         }
     }
-
-
 }

@@ -21,6 +21,7 @@ public class MainFragmentViewModel extends AndroidViewModel {
     private MutableLiveData<List<Product>> mNewProductList;
     private MutableLiveData<List<Product>> mRatedProducts ;
     private MutableLiveData<List<Product>> mVisitedProducts ;
+    private MutableLiveData<List<Product>> mVipProducts ;
     private MutableLiveData<List<Category>> mCategories ;
     private ProductRepository mProductRepository;
     private CategoriesRepository mCategoriesRepository ;
@@ -35,6 +36,7 @@ public class MainFragmentViewModel extends AndroidViewModel {
         mNewProductList = mProductRepository.getNewProducts();
         mRatedProducts = mProductRepository.getRatedProducts();
         mVisitedProducts = mProductRepository.getVisitedProducts();
+        mVipProducts = mProductRepository.getVipProducts();
         mCategories = mCategoriesRepository.getAllCategories();
         mProductRepository.loadBasketProducts();
     }
@@ -50,6 +52,8 @@ public class MainFragmentViewModel extends AndroidViewModel {
     public MutableLiveData<List<Product>> getVisitedProductList() {
         return mVisitedProducts;
     }
+
+    public MutableLiveData<List<Product>> getVipProducts(){return mVipProducts ;}
 
     public MutableLiveData<List<Category>> getCategoriesList() {
         return mCategories;
@@ -78,12 +82,4 @@ public class MainFragmentViewModel extends AndroidViewModel {
     public void loadAttributeTermsFromApi() throws IOException {
         mFilterRepository.loadAttributeTerms();
     }
-
-    public void saveShoppingCartProducts(){
-        mProductRepository.saveBasketProducts();
-    }
-
-
-
-
 }

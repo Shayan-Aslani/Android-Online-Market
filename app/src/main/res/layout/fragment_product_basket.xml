@@ -111,27 +111,31 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:padding="12dp"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/iran_sans"
+                    android:paddingRight="12.0dp"
                     android:text="جمع خرید"
                     android:textColor="@color/price_green"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/sum_price_shoppingCart_TextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/iran_sans"
+                    android:paddingLeft="12.0dp"
                     android:text="95000000"
                     android:textColor="@color/price_green"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

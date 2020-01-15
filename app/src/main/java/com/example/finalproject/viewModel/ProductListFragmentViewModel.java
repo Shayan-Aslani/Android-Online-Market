@@ -24,12 +24,19 @@ public class ProductListFragmentViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Product>> mProductList = new MutableLiveData<>() ;
     private MutableLiveData<List<Attribute.Term>> mSelectedTerms ;
+    private MutableLiveData<List<Attribute>> mAttributes ;
     private FilterRepository mFilterRepository ;
 
     public ProductListFragmentViewModel(@NonNull Application application) {
         super(application);
         mSelectedTerms = FilterRepository.getInstance(application).getSelectedTerms() ;
         mFilterRepository = FilterRepository.getInstance(application);
+        mAttributes = mFilterRepository.getAttributes();
+    }
+
+
+    public MutableLiveData<List<Attribute>> getmAttributes() {
+        return mAttributes;
     }
 
     public MutableLiveData<List<Product>> getProductList() {

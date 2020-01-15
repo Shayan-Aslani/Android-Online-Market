@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.finalproject.R;
+import com.example.finalproject.model.Product;
 import com.example.finalproject.view.activity.MainActivity;
 import com.example.finalproject.databinding.FragmentStartBinding;
 import com.example.finalproject.model.CartProduct;
@@ -36,7 +37,6 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class StartFragment extends Fragment {
-
 
     private MaterialButton tryAgainButton;
     private ProgressBar progressBar;
@@ -68,7 +68,6 @@ public class StartFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater , R.layout.fragment_start, container, false);
 
         initUi();
-
         startInit();
         tryAgainButton.setOnClickListener(view1 -> startInit());
         return mBinding.getRoot();
@@ -86,7 +85,6 @@ public class StartFragment extends Fragment {
             new InitProductsAsynceTask().execute();
         } else
             onNetworkUnavailable();
-
     }
 
     private boolean isNetworkAvailable() {
@@ -103,12 +101,9 @@ public class StartFragment extends Fragment {
         ProductRepository.getInstance(getContext()).getBasketProducts().setValue(list);
     }
 
-
-
     private class InitProductsAsynceTask extends AsyncTask<Void, String, Void> {
 
         private Boolean result = true;
-
         @Override
         protected Void doInBackground(Void... voids) {
             try {
@@ -130,7 +125,6 @@ public class StartFragment extends Fragment {
             super.onProgressUpdate(values);
             String toastString = values[0];
             Toast.makeText(getActivity(), toastString, Toast.LENGTH_SHORT).show();
-
             result = false;
         }
 
@@ -140,14 +134,14 @@ public class StartFragment extends Fragment {
             if(result) {
                 startActivity(MainActivity.newIntent(getActivity()));
                 CategoriesRepository.getInstance(getContext()).generateParentList();
-                ProductRepository.getInstance(getContext()).setVipProducts(ProductRepository.getInstance(getContext()).getRatedProducts().getValue()
+                ProductRepository.getInstance(getContext()).getVipProducts().setValue(ProductRepository.getInstance(getContext())
+                        .getRatedProducts().getValue()
                         .subList(0, 4));
+
                 getActivity().finish();
             }
             else
                 onNetworkUnavailable();
         }
     }
-
-
 }

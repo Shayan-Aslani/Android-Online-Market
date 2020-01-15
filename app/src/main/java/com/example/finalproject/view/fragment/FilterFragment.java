@@ -25,6 +25,7 @@ import com.example.finalproject.model.Attribute;
 import com.example.finalproject.repositories.FilterRepository;
 import com.example.finalproject.viewModel.ProductListFragmentViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,6 @@ import java.util.List;
 public class FilterFragment extends Fragment {
 
 
-    private List<Attribute> attributesList;
     private RecyclerView attributesRecyclerView, termsRecyclerView;
     private AttributesAdapter attributeAdapter;
     private AttributeTermAdapter termAdapter;
@@ -55,7 +55,6 @@ public class FilterFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        attributesList = FilterRepository.getInstance(getContext()).getAttributes().getValue();
         mProductListViewModel = ViewModelProviders.of(this).get(ProductListFragmentViewModel.class);
     }
 
@@ -66,13 +65,9 @@ public class FilterFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_filter, container, false);
         initUi();
         setRecyclerViews();
+        setListeners();
 
-        mBinding.closeImageViewFilterFragment.setOnClickListener(view1 -> getActivity().getSupportFragmentManager()
-                .popBackStack());
-
-        mBinding.dofilterFilterFragment.setOnClickListener(view12 -> doFilter());
-
-        FilterRepository.getInstance(getContext()).getAttributes().observe(this , attributeList -> {
+        mProductListViewModel.getmAttributes().observe(this , attributeList -> {
             attributeAdapter.setAttributes(attributeList);
         });
 
@@ -86,7 +81,7 @@ public class FilterFragment extends Fragment {
 
     private void setRecyclerViews() {
         termAdapter = new AttributeTermAdapter((AppCompatActivity) getActivity());
-        attributeAdapter = new AttributesAdapter((AppCompatActivity) getActivity(), attributesList ,termAdapter);
+        attributeAdapter = new AttributesAdapter((AppCompatActivity) getActivity(), new ArrayList<>(),termAdapter);
         attributesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         termsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         termsRecyclerView.setAdapter(termAdapter);
@@ -97,6 +92,14 @@ public class FilterFragment extends Fragment {
         mProductListViewModel.loadFilteredListFromApi();
         getActivity().getSupportFragmentManager()
                 .popBackStack();
+    }
+
+    private void setListeners(){
+
+        mBinding.closeImageViewFilterFragment.setOnClickListener(view1 -> getActivity().getSupportFragmentManager()
+                .popBackStack());
+
+        mBinding.dofilterFilterFragment.setOnClickListener(view12 -> doFilter());
     }
 
 }

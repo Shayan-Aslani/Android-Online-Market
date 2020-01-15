@@ -52,5 +52,4 @@ public class SearchFragment extends Fragment {
 
         return mBinding.getRoot();
     }
-
 }

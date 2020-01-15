@@ -29,9 +29,5 @@ public class CategoryListActivity extends SingleFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         currentCategoryId = getIntent().getIntExtra(CATEGORY_ID_EXTRA ,0 );
         super.onCreate(savedInstanceState);
-
     }
-
-
-
 }
