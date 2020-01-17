@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.finalproject.R;
 import com.example.finalproject.model.Product;
+import com.example.finalproject.repositories.CustomerRepository;
 import com.example.finalproject.view.activity.MainActivity;
 import com.example.finalproject.databinding.FragmentStartBinding;
 import com.example.finalproject.model.CartProduct;
@@ -137,7 +138,7 @@ public class StartFragment extends Fragment {
                 ProductRepository.getInstance(getContext()).getVipProducts().setValue(ProductRepository.getInstance(getContext())
                         .getRatedProducts().getValue()
                         .subList(0, 4));
-
+                CustomerRepository.getInstance(getContext()).loadLoginnedCustomer();
                 getActivity().finish();
             }
             else

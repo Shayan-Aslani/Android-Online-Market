@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.repositories.CategoriesRepository;
+import com.example.finalproject.repositories.CustomerRepository;
 import com.example.finalproject.repositories.FilterRepository;
 import com.example.finalproject.repositories.ProductRepository;
 
@@ -57,6 +58,14 @@ public class MainFragmentViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<Category>> getCategoriesList() {
         return mCategories;
+    }
+
+    public String getCustomerName(){
+        return CustomerRepository.getInstance(getApplication()).getCustomer().getValue().getEmail();
+    }
+
+    public void customerLogout(){
+        CustomerRepository.getInstance(getApplication()).logoutCustomer();
     }
 
     public void loadNewProductListFromApi() throws IOException {

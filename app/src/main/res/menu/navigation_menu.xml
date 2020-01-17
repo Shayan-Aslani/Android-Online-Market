@@ -11,9 +11,10 @@
     <item
         android:id="@+id/bag_navigation_menu"
         android:title="سبد خرید" />
+
     <item
-        android:title="پرفروش ترین ها" />
-
-
+        android:visible="false"
+        android:id="@+id/logut_nav_menu"
+        android:title="خروج"/>
 
 </menu>

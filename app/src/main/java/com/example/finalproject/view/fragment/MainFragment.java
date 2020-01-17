@@ -23,8 +23,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.finalproject.R;
+import com.example.finalproject.model.Customer;
+import com.example.finalproject.repositories.CustomerRepository;
+import com.example.finalproject.utils.Preferences;
 import com.example.finalproject.utils.UiUtils;
 import com.example.finalproject.view.activity.CategoryDetailActivity;
 import com.example.finalproject.view.activity.CategoryListActivity;
@@ -56,7 +60,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     private DrawerLayout drawer;
     private SliderView sliderView;
 
-    private ProductBasketViewModel productBasketViewModel ;
+    private ProductBasketViewModel productBasketViewModel;
     private MainFragmentViewModel mViewModel;
     private FragmentMainBinding mBinding;
 
@@ -94,6 +98,19 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         sliderView.setSliderAdapter(new SliderAdapter(getContext()
                 , mViewModel.getVipProducts().getValue()));
 
+        TextView textView = mBinding.mainNavigationView.getHeaderView(0).findViewById(R.id.main_nav_tv_username);
+        CustomerRepository.getInstance(getContext()).getCustomer().observe(this , customer ->{
+            if(customer!= null) {
+                mBinding.mainNavigationView.getMenu().findItem(R.id.logut_nav_menu).setVisible(true);
+                textView.setText(customer.getEmail());
+            }
+            else
+            {
+                textView.setText("");
+                mBinding.mainNavigationView.getMenu().findItem(R.id.logut_nav_menu).setVisible(false);
+            }
+        });
+
         return mBinding.getRoot();
     }
 
@@ -129,9 +146,9 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         toolbarBinding.mainToolbarSearchImageView.setOnClickListener(view ->
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                .replace(R.id.fragment_container , SearchFragment.newInstance())
-                .addToBackStack("transaction")
-                .commit()
+                        .replace(R.id.fragment_container, SearchFragment.newInstance())
+                        .addToBackStack("transaction")
+                        .commit()
         );
 
         toolbarBinding.mainToolbarNavigationImageview.setOnClickListener(view -> drawer.openDrawer(GravityCompat.START));
@@ -144,9 +161,6 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         latestProductsRecyclerView.setAdapter(latestProductsAdapter);
         popularProductsRecyclerView.setAdapter(popularProductsAdapter);
         mostViewedProductsRecyclerView.setAdapter(mostViewedProductAdapter);
-        mViewModel.getNewProductList().observe(this , productList -> latestProductsAdapter.setProducts(productList));
-        mViewModel.getRatedProductList().observe(this , productList -> popularProductsAdapter.setProducts(productList));
-        mViewModel.getVisitedProductList().observe(this , productList -> mostViewedProductAdapter.setProducts(productList));
     }
 
     private void initUi() {
@@ -158,7 +172,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setObservers(){
+    private void setObservers() {
         mViewModel.getCategoriesList().observe(this, list -> {
             setCategoriesChips(list);
         });
@@ -176,7 +190,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
         });
 
         productBasketViewModel.getCartProductBasketList().observe(this, shoppingBagList -> {
-            UiUtils.setBadgeicon(shoppingBagList.size() ,  mBinding.includeMainLayout.mainFragmentToolbar.mainToolbarBasketTextview);
+            UiUtils.setBadgeicon(shoppingBagList.size(), mBinding.includeMainLayout.mainFragmentToolbar.mainToolbarBasketTextview);
         });
     }
 
@@ -184,16 +198,23 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        if (id == R.id.home_navigation_menu) {
-            closeDrawer();
-        }
-        else if (id == R.id.bag_navigation_menu) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, ProductBasketFragment.newInstance())
-                    .addToBackStack("transaction")
-                    .commit();
-        } else if (id == R.id.categories_navigation_menu) {
-            startActivity(CategoryListActivity.newIntent(getContext(), 0));
+        switch (id) {
+            case R.id.home_navigation_menu:
+                closeDrawer();
+                break;
+            case R.id.bag_navigation_menu:
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, ProductBasketFragment.newInstance())
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            case R.id.categories_navigation_menu:
+                startActivity(CategoryListActivity.newIntent(getContext(), 0));
+                break;
+            case R.id.logut_nav_menu :
+                mViewModel.customerLogout();
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

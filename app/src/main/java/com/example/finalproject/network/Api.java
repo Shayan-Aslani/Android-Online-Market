@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.example.finalproject.model.Attribute;
 import com.example.finalproject.model.Category;
+import com.example.finalproject.model.Customer;
 import com.example.finalproject.model.Product;
 
 import org.w3c.dom.Attr;
@@ -11,8 +12,10 @@ import org.w3c.dom.Attr;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -37,12 +40,17 @@ public interface Api {
                                             @Query("attribute_term") String terms, @Query("orderby") String orderBy,
                                             @Query("order") String order, @Query("page") String page,
                                             @Query("per_page") int perPage);
-
     @GET("products/attributes")
     Call<List<Attribute>> getAttributes();
 
     @GET("products/attributes/{id}/terms")
     Call<List<Attribute.Term>> getTerms(@Path("id") String id);
+
+    @POST("customers")
+    Call<Customer> registerCustomer(@Body Customer customer);
+
+    @GET("customers")
+    Call<List<Customer>> getCustomer(@Query("email") String email);
 
 
 }

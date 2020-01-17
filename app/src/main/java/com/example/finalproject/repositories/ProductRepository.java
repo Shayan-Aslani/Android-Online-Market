@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.finalproject.utils.ProductBasketPreferences;
+import com.example.finalproject.utils.Preferences;
 import com.example.finalproject.model.CartProduct;
 import com.example.finalproject.model.Product;
 import com.example.finalproject.network.Api;
@@ -40,14 +40,13 @@ public class ProductRepository {
         return mInstance;
     }
 
-
     public void loadBasketProducts() {
-        List<CartProduct> list = ProductBasketPreferences.getProductList(mContext);
+        List<CartProduct> list = Preferences.getProductList(mContext);
         mBasketProducts.postValue(list);
     }
 
     public void saveBasketProducts() {
-        ProductBasketPreferences.setProductList(mContext, mBasketProducts.getValue());
+        Preferences.setProductList(mContext, mBasketProducts.getValue());
     }
 
     public MutableLiveData<Product> getProductById(int id) {
@@ -58,7 +57,6 @@ public class ProductRepository {
                 if (response.isSuccessful())
                     productMutableLiveData.setValue(response.body());
             }
-
             @Override
             public void onFailure(Call<Product> call, Throwable t) {
 
@@ -78,7 +76,6 @@ public class ProductRepository {
         mBasketProducts.setValue(list);
         saveBasketProducts();
     }
-
 
     public MutableLiveData<List<Product>> getNewProducts() {
         return mNewProducts;
@@ -110,5 +107,4 @@ public class ProductRepository {
         mVisitedProducts.postValue(RetrofitInstance.getRetrofit().create(Api.class)
                 .getAllProducts("popularity", "10").execute().body());
     }
-
 }
