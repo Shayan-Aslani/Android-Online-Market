@@ -69,7 +69,6 @@ public class ProductBasketAdapter extends RecyclerView.Adapter<ProductBasketAdap
     }
 
     public class ProductHolder extends RecyclerView.ViewHolder {
-        private TextView deletetextView ;
         private ImageView imageView ;
         private Product mProduct ;
         private ItemProductBasketBinding mBinding ;
@@ -81,10 +80,7 @@ public class ProductBasketAdapter extends RecyclerView.Adapter<ProductBasketAdap
             mBinding = binding ;
             detailFragmentViewModel = ViewModelProviders.of(mActivity).get(ProductDetailFragmentViewModel.class);
             imageView = mBinding.productImageCart ;
-            deletetextView = itemView.findViewById(R.id.delete_textview_cart);
-
         }
-
 
         @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
         public void bind(final CartProduct product) {
@@ -107,7 +103,7 @@ public class ProductBasketAdapter extends RecyclerView.Adapter<ProductBasketAdap
 
                });
 
-            deletetextView.setOnClickListener(view -> {
+            mBinding.deleteTextviewCart.setOnClickListener(view -> {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
                         .setTitle(R.string.are_you_sure_for_delete)
@@ -119,9 +115,7 @@ public class ProductBasketAdapter extends RecyclerView.Adapter<ProductBasketAdap
 
             });
 
-            Picasso.get().load(product.getImages().get(0).getSrc()).fit().placeholder(R.drawable.alt).into(imageView);
-
-
+            Picasso.get().load(product.getImages().get(0).getSrc()).placeholder(R.drawable.alt).into(imageView);
         }
     }
 

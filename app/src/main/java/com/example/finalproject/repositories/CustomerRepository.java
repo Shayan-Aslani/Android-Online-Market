@@ -3,8 +3,13 @@ package com.example.finalproject.repositories;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.finalproject.MyApplication;
+import com.example.finalproject.database.CustomerAddressModel;
+import com.example.finalproject.database.RoomDB;
+import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Customer;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
@@ -22,17 +27,32 @@ public class CustomerRepository {
     private static CustomerRepository mInstance;
     private Context mContext;
 
+    private RoomDB roomDB ;
+
     private MutableLiveData<Customer> mCustomer = new MutableLiveData<>();
 
     private CustomerRepository(Context mContext) {
         this.mContext = mContext;
+        roomDB = MyApplication.getInstance().getRoomDb();
     }
 
     public static CustomerRepository getInstance(Context context) {
         if (mInstance == null)
             mInstance = new CustomerRepository(context);
-
         return mInstance;
+    }
+
+    public List<CustomerAddressModel> getAllCustomerAddress(int customerId){
+        return roomDB.customerAddressDao().getAllCustomerAddress(customerId);
+    }
+    public void inserCustomerAddress (CustomerAddressModel customerAddressModel){
+        roomDB.customerAddressDao().insert(customerAddressModel);
+    }
+    public void deleteCustomerAddress(CustomerAddressModel customerAddressModel){
+        roomDB.customerAddressDao().delete(customerAddressModel);
+    }
+    public void updateCustomerAddress(CustomerAddressModel customerAddressModel){
+        roomDB.customerAddressDao().update(customerAddressModel);
     }
 
     public void registerCustomer(Customer customer) {
@@ -44,7 +64,6 @@ public class CustomerRepository {
                     saveCustomer();
                 }
             }
-
             @Override
             public void onFailure(Call<Customer> call, Throwable t) {
 
@@ -67,7 +86,6 @@ public class CustomerRepository {
                 Toast.makeText(mContext, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     public void saveCustomer() {

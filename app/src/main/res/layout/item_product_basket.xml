@@ -40,8 +40,7 @@
                 android:layout_marginRight="8.0dip"
                 android:layout_marginBottom="16.0dip"
                 android:minWidth="50.0dip"
-                android:minHeight="50.0dip"
-                android:scaleType="fitXY" />
+                android:minHeight="50.0dip" />
 
             <TextView
                 android:id="@+id/product_title_cart"

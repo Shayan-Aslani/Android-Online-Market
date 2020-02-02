@@ -82,23 +82,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_Button_shoppingFragment"
-            android:layout_width="232.0dip"
-            android:layout_height="40.0dip"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="@color/digikala_bluegrey_light"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="ورود به حساب کاربری"
-            android:textColor="@color/digikala_white_pure"
-            android:textSize="15.0sp"
-            app:layout_constraintEnd_toEndOf="@+id/null_massage_shopping_bag"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="@+id/null_massage_shopping_bag"
-            app:layout_constraintTop_toBottomOf="@+id/null_massage_shopping_bag" />
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="0dp"

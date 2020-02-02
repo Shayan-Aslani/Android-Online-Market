@@ -104,8 +104,7 @@ public class MainFragment extends Fragment implements NavigationView.OnNavigatio
                 mBinding.mainNavigationView.getMenu().findItem(R.id.logut_nav_menu).setVisible(true);
                 textView.setText(customer.getEmail());
             }
-            else
-            {
+            else {
                 textView.setText("");
                 mBinding.mainNavigationView.getMenu().findItem(R.id.logut_nav_menu).setVisible(false);
             }

@@ -5,12 +5,27 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import com.example.finalproject.database.RoomDB;
+
 public class MyApplication extends Application {
+    private static MyApplication mInstance;
+
+    public static MyApplication getInstance() {
+        return mInstance;
+    }
+
+    public RoomDB getRoomDb() {
+        return roomDb;
+    }
+
+    private RoomDB roomDb;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        roomDb = RoomDB.getInstance(this);
         createNotificationChannel();
+        mInstance = this;
     }
 
     private void createNotificationChannel() {
