@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressH
 
     private List<CustomerAddressModel> addressList = new ArrayList<>();
     private AppCompatActivity mActivity ;
+    private int checkedPosition = 0 ;
 
     public AddressAdapter(AppCompatActivity mActivity ) {
         this.mActivity = mActivity;
@@ -37,6 +39,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressH
     public void setAddressList(List<CustomerAddressModel> addressList) {
         this.addressList = addressList;
         notifyDataSetChanged();
+    }
+
+    public CustomerAddressModel getSelectedAddress(){
+        return addressList.get(checkedPosition);
     }
 
     @NonNull
@@ -70,14 +76,24 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressH
         }
 
         public void bind(final CustomerAddressModel address) {
-
             this.mAddress = address;
-            itemView.setOnClickListener(view -> {
-
+            if(getAdapterPosition() == checkedPosition)
+            {
+                mBinding.chkBtn.setChecked(true);
+            }
+            else
+            {
+                mBinding.chkBtn.setChecked(false);
+            }
+            mBinding.chkBtn.setOnCheckedChangeListener((compoundButton, b) -> {
+                if(b)
+                {
+                    checkedPosition = getAdapterPosition();
+                    notifyDataSetChanged();
+                }
             });
             mBinding.orderFullName.setText(mAddress.getFirstName());
             mBinding.address.setText(mAddress.getAddress());
-
         }
     }
 }

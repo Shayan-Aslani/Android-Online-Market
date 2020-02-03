@@ -11,6 +11,7 @@ import com.example.finalproject.database.CustomerAddressModel;
 import com.example.finalproject.database.RoomDB;
 import com.example.finalproject.model.Address;
 import com.example.finalproject.model.Customer;
+import com.example.finalproject.model.Order;
 import com.example.finalproject.network.Api;
 import com.example.finalproject.network.RetrofitInstance;
 import com.example.finalproject.utils.Preferences;
@@ -42,8 +43,8 @@ public class CustomerRepository {
         return mInstance;
     }
 
-    public List<CustomerAddressModel> getAllCustomerAddress(int customerId){
-        return roomDB.customerAddressDao().getAllCustomerAddress(customerId);
+    public LiveData<List<CustomerAddressModel>> getAllCustomerAddress(){
+        return roomDB.customerAddressDao().getAllCustomerAddress(getCustomer().getValue().getId());
     }
     public void inserCustomerAddress (CustomerAddressModel customerAddressModel){
         roomDB.customerAddressDao().insert(customerAddressModel);
@@ -103,5 +104,23 @@ public class CustomerRepository {
 
     public MutableLiveData<Customer> getCustomer() {
         return mCustomer;
+    }
+
+    public MutableLiveData<Order> sendOrder(Order order) {
+        MutableLiveData<Order> resultOrder = new MutableLiveData<>();
+        RetrofitInstance.getRetrofit().create(Api.class).sendOrder(order).enqueue(new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.isSuccessful()) {
+                    resultOrder.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable t) {
+
+            }
+        });
+        return resultOrder;
     }
 }

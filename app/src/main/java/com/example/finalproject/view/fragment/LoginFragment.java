@@ -68,6 +68,5 @@ public class LoginFragment extends Fragment {
             Toast.makeText(getActivity(), "با موفقیت وارد شدید", Toast.LENGTH_SHORT).show();
             getActivity().onBackPressed();
         }
-
     }
 }

@@ -21,6 +21,15 @@ public class CartProduct {
     private List<Product.Images> images;
     private String price;
     private String description;
+    private int count ;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public String getDescription() {
         return description;

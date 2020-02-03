@@ -1,6 +1,7 @@
 package com.example.finalproject.database;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface AddressDao {
 
     @Query("SELECT * FROM address_customer WHERE customerId = :customerId")
-    List<CustomerAddressModel> getAllCustomerAddress(int customerId);
+    LiveData<List<CustomerAddressModel>> getAllCustomerAddress(int customerId);
     @Insert()
     void insert(CustomerAddressModel customerAddressModel);
     @Update

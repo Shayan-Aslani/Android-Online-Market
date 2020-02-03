@@ -79,6 +79,12 @@ public class Order {
     @SerializedName("customer_note")
     @Expose
     private String customerNote;
+    @SerializedName("billing")
+    @Expose
+    private Billing billing;
+    @SerializedName("shipping")
+    @Expose
+    private Shipping shipping;
     @SerializedName("payment_method")
     @Expose
     private String paymentMethod;
@@ -97,6 +103,9 @@ public class Order {
     @SerializedName("date_completed")
     @Expose
     private Object dateCompleted;
+    @SerializedName("line_items")
+    @Expose
+    private List<LineItem> lineItems = null;
     @SerializedName("tax_lines")
     @Expose
     private List<Object> taxLines = null;
@@ -106,6 +115,9 @@ public class Order {
     @SerializedName("fee_lines")
     @Expose
     private List<Object> feeLines = null;
+    @SerializedName("coupon_lines")
+    @Expose
+    private List<CouponLine> couponLines = null;
     @SerializedName("refunds")
     @Expose
     private List<Object> refunds = null;
@@ -302,7 +314,21 @@ public class Order {
         this.customerNote = customerNote;
     }
 
+    public Billing getBilling() {
+        return billing;
+    }
 
+    public void setBilling(Billing billing) {
+        this.billing = billing;
+    }
+
+    public Shipping getShipping() {
+        return shipping;
+    }
+
+    public void setShipping(Shipping shipping) {
+        this.shipping = shipping;
+    }
 
     public String getPaymentMethod() {
         return paymentMethod;
@@ -352,7 +378,13 @@ public class Order {
         this.dateCompleted = dateCompleted;
     }
 
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
 
+    public void setLineItems(List<LineItem> lineItems) {
+        this.lineItems = lineItems;
+    }
 
     public List<Object> getTaxLines() {
         return taxLines;
@@ -378,6 +410,13 @@ public class Order {
         this.feeLines = feeLines;
     }
 
+    public List<CouponLine> getCouponLines() {
+        return couponLines;
+    }
+
+    public void setCouponLines(List<CouponLine> couponLines) {
+        this.couponLines = couponLines;
+    }
 
     public List<Object> getRefunds() {
         return refunds;

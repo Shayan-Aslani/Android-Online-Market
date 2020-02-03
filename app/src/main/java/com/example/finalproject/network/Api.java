@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.example.finalproject.model.Attribute;
 import com.example.finalproject.model.Category;
 import com.example.finalproject.model.Customer;
+import com.example.finalproject.model.Order;
 import com.example.finalproject.model.Product;
 
 import org.w3c.dom.Attr;
@@ -21,7 +22,6 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface Api {
-
 
     @GET("products")
     Call<List<Product>> getAllProducts(@Query("orderby") String type, @Query("per_page") String perpage);
@@ -52,5 +52,6 @@ public interface Api {
     @GET("customers")
     Call<List<Customer>> getCustomer(@Query("email") String email);
 
-
+    @POST("orders")
+    Call<Order> sendOrder(@Body Order order);
 }
